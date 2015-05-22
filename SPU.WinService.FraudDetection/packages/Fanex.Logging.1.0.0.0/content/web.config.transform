@@ -1,0 +1,7 @@
+﻿<?xml version="1.0"?>
+<configuration>
+    <configSections>
+        <section name="Fanex.Logging" type="Fanex.Logging.Configuration.LoggingSettings, Fanex.Logging"/>
+    </configSections>
+    <Fanex.Logging msmqPath="FormatName:DIRECT=tcp:[IP]\private$\entlib" defaultCategory="$CategoryValue"/>
+</configuration>
