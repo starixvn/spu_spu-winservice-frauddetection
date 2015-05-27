@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.ServiceProcess;
-using SPU.Lib.FraudDetection.BusinessManager;
 using Fanex.Data.Configuration;
+using SPU.Lib.FraudDetection.BusinessManager;
 
 namespace SPU.WinService.FraudDetection
 {
@@ -49,34 +46,27 @@ namespace SPU.WinService.FraudDetection
         {
             base.Dispose(disposing);
         }
-
+        
         /// <summary>
         /// OnStart(): Put startup code here
         ///  - Start threads, get inital data, etc.
         /// </summary>
         /// <param name="args"></param>
         protected override void OnStart(string[] args)
-        {
+        {         
             base.OnStart(args);
-            
+
             try
             {
                 fraudAutoDetection = new FraudAutoDetection();
-
-                System.Threading.Thread.Sleep(10 * 1000);
                 fraudAutoDetection.ScanSuspiciousTickets();
-
-                //List<Task> tasks = fraudAutoDetection.Tasks;
-                //foreach (var task in tasks)
-                //{                
-                //    Console.WriteLine(task.TaskInfo.TaskName);
-                //}
             }
             catch (Exception ex)
             {
                 Fanex.Logging.Logger.Log.Error("SPU WinService - OnStart Error : " + ex.Message);
             }
-        }           
+
+        }
 
         /// <summary>
         /// OnStop(): Put your stop code here
@@ -126,6 +116,18 @@ namespace SPU.WinService.FraudDetection
         protected override void OnShutdown()
         {
             base.OnShutdown();
+
+            try
+            {
+                if (fraudAutoDetection != null)
+                {
+                    fraudAutoDetection.Stop();
+                }
+            }
+            catch (Exception ex)
+            {
+                Fanex.Logging.Logger.Log.Error("SPU WinService - OnShutdown Error : " + ex.Message);
+            }
         }
 
         /// <summary>
@@ -168,6 +170,6 @@ namespace SPU.WinService.FraudDetection
                   SessionChangeDescription changeDescription)
         {
             base.OnSessionChange(changeDescription);
-        }
+        }        
     }
 }
