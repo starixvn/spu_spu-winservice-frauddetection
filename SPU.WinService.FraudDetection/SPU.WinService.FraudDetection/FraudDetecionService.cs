@@ -59,7 +59,7 @@ namespace SPU.WinService.FraudDetection
             try
             {
                 fraudAutoDetection = new FraudAutoDetection();
-                fraudAutoDetection.ScanSuspiciousTickets();
+                fraudAutoDetection.LoadTasks();                
             }
             catch (Exception ex)
             {

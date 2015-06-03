@@ -1,6 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions> 
   <Function Name="SPU_FraudDetection">
-    <Setting Key="SPU_TaskSelectAll" SpName="SPU_TaskSelectAll" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />    
+    <Setting Key="SPU_TaskSelectAll" SpName="SPU_TaskSelectAll" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+    <Setting Key="SPU_MatchInsert" SpName="SPU_MatchInsert" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+    <Setting Key="SPU_SuspiciousInfoInsert" SpName="SPU_SuspiciousInfoInsert" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+    <Setting Key="SPU_CustomerGroupInsert" SpName="SPU_CustomerGroupInsert" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
   </Function>
 </Functions>
