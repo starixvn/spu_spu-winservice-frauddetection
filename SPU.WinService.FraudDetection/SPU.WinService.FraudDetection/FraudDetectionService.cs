@@ -62,7 +62,7 @@ namespace SPU.WinService.FraudDetection
 
         public void RunOnStart()
         {
-            //ReceivingMessageHandler.TriggerReceivingMessage();
+            ReceivingMessageHandler.TriggerReceivingMessage();
             TaskLoader.LoadTasks();
         }
     }
