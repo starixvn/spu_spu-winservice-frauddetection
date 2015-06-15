@@ -37,13 +37,13 @@ namespace SPU.WinService.FraudDetection.UnitTest
             _mockTaskLoader = new TaskLoader(_mockTaskService.Object, _mockSpuQueue);
             _mockMessageHandler = new ReceivingMessageHandler(_mockTaskManager.Object, _mockSpuQueue);
             _sut = new FraudDetectionService(_mockTaskLoader, _mockMessageHandler);
+            _mockSpuQueue.Clear();
         }
 
         [TearDown]
         public void TearDown()
         {
             _mockSpuQueue.Stop();
-            _mockMessageHandler.ClearTasks();
         }
 
         [Test]
