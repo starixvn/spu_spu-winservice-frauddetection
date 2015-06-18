@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.ServiceProcess;
 using Fanex.Data.Configuration;
 using SPU.Lib.FraudDetection;

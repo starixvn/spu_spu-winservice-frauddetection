@@ -1,0 +1,35 @@
+﻿@using SPU.Lib.FraudDetection.DTO.ReportTemplate
+@model IList<MarginCustormer>
+
+@{
+    const int TwoPreviousMonths = 2;
+}
+<h3>Margin %</h3>
+<table style="border: 1px solid black; padding: 3px; border-collapse: collapse;">
+    <tr>
+        <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">Member</th>
+        @for (int i = TwoPreviousMonths; i >= 0; i--)
+        {
+            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;" >@DateTime.Now.AddMonths(-i).ToString("MMM")</th>
+        }
+    </tr>
+    @if (Model.Any())
+    {
+        foreach (var customer in Model)
+        {
+            <tr>
+                <td style="border: 1px solid black; padding: 3px;">@customer.Member</td>
+            @foreach (var margin in customer.Margins)
+            {
+                <td style="border: 1px solid black; padding: 3px;">@margin</td>
+            }
+            </tr>
+        }
+    }
+    else
+    {
+    <tr>
+        <td colspan="4" style="text-align: center; padding: 3px;">No data is available.</td>
+    </tr>
+    }
+</table>
