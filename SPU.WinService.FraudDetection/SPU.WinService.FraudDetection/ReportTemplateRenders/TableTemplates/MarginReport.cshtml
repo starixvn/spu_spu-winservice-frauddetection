@@ -21,7 +21,9 @@
                 <td style="border: 1px solid black; padding: 3px;">@customer.Member</td>
             @foreach (var margin in customer.Margins)
             {
-                <td style="border: 1px solid black; padding: 3px;">@margin</td>
+                <td style="border: 1px solid black; padding: 3px;">
+                    @(margin.HasValue ? margin.Value.ToString(): "N/A")
+                </td>
             }
             </tr>
         }
