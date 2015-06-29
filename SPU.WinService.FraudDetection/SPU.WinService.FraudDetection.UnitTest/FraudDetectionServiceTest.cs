@@ -4,14 +4,16 @@ using System.Threading;
 using Fanex.Data.Repository;
 using Moq;
 using NUnit.Framework;
-using SPU.Lib.FraudDetection;
-using SPU.Lib.FraudDetection.BusinessManager;
 using SPU.Lib.FraudDetection.DTO;
-using SPU.Lib.FraudDetection.SendingTasks;
 using SPU.Lib.FraudDetection.Service.Interface;
 
 namespace SPU.WinService.FraudDetection.UnitTest
 {
+    using Lib.FraudDetection.QueueManagement;
+    using Lib.FraudDetection.QueueManagement.SendingTasks;
+    using Lib.FraudDetection.TaskExecutors;
+    using Lib.FraudDetection.TaskLoaders;
+
     [TestFixture]
     public class FraudDetectionServiceTest
     {
@@ -64,7 +66,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
         [Test]
         public void When_Load_No_Task_Then_AddTask_Should_Not_Be_Called()
         {
-            _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(new List<TaskInfo>());
+            _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(new List<Task>());
 
             // ---- Act ---
             _sut.RunOnStart();
@@ -78,7 +80,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
         {
             var sampleTask = GetSampleTask();
             sampleTask.IsActive = true;
-            var sampleTasks = new List<TaskInfo> { sampleTask, sampleTask };
+            var sampleTasks = new List<Task> { sampleTask, sampleTask };
 
             _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(sampleTasks);
 
@@ -96,7 +98,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
         {
             var sampleTask = GetSampleTask();
             sampleTask.IsActive = true;
-            var sampleTasks = new List<TaskInfo> { sampleTask, sampleTask };
+            var sampleTasks = new List<Task> { sampleTask, sampleTask };
             var updatingTask = SendingTaskFactory.GetSender(SendingType.UpdatingTask);
 
             _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(sampleTasks);
@@ -104,7 +106,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             // ---- Act ---
             _sut.RunOnStart();
 
-            updatingTask.Send(new Task(sampleTask));
+            updatingTask.Send(sampleTask);
 
             // --- Assert  ---
             Thread.Sleep(TimeSpan.FromSeconds(2));
@@ -117,7 +119,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
         {
             var sampleTask = GetSampleTask();
             sampleTask.IsActive = true;
-            var sampleTasks = new List<TaskInfo> { sampleTask, sampleTask };
+            var sampleTasks = new List<Task> { sampleTask, sampleTask };
             var removeingTask = SendingTaskFactory.GetSender(SendingType.RemovingTask);
 
             _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(sampleTasks);
@@ -125,7 +127,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             // ---- Act ---
             _sut.RunOnStart();
 
-            removeingTask.Send(new Task(sampleTask));
+            removeingTask.Send(sampleTask);
 
             // --- Assert  ---
             Thread.Sleep(TimeSpan.FromSeconds(3));
@@ -133,9 +135,9 @@ namespace SPU.WinService.FraudDetection.UnitTest
             _mockTaskManager.Verify(x => x.RemoveTask(It.IsAny<Task>()), Times.Exactly(1));
         }
 
-        private TaskInfo GetSampleTask()
+        private Task GetSampleTask()
         {
-            var sampleTask = new TaskInfo
+            var sampleTask = new Task
             {
                 EventId = 2,
                 Interval = 60,

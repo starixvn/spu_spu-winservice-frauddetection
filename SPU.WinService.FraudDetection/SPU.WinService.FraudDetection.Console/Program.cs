@@ -1,7 +1,7 @@
-﻿using SPU.Lib.FraudDetection;
-
-namespace SPU.WinService.FraudDetection.Console
+﻿namespace SPU.WinService.FraudDetection.Console
 {
+    using Lib.FraudDetection.QueueManagement;
+
     internal class Program
     {
         private static void Main(string[] args)

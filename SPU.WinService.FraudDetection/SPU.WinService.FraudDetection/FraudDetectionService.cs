@@ -5,6 +5,9 @@ using SPU.Lib.FraudDetection;
 
 namespace SPU.WinService.FraudDetection
 {
+    using Lib.FraudDetection.QueueManagement;
+    using Lib.FraudDetection.TaskLoaders;
+
     public partial class FraudDetectionService : ServiceBase
     {
         public readonly ITaskLoader TaskLoader;
