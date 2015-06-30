@@ -2,37 +2,37 @@
 @model IList<SuspiciousCustormer>
 
 <h3>Suspicious Statistic</h3>
-    <table style="border: 1px solid black; padding: 3px; border-collapse: collapse;">
+<table style="border: 1px solid black; border-collapse: collapse; padding: 3px;">
+    <tr>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">Member</th>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">Workflow</th>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">Sport</th>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">League</th>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">MatchId</th>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">Match Code</th>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">Event Date</th>
+        <th style="background-color: #bbb; border: 1px solid black; padding: 3px;">Event</th>
+    </tr>
+    @if (Model.Any())
+    {
+        foreach (var customer in Model)
+        {
+            <tr>
+                <td style="border: 1px solid black; padding: 3px;">@customer.Member</td>
+                <td style="border: 1px solid black; padding: 3px;">@customer.Workflow</td>
+                <td style="border: 1px solid black; padding: 3px;">@customer.Sport</td>
+                <td style="border: 1px solid black; padding: 3px;">@customer.League</td>
+                <td style="border: 1px solid black; padding: 3px;">@customer.MatchId</td>
+                <td style="border: 1px solid black; padding: 3px;">@customer.MatchCode</td>
+                <td style="border: 1px solid black; padding: 3px;">@customer.EventDate.ToString("MM/dd/yyyy")</td>
+                <td style="border: 1px solid black; padding: 3px;">@customer.Event</td>
+            </tr>
+        }
+    }
+    else
+    {
         <tr>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">Member</th>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">Worflow</th>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">Sport</th>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">League</th>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">MatchId</th>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">Match Code</th>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">Event Date</th>
-            <th style="border: 1px solid black; padding: 3px; background-color: #bbb;">Event</th>
+            <td colspan="8" style="padding: 3px; text-align: center;">No data is available.</td>
         </tr>
-@if (Model.Any())
-{
-    foreach (var customer in Model)
-     {
-         <tr>
-             <td style="border: 1px solid black; padding: 3px;">@customer.Member</td>
-             <td style="border: 1px solid black; padding: 3px;">@customer.Workflow</td>
-             <td style="border: 1px solid black; padding: 3px;">@customer.Sport</td>
-             <td style="border: 1px solid black; padding: 3px;">@customer.League</td>
-             <td style="border: 1px solid black; padding: 3px;">@customer.MatchId</td>
-             <td style="border: 1px solid black; padding: 3px;">@customer.MatchCode</td>
-             <td style="border: 1px solid black; padding: 3px;">@customer.EventDate</td>
-             <td style="border: 1px solid black; padding: 3px;">@customer.Event</td>
-         </tr>
-     }
-}
-else
-{
-        <tr>
-            <td colspan="8" style="text-align: center; padding: 3px;">No data is available.</td>
-        </tr>
-}
-    </table>
+    }
+</table>
