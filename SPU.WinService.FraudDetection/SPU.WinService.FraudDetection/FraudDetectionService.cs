@@ -64,6 +64,8 @@ namespace SPU.WinService.FraudDetection
 
         public void RunOnStart()
         {
+            var queue = new SpuMessageQueue();
+            queue.Clear();
             ReceivingMessageHandler.TriggerReceivingMessage();
             TaskLoader.LoadTasks();
         }

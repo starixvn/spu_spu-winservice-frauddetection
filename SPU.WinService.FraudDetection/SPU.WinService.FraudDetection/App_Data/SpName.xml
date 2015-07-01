@@ -41,7 +41,7 @@
     <Setting Key="SPU_SelectMatchInfoFromDBArchive" SpName="SPU_SelectMatchInfoFromDBArchive"
              DbName="DBSPU.bodb_Archive.bodbSPUNet" />
     <Setting Key="SPU_SelBalanceUpDay" SpName="SPU_SelBalanceUpDay" DbName="DBSPU.bodb02.bodbSPUNet" />
-    <Setting Key="SPU_SuspiciousCustomerMargin" SpName="SPU_SuspiciousCustomerMargin" DbName="DBSPU.bodb02.bodbSPUNet" />
+    <Setting Key="SPU_CustomerWinlostSelect" SpName="SPU_CustomerWinlostSelect" DbName="DBSPU.bodb02.bodbSPUNet" />
   </Function>
 
 </Functions>
