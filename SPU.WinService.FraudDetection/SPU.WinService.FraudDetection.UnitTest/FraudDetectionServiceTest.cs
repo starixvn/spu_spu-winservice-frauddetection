@@ -72,7 +72,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             _sut.RunOnStart();
 
             // --- Assert  ---
-            _mockTaskManager.Verify(x => x.AddTask(It.IsAny<Task>()), Times.Exactly(0));
+            _mockTaskManager.Verify(x => x.AddTask(It.IsAny<int>()), Times.Exactly(0));
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             // --- Assert  ---
             Thread.Sleep(TimeSpan.FromSeconds(2));
 
-            _mockTaskManager.Verify(x => x.AddTask(It.IsAny<Task>()), Times.Exactly(2));
+            _mockTaskManager.Verify(x => x.AddTask(It.IsAny<int>()), Times.Exactly(2));
         }
 
         [Test]
@@ -99,7 +99,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             var sampleTask = GetSampleTask();
             sampleTask.IsActive = true;
             var sampleTasks = new List<Task> { sampleTask, sampleTask };
-            var updatingTask = SendingTaskFactory.GetSender(SendingType.UpdatingTask);
+            var updatingTask = SendingMessageFactory.GetSender(SendingType.UpdatingTask);
 
             _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(sampleTasks);
 
@@ -111,7 +111,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             // --- Assert  ---
             Thread.Sleep(TimeSpan.FromSeconds(2));
 
-            _mockTaskManager.Verify(x => x.UpdateTask(It.IsAny<Task>()), Times.Exactly(1));
+            _mockTaskManager.Verify(x => x.UpdateTask(It.IsAny<int>()), Times.Exactly(1));
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             var sampleTask = GetSampleTask();
             sampleTask.IsActive = true;
             var sampleTasks = new List<Task> { sampleTask, sampleTask };
-            var removeingTask = SendingTaskFactory.GetSender(SendingType.RemovingTask);
+            var removeingTask = SendingMessageFactory.GetSender(SendingType.RemovingTask);
 
             _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(sampleTasks);
 
@@ -132,7 +132,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
             // --- Assert  ---
             Thread.Sleep(TimeSpan.FromSeconds(3));
 
-            _mockTaskManager.Verify(x => x.RemoveTask(It.IsAny<Task>()), Times.Exactly(1));
+            _mockTaskManager.Verify(x => x.RemoveTask(It.IsAny<int>()), Times.Exactly(1));
         }
 
         private Task GetSampleTask()
