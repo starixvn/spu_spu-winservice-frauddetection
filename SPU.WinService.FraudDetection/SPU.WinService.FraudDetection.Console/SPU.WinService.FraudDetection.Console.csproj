@@ -97,20 +97,32 @@
     <Reference Include="SPSRemoting">
       <HintPath>..\packages\SPSRemoting.1.0.0\lib\net40\SPSRemoting.dll</HintPath>
     </Reference>
-    <Reference Include="SPU.Lib.Core">
-      <HintPath>..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection\bin\Debug\SPU.Lib.Core.dll</HintPath>
+    <Reference Include="SPU.Lib.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.Core.dll</HintPath>
     </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Criteria">
-      <HintPath>..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection\bin\Debug\SPU.Lib.FraudDetection.Criteria.dll</HintPath>
+    <Reference Include="SPU.Lib.FraudDetection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.dll</HintPath>
     </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DataAccess">
-      <HintPath>..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection\bin\Debug\SPU.Lib.FraudDetection.DataAccess.dll</HintPath>
+    <Reference Include="SPU.Lib.FraudDetection.BusinessManager.UnitTest">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.BusinessManager.UnitTest.dll</HintPath>
     </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DTO">
-      <HintPath>..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection\bin\Debug\SPU.Lib.FraudDetection.DTO.dll</HintPath>
+    <Reference Include="SPU.Lib.FraudDetection.Criteria, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.Criteria.dll</HintPath>
     </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Service">
-      <HintPath>..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection\bin\Debug\SPU.Lib.FraudDetection.Service.dll</HintPath>
+    <Reference Include="SPU.Lib.FraudDetection.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="SPU.Lib.FraudDetection.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="SPU.Lib.FraudDetection.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.Service.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -149,10 +161,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection.BusinessManager.csproj">
-      <Project>{1b2147ac-1a2b-462a-bb70-73786617ad6b}</Project>
-      <Name>SPU.Lib.FraudDetection.BusinessManager</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SPU.WinService.FraudDetection\SPU.WinService.FraudDetection.csproj">
       <Project>{472986c6-a30a-4b32-ae5a-fe69347bdfd7}</Project>
       <Name>SPU.WinService.FraudDetection</Name>

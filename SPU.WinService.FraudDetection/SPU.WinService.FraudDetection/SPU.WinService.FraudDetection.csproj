@@ -154,6 +154,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="Dependencies\SPU.Lib.FraudDetection.BusinessManager.UnitTest.dll" />
     <Content Include="Install Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
