@@ -30,12 +30,12 @@
     <Setting Key="SPU_TaskIns" SpName="SPU_TaskIns" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
     <Setting Key="SPU_TablesForeignKeySelectAll" SpName="SPU_TablesForeignKeySelectAll"
              DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_WorkflowSelectById" SpName="SPU_WorkflowSelectById" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+    <Setting Key="SPU_CaseSelectById" SpName="SPU_CaseSelectById" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
     <Setting Key="SPU_SuspiciouCustomerSelect" SpName="SPU_SuspiciouCustomerSelect"
              DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    
+
     <Setting Key="SPU_TaskInfoSelect" SpName="SPU_TaskInfoSelect" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_TaskSelectByWorkflowId" SpName="SPU_TaskSelectByWorkflowId"
+    <Setting Key="SPU_TaskSelectByCaseId" SpName="SPU_TaskSelectByCaseId"
          DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
     <Setting Key="SPU_TaskSelectForExecuting" SpName="SPU_TaskSelectForExecuting"
          DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
