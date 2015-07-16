@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceProcess;
-using System.Text;
-using Fanex.Data.Configuration;
-
-namespace SPU.WinService.FraudDetection
+﻿namespace SPU.WinService.FraudDetection
 {
+    using System.ServiceProcess;
+
     internal static class Program
     {
         /// <summary>
