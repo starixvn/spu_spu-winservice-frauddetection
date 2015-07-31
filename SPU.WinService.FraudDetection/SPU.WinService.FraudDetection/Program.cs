@@ -1,6 +1,7 @@
 ﻿namespace SPU.WinService.FraudDetection
 {
     using System.ServiceProcess;
+    using FD.WinService.FraudDetection;
 
     internal static class Program
     {

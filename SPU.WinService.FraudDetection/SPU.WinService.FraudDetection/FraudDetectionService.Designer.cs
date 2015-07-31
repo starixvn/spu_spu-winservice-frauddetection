@@ -1,4 +1,4 @@
-﻿namespace SPU.WinService.FraudDetection
+﻿namespace FD.WinService.FraudDetection
 {
     public partial class FraudDetectionService
     {

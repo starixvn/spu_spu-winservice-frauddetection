@@ -3,16 +3,16 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
 VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPU.WinService.FraudDetection", "SPU.WinService.FraudDetection\SPU.WinService.FraudDetection.csproj", "{472986C6-A30A-4B32-AE5A-FE69347BDFD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FD.WinService.FraudDetection", "SPU.WinService.FraudDetection\FD.WinService.FraudDetection.csproj", "{472986C6-A30A-4B32-AE5A-FE69347BDFD7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPU.WinService.FraudDetection.UnitTest", "SPU.WinService.FraudDetection.UnitTest\SPU.WinService.FraudDetection.UnitTest.csproj", "{A37703D7-8393-4F0F-B660-6D78155A32BF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FD.WinService.FraudDetection.UnitTest", "SPU.WinService.FraudDetection.UnitTest\FD.WinService.FraudDetection.UnitTest.csproj", "{A37703D7-8393-4F0F-B660-6D78155A32BF}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{341C430E-9BC4-47DD-8502-4AEA05C4FEFC}"
 	ProjectSection(SolutionItems) = preProject
 		.nuget\packages.config = .nuget\packages.config
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SPU.WinService.FraudDetection.Console", "SPU.WinService.FraudDetection.Console\SPU.WinService.FraudDetection.Console.csproj", "{DE5364C2-0A74-443F-A777-39D301AAC3F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FD.WinService.FraudDetection.Console", "SPU.WinService.FraudDetection.Console\FD.WinService.FraudDetection.Console.csproj", "{DE5364C2-0A74-443F-A777-39D301AAC3F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,8 +8,8 @@
     <ProjectGuid>{472986C6-A30A-4B32-AE5A-FE69347BDFD7}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SPU.WinService.FraudDetection</RootNamespace>
-    <AssemblyName>SPU.WinService.FraudDetection</AssemblyName>
+    <RootNamespace>FD.WinService.FraudDetection</RootNamespace>
+    <AssemblyName>FD.WinService.FraudDetection</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>
     </TargetFrameworkProfile>
@@ -56,6 +56,34 @@
     <Reference Include="Fanex.NAP.Framework">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="FD.Lib.BusinessManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\FD.Lib.BusinessManager.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\FD.Lib.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Criteria, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\FD.Lib.Criteria.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\FD.Lib.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\FD.Lib.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Model, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\FD.Lib.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\FD.Lib.Service.dll</HintPath>
+    </Reference>
     <Reference Include="IBCFile">
       <HintPath>..\packages\Fanex.File.1.0.0\lib\net40\IBCFile.dll</HintPath>
     </Reference>
@@ -92,30 +120,6 @@
     </Reference>
     <Reference Include="SPSRemoting">
       <HintPath>..\packages\SPSRemoting.1.0.0\lib\net40\SPSRemoting.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\SPU.Lib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection.BusinessManager.UnitTest\Dependencies\SPU.Lib.FraudDetection.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Criteria, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\SPU.Lib.FraudDetection.Criteria.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\SPU.Lib.FraudDetection.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\spu-lib\SPU.Lib.FraudDetection\SPU.Lib.FraudDetection.BusinessManager.UnitTest\Dependencies\SPU.Lib.FraudDetection.DTO.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>Dependencies\SPU.Lib.FraudDetection.Service.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -154,7 +158,13 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
-    <Content Include="Dependencies\SPU.Lib.FraudDetection.BusinessManager.UnitTest.dll" />
+    <Content Include="Dependencies\FD.Lib.BusinessManager.dll" />
+    <Content Include="Dependencies\FD.Lib.Core.dll" />
+    <Content Include="Dependencies\FD.Lib.Criteria.dll" />
+    <Content Include="Dependencies\FD.Lib.DataAccess.dll" />
+    <Content Include="Dependencies\FD.Lib.DTO.dll" />
+    <Content Include="Dependencies\FD.Lib.Model.dll" />
+    <Content Include="Dependencies\FD.Lib.Service.dll" />
     <Content Include="Install Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -182,12 +192,6 @@
       <SubType>Designer</SubType>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Dependencies\SPU.Lib.Core.dll" />
-    <Content Include="Dependencies\SPU.Lib.FraudDetection.Criteria.dll" />
-    <Content Include="Dependencies\SPU.Lib.FraudDetection.DataAccess.dll" />
-    <Content Include="Dependencies\SPU.Lib.FraudDetection.dll" />
-    <Content Include="Dependencies\SPU.Lib.FraudDetection.DTO.dll" />
-    <Content Include="Dependencies\SPU.Lib.FraudDetection.Service.dll" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

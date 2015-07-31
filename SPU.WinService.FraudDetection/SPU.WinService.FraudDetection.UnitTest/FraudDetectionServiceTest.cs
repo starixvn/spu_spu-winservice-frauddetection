@@ -1,23 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
-using Fanex.Data.Repository;
-using Moq;
-using NUnit.Framework;
-using SPU.Lib.FraudDetection.DTO;
-using SPU.Lib.FraudDetection.Service.Interface;
-
-namespace SPU.WinService.FraudDetection.UnitTest
+﻿namespace FD.WinService.FraudDetection.UnitTest
 {
-    using Lib.FraudDetection.QueueManagement;
-    using Lib.FraudDetection.QueueManagement.SendingTasks;
-    using Lib.FraudDetection.TaskExecutors;
-    using Lib.FraudDetection.TaskLoaders;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading;
+    using Fanex.Data.Repository;
+    using FD.Lib.QueueManagement;
+    using FD.Lib.QueueManagement.SendingTasks;
+    using FD.Lib.Service.Interface;
+    using FD.Lib.TaskExecutors;
+    using FD.Lib.TaskLoaders;
+    using FD.WinService.FraudDetection;
+    using Lib.DTO;
+    using Moq;
+    using NUnit.Framework;
 
     [TestFixture]
     public class FraudDetectionServiceTest
     {
-        private SpuMessageQueue _mockSpuQueue;
+        private FDMessageQueue _mockSpuQueue;
 
         private ReceivingMessageHandler _mockMessageHandler;
 
@@ -32,7 +32,7 @@ namespace SPU.WinService.FraudDetection.UnitTest
         [SetUp]
         public void SetUp()
         {
-            _mockSpuQueue = new SpuMessageQueue();
+            _mockSpuQueue = new FDMessageQueue();
             _mockTaskService = new Mock<ITaskService>();
             _mockTaskManager = new Mock<ITaskManager>();
             _mockTaskLoader = new TaskLoader(_mockTaskService.Object, _mockSpuQueue);

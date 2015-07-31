@@ -7,8 +7,8 @@
     <ProjectGuid>{DE5364C2-0A74-443F-A777-39D301AAC3F0}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SPU.WinService.FraudDetection.Console</RootNamespace>
-    <AssemblyName>SPU.WinService.FraudDetection.Console</AssemblyName>
+    <RootNamespace>FD.WinService.FraudDetection.Console</RootNamespace>
+    <AssemblyName>FD.WinService.FraudDetection.Console</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -55,6 +55,27 @@
     <Reference Include="Fanex.NAP.Framework">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
     </Reference>
+    <Reference Include="FD.Lib.BusinessManager">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.BusinessManager.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Core">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Criteria">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Criteria.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.DataAccess">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.DTO">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Model">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Service">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Service.dll</HintPath>
+    </Reference>
     <Reference Include="IBCFile">
       <HintPath>..\packages\Fanex.File.1.0.0\lib\net40\IBCFile.dll</HintPath>
     </Reference>
@@ -97,33 +118,6 @@
     <Reference Include="SPSRemoting">
       <HintPath>..\packages\SPSRemoting.1.0.0\lib\net40\SPSRemoting.dll</HintPath>
     </Reference>
-    <Reference Include="SPU.Lib.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.BusinessManager.UnitTest">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.BusinessManager.UnitTest.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Criteria, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.Criteria.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DataAccess, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DTO, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.DTO.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Service, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.Service.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
@@ -161,9 +155,9 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SPU.WinService.FraudDetection\SPU.WinService.FraudDetection.csproj">
+    <ProjectReference Include="..\SPU.WinService.FraudDetection\FD.WinService.FraudDetection.csproj">
       <Project>{472986c6-a30a-4b32-ae5a-fe69347bdfd7}</Project>
-      <Name>SPU.WinService.FraudDetection</Name>
+      <Name>FD.WinService.FraudDetection</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

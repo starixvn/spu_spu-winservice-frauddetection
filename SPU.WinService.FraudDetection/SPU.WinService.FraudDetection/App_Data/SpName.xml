@@ -1,53 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 
 <Functions>
-  <Function Name="SPU_FraudDetection">
-    <Setting Key="SPU_TaskSelectAll" SpName="SPU_TaskSelectAll" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_MatchInsert" SpName="SPU_MatchInsert" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_SuspiciousInfoInsert" SpName="SPU_SuspiciousInfoInsert"
-             DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_CustomerGroupInsert" SpName="SPU_CustomerGroupInsert"
-             DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+  <Function Name="FD_FraudDetection">
+    <Setting Key="FD_TaskGetAll" SpName="FD_TaskGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MatchInsert" SpName="FD_MatchInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciousInfoInsert" SpName="FD_SuspiciousInfoInsert"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerGroupInsert" SpName="FD_CustomerGroupInsert"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
-  <Function Name="SPU_MailMaster">
-    <Setting Key="SPU_MailMasterGetAll" SpName="SPU_MailMasterGetAll" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_MailMasterDelete" SpName="SPU_MailMasterDelete" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_MailMasterGetById" SpName="SPU_MailMasterGetById" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_MailMasterGetByName" SpName="SPU_MailMasterGetByName"
-             DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_MailMasterIns" SpName="SPU_MailMasterIns" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_MailMasterUpdate" SpName="SPU_MailMasterUpdate" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_MailMasterActivate" SpName="SPU_MailMasterActivate" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+  <Function Name="FD_MailMaster">
+    <Setting Key="FD_MailMasterGetAll" SpName="FD_MailMasterGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterDelete" SpName="FD_MailMasterDelete" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterGetById" SpName="FD_MailMasterGetById" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterGetByName" SpName="FD_MailMasterGetByName"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterIns" SpName="FD_MailMasterIns" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterUpdate" SpName="FD_MailMasterUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterActivate" SpName="FD_MailMasterActivate" DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
-  <Function Name="SPU_Task">
-    <Setting Key="SPU_EventSelectAll" SpName="SPU_EventSelectAll" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_ConfigurationSelectAll" SpName="SPU_ConfigurationSelectAll"
-             DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_SBSportSelectAll" SpName="SPU_SBSportSelectAll" DbName="DBSPU.bodb02.bodbSPUNet" />
-    <Setting Key="SPU_SBBettypeSelectAll" SpName="SPU_SBBettypeSelectAll" DbName="DBSPU.bodb02.bodbSPUNet" />
-    <Setting Key="SPU_TaskIns" SpName="SPU_TaskIns" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_TablesForeignKeySelectAll" SpName="SPU_TablesForeignKeySelectAll"
-             DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_CaseSelectById" SpName="SPU_CaseSelectById" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_SuspiciouCustomerSelect" SpName="SPU_SuspiciouCustomerSelect"
-             DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+  <Function Name="FD_Task">
+    <Setting Key="FD_EventSelectAll" SpName="FD_EventSelectAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_ConfigurationSelectAll" SpName="FD_ConfigurationSelectAll"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SBSportSelectAll" SpName="FD_SBSportSelectAll" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_SBBettypeSelectAll" SpName="FD_SBBettypeSelectAll" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_TaskIns" SpName="FD_TaskIns" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TablesForeignKeySelectAll" SpName="FD_TablesForeignKeySelectAll"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CaseSelectById" SpName="FD_CaseSelectById" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciouCustomerSelect" SpName="FD_SuspiciouCustomerSelect"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
 
-    <Setting Key="SPU_TaskInfoSelect" SpName="SPU_TaskInfoSelect" DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_TaskSelectByCaseId" SpName="SPU_TaskSelectByCaseId"
-         DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
-    <Setting Key="SPU_TaskSelectForExecuting" SpName="SPU_TaskSelectForExecuting"
-         DbName="DBSPU.SPU_FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskInfoSelect" SpName="FD_TaskInfoSelect" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskSelectByCaseId" SpName="FD_TaskSelectByCaseId"
+         DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskSelectForExecuting" SpName="FD_TaskSelectForExecuting"
+         DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
-  <Function Name="SPU_Suspicious_Customer">
-    <Setting Key="SPU_SelectUsernameByCustId" SpName="SPU_SelectUsernameByCustId" DbName="DBSPU.bodb02.bodbSPUNet" />
-    <Setting Key="SPU_SelectMatchInfoFromDB02" SpName="SPU_SelectMatchInfoFromDB02" DbName="DBSPU.bodb02.bodbSPUNet" />
-    <Setting Key="SPU_SelectMatchInfoFromDBArchive" SpName="SPU_SelectMatchInfoFromDBArchive"
-             DbName="DBSPU.bodb_Archive.bodbSPUNet" />
-    <Setting Key="SPU_SelBalanceUpDay" SpName="SPU_SelBalanceUpDay" DbName="DBSPU.bodb02.bodbSPUNet" />
-    <Setting Key="SPU_CustomerWinlostSelect" SpName="SPU_CustomerWinlostSelect" DbName="DBSPU.bodb02.bodbSPUNet" />
+  <Function Name="FD_Suspicious_Customer">
+    <Setting Key="FD_SelectUsernameByCustId" SpName="FD_SelectUsernameByCustId" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_SelectMatchInfoFromDB02" SpName="FD_SelectMatchInfoFromDB02" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_SelectMatchInfoFromDBArchive" SpName="FD_SelectMatchInfoFromDBArchive"
+             DbName="DBFD.bodb_Archive.bodbSPUNet" />
+    <Setting Key="FD_SelBalanceUpDay" SpName="FD_SelBalanceUpDay" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_CustomerWinlostSelect" SpName="FD_CustomerWinlostSelect" DbName="DBFD.bodb02.bodbSPUNet" />
   </Function>
 
 </Functions>

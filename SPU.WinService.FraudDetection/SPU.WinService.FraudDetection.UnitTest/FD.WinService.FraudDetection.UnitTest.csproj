@@ -6,8 +6,8 @@
     <ProjectGuid>{A37703D7-8393-4F0F-B660-6D78155A32BF}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SPU.WinService.FraudDetection.UnitTest</RootNamespace>
-    <AssemblyName>SPU.WinService.FraudDetection.UnitTest</AssemblyName>
+    <RootNamespace>FD.WinService.FraudDetection.UnitTest</RootNamespace>
+    <AssemblyName>FD.WinService.FraudDetection.UnitTest</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{3AC096D0-A1C2-E12C-1390-A8335801FDAB};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -47,6 +47,27 @@
     </Reference>
     <Reference Include="Fanex.NAP.Framework">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.BusinessManager">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.BusinessManager.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Core">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Criteria">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Criteria.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.DataAccess">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DataAccess.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.DTO">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.DTO.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Model">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Model.dll</HintPath>
+    </Reference>
+    <Reference Include="FD.Lib.Service">
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.Service.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -107,24 +128,6 @@
       <HintPath>..\packages\NUnitTestAdapter.2.0.0\lib\NUnit.VisualStudio.TestAdapter.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="SPU.Lib.Core">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Criteria">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.Criteria.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DataAccess">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.DataAccess.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.DTO">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.DTO.dll</HintPath>
-    </Reference>
-    <Reference Include="SPU.Lib.FraudDetection.Service">
-      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\SPU.Lib.FraudDetection.Service.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core">
@@ -165,9 +168,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SPU.WinService.FraudDetection\SPU.WinService.FraudDetection.csproj">
+    <ProjectReference Include="..\SPU.WinService.FraudDetection\FD.WinService.FraudDetection.csproj">
       <Project>{472986c6-a30a-4b32-ae5a-fe69347bdfd7}</Project>
-      <Name>SPU.WinService.FraudDetection</Name>
+      <Name>FD.WinService.FraudDetection</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

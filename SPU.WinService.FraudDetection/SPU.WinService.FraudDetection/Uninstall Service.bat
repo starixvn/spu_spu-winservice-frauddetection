@@ -1,1 +1,1 @@
-%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\InstallUtil.exe SPU.WinService.FraudDetection.exe /u SPU.WinService.FraudDetection.exe
+%WINDIR%\Microsoft.NET\Framework64\v4.0.30319\InstallUtil.exe FD.WinService.FraudDetection.exe /u FD.WinService.FraudDetection.exe

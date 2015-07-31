@@ -1,12 +1,10 @@
-﻿using System.Diagnostics;
-using System.ServiceProcess;
-using Fanex.Data.Configuration;
-using SPU.Lib.FraudDetection;
-
-namespace SPU.WinService.FraudDetection
+﻿namespace FD.WinService.FraudDetection
 {
-    using Lib.FraudDetection.QueueManagement;
-    using Lib.FraudDetection.TaskLoaders;
+    using System.Diagnostics;
+    using System.ServiceProcess;
+    using Fanex.Data.Configuration;
+    using FD.Lib.QueueManagement;
+    using FD.Lib.TaskLoaders;
 
     public partial class FraudDetectionService : ServiceBase
     {
@@ -64,7 +62,7 @@ namespace SPU.WinService.FraudDetection
 
         public void RunOnStart()
         {
-            var queue = new SpuMessageQueue();
+            var queue = new FDMessageQueue();
             queue.Clear();
             ReceivingMessageHandler.TriggerReceivingMessage();
             TaskLoader.LoadTasks();
