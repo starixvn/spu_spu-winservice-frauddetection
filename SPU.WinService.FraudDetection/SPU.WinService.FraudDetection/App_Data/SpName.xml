@@ -1,6 +1,86 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <Functions>
+  <Function Name="FD_Case">
+    <Setting Key="FD_CaseGetAll" SpName="FD_CaseGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CaseInsert" SpName="FD_CaseInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CaseUpdate" SpName="FD_CaseUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CaseUpdateStatus" SpName="FD_CaseUpdateStatus" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CaseGetById" SpName="FD_CaseGetById" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="FD_CustomerGroup">
+    <Setting Key="FD_GroupInsert" SpName="FD_GroupInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_GroupGetAll" SpName="FD_GroupGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_GroupGetById" SpName="FD_GroupGetById" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_GroupUpdate" SpName="FD_GroupUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_GroupUpdateStatus" SpName="FD_GroupUpdateStatus" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_GroupGetAvailableGroupForCase" SpName="FD_GroupGetAvailableGroupForCase" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="FD_Task">
+    <Setting Key="FD_EventGetAll" SpName="FD_EventGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_ConfigGetAll" SpName="FD_ConfigGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SBSportGetAll" SpName="FD_SBSportGetAll" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_SBBettypeGetAll" SpName="FD_SBBettypeGetAll" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_TaskInsert" SpName="FD_TaskInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TablesForeignKeyGetAll" SpName="FD_TablesForeignKeyGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskInfoGet" SpName="FD_TaskInfoGet" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskUpdate" SpName="FD_TaskUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskUpdateStatus" SpName="FD_TaskUpdateStatus" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskGetAllByCaseId" SpName="FD_TaskGetAllByCaseId" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskGetByCaseId" SpName="FD_TaskGetByCaseId" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciousCustomerGetAll" SpName="FD_SuspiciousCustomerGetAll"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskGetForExecuting" SpName="FD_TaskGetForExecuting"
+         DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="FD_Configurations">
+    <Setting Key="FD_ParameterGetAll" SpName="FD_ParameterGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_ConfigUpdate" SpName="FD_ConfigUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="FD_MailMaster">
+    <Setting Key="FD_MailMasterGetAll" SpName="FD_MailMasterGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterDelete" SpName="FD_MailMasterDelete" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterGetById" SpName="FD_MailMasterGetById" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterGetByName" SpName="FD_MailMasterGetByName" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterInsert" SpName="FD_MailMasterInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterUpdate" SpName="FD_MailMasterUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MailMasterUpdateStatus" SpName="FD_MailMasterUpdateStatus" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="Reports">
+    <Setting Key="FD_SuspiciousCustomerReportGetAll" SpName="FD_SuspiciousCustomerReportGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciousCustomerGetByGroup" SpName="FD_SuspiciousCustomerGetByGroup" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciousCustomerGetCount" SpName="FD_SuspiciousCustomerGetCount" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="FD_Suspicious_Customer">
+    <Setting Key="FD_GetUsernameByCustId" SpName="FD_GetUsernameByCustId" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_GetMatchInfoFromDB02" SpName="FD_GetMatchInfoFromDB02" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_GetMatchInfoFromDBArchive" SpName="FD_GetMatchInfoFromDBArchive" DbName="DBFD.bodb_Archive.bodbSPUNet" />
+    <Setting Key="FD_GetBalanceUpDay" SpName="FD_GetBalanceUpDay" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_CustomerWinlostGetByIds" SpName="FD_CustomerWinlostGetByIds" DbName="DBFD.bodb02.bodbSPUNet" />
+  </Function>
+
+  <Function Name="CaseGroup">
+    <Setting Key="FD_CaseGroupInsert" SpName="FD_CaseGroupInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CaseGroupDelete" SpName="FD_CaseGroupDelete" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CaseGroupGetAll" SpName="FD_CaseGroupGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="FD_CustomerBettingGroup">
+    <Setting Key="FD_CustomerBettingGroupInsert" SpName="FD_CustomerBettingGroupInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupGetAll" SpName="FD_CustomerBettingGroupGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupGetById" SpName="FD_CustomerBettingGroupGetById" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupUpdate" SpName="FD_CustomerBettingGroupUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupDelete" SpName="FD_CustomerBettingGroupDelete" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupGetCustomerByName" SpName="FD_CustomerBettingGroupGetCustomerByName" DbName="DBFD.bodb02.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupInsertCustomer" SpName="FD_CustomerBettingGroupInsertCustomer" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupDeleteCustomer" SpName="FD_CustomerBettingGroupDeleteCustomer" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
   <Function Name="FD_FraudDetection">
     <Setting Key="FD_TaskGetAll" SpName="FD_TaskGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_MatchInsert" SpName="FD_MatchInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
@@ -8,46 +88,6 @@
              DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_CustomerGroupInsert" SpName="FD_CustomerGroupInsert"
              DbName="DBFD.FraudDetection.bodbSPUNet" />
-  </Function>
-
-  <Function Name="FD_MailMaster">
-    <Setting Key="FD_MailMasterGetAll" SpName="FD_MailMasterGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_MailMasterDelete" SpName="FD_MailMasterDelete" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_MailMasterGetById" SpName="FD_MailMasterGetById" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_MailMasterGetByName" SpName="FD_MailMasterGetByName"
-             DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_MailMasterIns" SpName="FD_MailMasterIns" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_MailMasterUpdate" SpName="FD_MailMasterUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_MailMasterActivate" SpName="FD_MailMasterActivate" DbName="DBFD.FraudDetection.bodbSPUNet" />
-  </Function>
-
-  <Function Name="FD_Task">
-    <Setting Key="FD_EventSelectAll" SpName="FD_EventSelectAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_ConfigurationSelectAll" SpName="FD_ConfigurationSelectAll"
-             DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_SBSportSelectAll" SpName="FD_SBSportSelectAll" DbName="DBFD.bodb02.bodbSPUNet" />
-    <Setting Key="FD_SBBettypeSelectAll" SpName="FD_SBBettypeSelectAll" DbName="DBFD.bodb02.bodbSPUNet" />
-    <Setting Key="FD_TaskIns" SpName="FD_TaskIns" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_TablesForeignKeySelectAll" SpName="FD_TablesForeignKeySelectAll"
-             DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_CaseSelectById" SpName="FD_CaseSelectById" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_SuspiciouCustomerSelect" SpName="FD_SuspiciouCustomerSelect"
-             DbName="DBFD.FraudDetection.bodbSPUNet" />
-
-    <Setting Key="FD_TaskInfoSelect" SpName="FD_TaskInfoSelect" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_TaskSelectByCaseId" SpName="FD_TaskSelectByCaseId"
-         DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_TaskSelectForExecuting" SpName="FD_TaskSelectForExecuting"
-         DbName="DBFD.FraudDetection.bodbSPUNet" />
-  </Function>
-
-  <Function Name="FD_Suspicious_Customer">
-    <Setting Key="FD_SelectUsernameByCustId" SpName="FD_SelectUsernameByCustId" DbName="DBFD.bodb02.bodbSPUNet" />
-    <Setting Key="FD_SelectMatchInfoFromDB02" SpName="FD_SelectMatchInfoFromDB02" DbName="DBFD.bodb02.bodbSPUNet" />
-    <Setting Key="FD_SelectMatchInfoFromDBArchive" SpName="FD_SelectMatchInfoFromDBArchive"
-             DbName="DBFD.bodb_Archive.bodbSPUNet" />
-    <Setting Key="FD_SelBalanceUpDay" SpName="FD_SelBalanceUpDay" DbName="DBFD.bodb02.bodbSPUNet" />
-    <Setting Key="FD_CustomerWinlostSelect" SpName="FD_CustomerWinlostSelect" DbName="DBFD.bodb02.bodbSPUNet" />
   </Function>
 
 </Functions>
