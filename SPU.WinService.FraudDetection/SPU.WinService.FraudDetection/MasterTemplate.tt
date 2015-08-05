@@ -1,0 +1,50 @@
+﻿<#@ template debug="false" hostspecific="true" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ include file="$(SolutionDir)\Packages\T4.TemplateFileManager.2.2.1\tools\ttinc\TemplateFilemanager.CS.ttinclude" #>
+<#@ output extension=".txt" #>
+<# 
+// Recommended editor: Tangible T4 Editor (http://t4-editor.tangible-engineering.com/Download_T4Editor_Plus_ModelingTools.html)
+// after save SimpleSample.tt, the output will be generated in the TestFolder of the project
+var fileProperties = new FileProperties()
+{
+	BuildAction = BuildAction.Compile
+};
+
+var fileManager = TemplateFileManager.Create(this);
+fileManager.IsAutoIndentEnabled = true;
+fileManager.CanOverwriteExistingFile = true;
+
+// init handling for parameter templates, included in T4TemplateFileManager
+var paramTmpl = ParamTextTemplate.Create(this.Host); 
+
+var currentDirectory = this.Host.ResolvePath("");
+
+var buildEnvironments = new string[] 
+{
+	currentDirectory + @"\bin\Debug"
+	,currentDirectory +  @"\bin\Release"
+};
+
+foreach (var buildEnvironment in buildEnvironments)
+{
+	if(!Directory.Exists(buildEnvironment))
+	{
+		continue;
+	}
+
+	fileManager.StartNewFile(buildEnvironment + @"\FD.WinService.FraudDetection.exe.LOCAL.config");
+	string output = paramTmpl.TransformText("app.LOCAL.config.tt", null);
+	this.Write(output);
+
+	fileManager.StartNewFile(buildEnvironment + @"\FD.WinService.FraudDetection.exe.UAT.config");
+	output = paramTmpl.TransformText("app.UAT.config.tt", null);
+	this.Write(output);
+
+	fileManager.StartNewFile(buildEnvironment + @"\FD.WinService.FraudDetection.exe.PRO.config");
+	output = paramTmpl.TransformText("app.PRO.config.tt", null);
+	this.Write(output);
+	
+}
+
+fileManager.Process();
+#>

@@ -34,6 +34,15 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'UAT|x86'">
+    <OutputPath>bin\x86\UAT\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PRO|x86'">
+    <OutputPath>bin\x86\PRO\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Fanex.MailStation.1.0.7.0\lib\net40\Common.Logging.dll</HintPath>
@@ -158,6 +167,16 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <Content Include="app.PRO.config.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>app.PRO.config.tt</DependentUpon>
+    </Content>
+    <Content Include="app.UAT.config.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>app.UAT.config.tt</DependentUpon>
+    </Content>
     <Content Include="Dependencies\FD.Lib.BusinessManager.dll" />
     <Content Include="Dependencies\FD.Lib.Core.dll" />
     <Content Include="Dependencies\FD.Lib.Criteria.dll" />
@@ -168,16 +187,38 @@
     <Content Include="Install Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="MasterTemplate.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MasterTemplate.tt</DependentUpon>
+    </Content>
     <Content Include="Uninstall Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="app.LOCAL.config.config">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>app.LOCAL.config.tt</DependentUpon>
+    </None>
+    <None Include="app.LOCAL.config.tt">
+      <SubType>Designer</SubType>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>app.LOCAL.config.config</LastGenOutput>
+    </None>
+    <None Include="app.PRO.config.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>app.PRO.config.txt</LastGenOutput>
+    </None>
+    <None Include="app.UAT.config.tt">
+      <SubType>Designer</SubType>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>app.UAT.config.txt</LastGenOutput>
+    </None>
     <None Include="packages.config" />
-    <Content Include="ReportTemplateRenders\TableTemplates\MarginReport.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ReportTemplateRenders\TableTemplates\SuspiciousStatisticsReport.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <None Include="MasterTemplate.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MasterTemplate.txt</LastGenOutput>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FraudDetectionService.resx">
@@ -193,7 +234,17 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="bin\Debug\" />
+    <Folder Include="bin\Release\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>call $(ProjectDir)"Uninstall Service.bat"</PreBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

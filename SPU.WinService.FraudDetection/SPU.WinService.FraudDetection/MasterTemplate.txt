@@ -1,0 +1,12 @@
+﻿
+Error processing file FD.WinService.FraudDetection.exe.LOCAL.config The document cannot be opened. It has been renamed, deleted or moved.
+//-> FD.WinService.FraudDetection.exe.LOCAL.config
+Error processing file FD.WinService.FraudDetection.exe.PRO.config The document cannot be opened. It has been renamed, deleted or moved.
+//-> FD.WinService.FraudDetection.exe.PRO.config
+Error processing file FD.WinService.FraudDetection.exe.UAT.config The document cannot be opened. It has been renamed, deleted or moved.
+//-> FD.WinService.FraudDetection.exe.UAT.config
+// Generated helper templates
+// Generated items
+// SPU.WinService.FraudDetection\SPU.WinService.FraudDetection\bin\Debug\FD.WinService.FraudDetection.exe.PRO.config
+// SPU.WinService.FraudDetection\SPU.WinService.FraudDetection\bin\Debug\FD.WinService.FraudDetection.exe.UAT.config
+// SPU.WinService.FraudDetection\SPU.WinService.FraudDetection\bin\Debug\FD.WinService.FraudDetection.exe.LOCAL.config

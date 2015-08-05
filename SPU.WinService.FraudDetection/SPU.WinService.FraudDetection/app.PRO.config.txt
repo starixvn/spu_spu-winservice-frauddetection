@@ -37,18 +37,18 @@
       </providers>
     </roleManager>
   </system.web>
-  <Fanex.MailDelivery.Client environment="UAT" 
-                             applicationSendMailId="3"
-                             siteId="25" 
-                             rabbitMQConnectionString="host=10.40.40.127;virtualHost=/MailStationHost;username=rabbitclient" 
-                             messageBrokerLogCategory="MailCentralized">
+<Fanex.MailDelivery.Client environment="PRO" 
+                           applicationSendMailId="55" 
+                           siteId="25" 
+                           rabbitMQConnectionString="host=10.40.40.127;virtualHost=/MailStationHost;username=rabbitclient" 
+                           messageBrokerLogCategory="MailCentralized">
         <Functions>
           <!--<add id="1" name="YourFunction" />-->
         </Functions>
         <Schedules>
           <!--<Schedule id="2" name="YourSchedule" job="YourProject.Namespace.Job, YourProject">-->
         </Schedules>
-    </Fanex.MailDelivery.Client>
+  </Fanex.MailDelivery.Client>
   <runtime>
     <assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">
       <dependentAssembly>
