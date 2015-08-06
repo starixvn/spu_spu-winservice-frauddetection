@@ -192,6 +192,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MasterTemplate.tt</DependentUpon>
     </Content>
+    <Content Include="TextFile1.txt" />
     <Content Include="Uninstall Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
