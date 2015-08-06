@@ -32,18 +32,17 @@ foreach (var buildEnvironment in buildEnvironments)
 		continue;
 	}
 
-	fileManager.StartNewFile(buildEnvironment + @"\FD.WinService.FraudDetection.exe.LOCAL.config");
+	fileManager.StartNewFile("FD.WinService.FraudDetection.exe.LOCAL.config");
 	string output = paramTmpl.TransformText("app.LOCAL.config.tt", null);
 	this.Write(output);
 
-	fileManager.StartNewFile(buildEnvironment + @"\FD.WinService.FraudDetection.exe.UAT.config");
+	fileManager.StartNewFile("FD.WinService.FraudDetection.exe.UAT.config");
 	output = paramTmpl.TransformText("app.UAT.config.tt", null);
 	this.Write(output);
 
-	fileManager.StartNewFile(buildEnvironment + @"\FD.WinService.FraudDetection.exe.PRO.config");
+	fileManager.StartNewFile("FD.WinService.FraudDetection.exe.PRO.config");
 	output = paramTmpl.TransformText("app.PRO.config.tt", null);
-	this.Write(output);
-	
+	this.Write(output);	
 }
 
 fileManager.Process();
