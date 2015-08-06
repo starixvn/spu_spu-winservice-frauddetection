@@ -24,8 +24,7 @@
   <connectionStrings>
     <add name="DBFD.bodb02.bodbSPUNet" connectionString="Data Source=10.18.200.215;Initial Catalog=bodb02;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />
     <add name="DBFD.bodb_Archive.bodbSPUNet" connectionString="Data Source=10.18.200.215;Initial Catalog=bodb_Archive;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />
-    <add name="DBFD.FraudDetection.bodbSPUNet" connectionString="Data Source=10.18.200.215;Initial Catalog=SPU_FraudDetection;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />
-    <add name="DBFD.FraudDetection.bodbSPUNet2" connectionString="Data Source=10.18.200.215;Initial Catalog=SPU_FraudDetection;User Id=sputeam;Password=@sputeam#" providerName="System.Data.SqlClient" />
+    <add name="DBFD.FraudDetection.bodbSPUNet" connectionString="Data Source=10.18.200.215;Initial Catalog=SPU_FraudDetection;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />    
   </connectionStrings>
   <system.web>
     <membership defaultProvider="ClientAuthenticationMembershipProvider">
