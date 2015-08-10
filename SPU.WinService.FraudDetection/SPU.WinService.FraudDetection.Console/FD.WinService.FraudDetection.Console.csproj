@@ -61,7 +61,8 @@
     <Reference Include="Fanex.NAP.Framework">
       <HintPath>..\packages\Fanex.NAP.Framework.1.0.0.3\lib\net40\Fanex.NAP.Framework.dll</HintPath>
     </Reference>
-    <Reference Include="FD.Lib.BusinessManager">
+    <Reference Include="FD.Lib.BusinessManager, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
       <HintPath>..\SPU.WinService.FraudDetection\Dependencies\FD.Lib.BusinessManager.dll</HintPath>
     </Reference>
     <Reference Include="FD.Lib.Core">

@@ -3,6 +3,7 @@
     using System.Diagnostics;
     using System.ServiceProcess;
     using Fanex.Data.Configuration;
+    using Fanex.MailDelivery.Client.Handlers;
     using FD.Lib.QueueManagement;
     using FD.Lib.TaskLoaders;
 
@@ -53,6 +54,7 @@
         protected override void OnStop()
         {
             ReceivingMessageHandler.ClearTasks();
+            MailClientHandler.Stop();
         }
 
         protected override void OnShutdown()
@@ -62,6 +64,8 @@
 
         public void RunOnStart()
         {
+            MailClientHandler.Start();
+
             var queue = new FDMessageQueue();
             queue.Clear();
             ReceivingMessageHandler.TriggerReceivingMessage();
