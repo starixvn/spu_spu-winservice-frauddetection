@@ -38,7 +38,7 @@
     </roleManager>
   </system.web>
 <Fanex.MailDelivery.Client environment="PRO" 
-                           applicationSendMailId="55" 
+                           applicationSendMailId="53" 
                            siteId="25" 
                            rabbitMQConnectionString="host=10.40.40.127;virtualHost=/MailStationHost;username=rabbitclient" 
                            messageBrokerLogCategory="MailCentralized">
