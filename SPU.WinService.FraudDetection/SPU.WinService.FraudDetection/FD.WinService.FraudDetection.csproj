@@ -177,6 +177,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>app.UAT.config.tt</DependentUpon>
     </Content>
+    <Content Include="app.UAT.config1.txt">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>app.UAT.config.tt</DependentUpon>
+    </Content>
     <Content Include="Dependencies\FD.Lib.BusinessManager.dll" />
     <Content Include="Dependencies\FD.Lib.Core.dll" />
     <Content Include="Dependencies\FD.Lib.Criteria.dll" />
@@ -204,7 +209,12 @@
     <None Include="app.LOCAL.config.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>app.LOCAL.config.config</LastGenOutput>
+      <LastGenOutput>app.LOCAL.config1.config</LastGenOutput>
+    </None>
+    <None Include="app.LOCAL.config1.config">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>app.LOCAL.config.tt</DependentUpon>
     </None>
     <None Include="app.PRO.config.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -214,12 +224,11 @@
     <None Include="app.UAT.config.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>app.UAT.config.txt</LastGenOutput>
+      <LastGenOutput>app.UAT.config1.txt</LastGenOutput>
     </None>
     <Content Include="FD.WinService.FraudDetection.exe.LOCAL.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
     </Content>
     <Content Include="FD.WinService.FraudDetection.exe.PRO.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
