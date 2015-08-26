@@ -165,6 +165,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FD.WinService.FraudDetection.Core\FD.WinService.FraudDetection.Core.csproj">
+      <Project>{d655014f-b9be-4c41-93a3-b035554a0ade}</Project>
+      <Name>FD.WinService.FraudDetection.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\SPU.WinService.FraudDetection\FD.WinService.FraudDetection.csproj">
       <Project>{472986c6-a30a-4b32-ae5a-fe69347bdfd7}</Project>
       <Name>FD.WinService.FraudDetection</Name>

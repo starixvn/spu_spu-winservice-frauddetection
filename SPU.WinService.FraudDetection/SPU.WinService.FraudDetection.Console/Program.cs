@@ -1,6 +1,7 @@
 ﻿namespace FD.WinService.FraudDetection.Console
 {
     using System;
+    using Core.QueueManagement;
     using Lib.QueueManagement;
     using SPU.WinService.FraudDetection;
 
@@ -8,7 +9,7 @@
     {
         private static void Main(string[] args)
         {
-            var queue = new FDMessageQueue();
+            var queue = new MessageQueueReceiver();
             queue.Clear();
 
             var sut = new FraudDetectionService();

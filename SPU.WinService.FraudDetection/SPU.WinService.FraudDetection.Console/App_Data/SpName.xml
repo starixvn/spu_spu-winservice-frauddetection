@@ -62,6 +62,9 @@
     <Setting Key="FD_GetMatchInfoFromDBArchive" SpName="FD_GetMatchInfoFromDBArchive" DbName="DBFD.bodb_Archive.bodbSPUNet" />
     <Setting Key="FD_GetBalanceUpDay" SpName="FD_GetBalanceUpDay" DbName="DBFD.bodb02.bodbSPUNet" />
     <Setting Key="FD_CustomerWinlostGetByIds" SpName="FD_CustomerWinlostGetByIds" DbName="DBFD.bodb02.bodbSPUNet" />
+
+    <Setting Key="FD_NewSuspiciousCustomersGet" SpName="FD_NewSuspiciousCustomersGet" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciousCustomerInsert" SpName="FD_SuspiciousCustomerInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
   <Function Name="CaseGroup">

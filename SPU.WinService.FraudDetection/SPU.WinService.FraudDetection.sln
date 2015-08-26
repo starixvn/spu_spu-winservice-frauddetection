@@ -14,6 +14,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{341C43
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FD.WinService.FraudDetection.Console", "SPU.WinService.FraudDetection.Console\FD.WinService.FraudDetection.Console.csproj", "{DE5364C2-0A74-443F-A777-39D301AAC3F0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FD.WinService.FraudDetection.Core", "FD.WinService.FraudDetection.Core\FD.WinService.FraudDetection.Core.csproj", "{D655014F-B9BE-4C41-93A3-B035554A0ADE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FD.WinService.FraudDetection.Core.UnitTest", "FD.WinService.FraudDetection.Core.UnitTest\FD.WinService.FraudDetection.Core.UnitTest.csproj", "{14C76B13-17F8-4D94-8833-DCAD2C57C525}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +59,26 @@ Global
 		{DE5364C2-0A74-443F-A777-39D301AAC3F0}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{DE5364C2-0A74-443F-A777-39D301AAC3F0}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{DE5364C2-0A74-443F-A777-39D301AAC3F0}.Release|x86.ActiveCfg = Release|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D655014F-B9BE-4C41-93A3-B035554A0ADE}.Release|x86.ActiveCfg = Release|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{14C76B13-17F8-4D94-8833-DCAD2C57C525}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

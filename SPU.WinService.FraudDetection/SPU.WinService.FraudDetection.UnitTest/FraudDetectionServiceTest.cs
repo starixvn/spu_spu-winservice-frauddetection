@@ -3,21 +3,23 @@
     using System;
     using System.Collections.Generic;
     using System.Threading;
+    using Core.QueueManagement;
     using Fanex.Data.Repository;
-    using FD.Lib.QueueManagement;
-    using FD.Lib.QueueManagement.SendingTasks;
-    using FD.Lib.Service.Interface;
-    using FD.Lib.TaskExecutors;
-    using FD.Lib.TaskLoaders;
-    using FD.WinService.FraudDetection;
     using Lib.DTO;
+    using Lib.QueueManagement;
+    using Lib.QueueManagement.SendingTasks;
+    using Lib.Service.Interface;
+    using Lib.TaskExecutors;
+    using Lib.TaskLoaders;
     using Moq;
     using NUnit.Framework;
 
     [TestFixture]
     public class FraudDetectionServiceTest
     {
-        private FDMessageQueue _mockSpuQueue;
+        private IMessageQueueSender _mockSpuQueueSender;
+
+        private IMessageQueueReceiver _mockSpuQueueReceiver;
 
         private ReceivingMessageHandler _mockMessageHandler;
 
@@ -32,19 +34,20 @@
         [SetUp]
         public void SetUp()
         {
-            _mockSpuQueue = new FDMessageQueue();
+            _mockSpuQueueSender = new MessageQueueSender();
+            _mockSpuQueueReceiver = new MessageQueueReceiver();
             _mockTaskService = new Mock<ITaskService>();
             _mockTaskManager = new Mock<ITaskManager>();
-            _mockTaskLoader = new TaskLoader(_mockTaskService.Object, _mockSpuQueue);
-            _mockMessageHandler = new ReceivingMessageHandler(_mockTaskManager.Object, _mockSpuQueue);
+            _mockTaskLoader = new TaskLoader(_mockTaskService.Object, _mockSpuQueueSender);
+            _mockMessageHandler = new ReceivingMessageHandler(_mockTaskManager.Object, _mockSpuQueueReceiver);
             _sut = new FraudDetectionService(_mockTaskLoader, _mockMessageHandler);
-            _mockSpuQueue.Clear();
+            
         }
 
         [TearDown]
         public void TearDown()
         {
-            _mockSpuQueue.Stop();
+            _mockSpuQueueReceiver.Stop();
         }
 
         [Test]
@@ -104,12 +107,14 @@
             _mockTaskService.Setup(x => x.LoadAllTasks(It.IsAny<ICriteria>())).Returns(sampleTasks);
 
             // ---- Act ---
+
+            
             _sut.RunOnStart();
 
-            updatingTask.Send(sampleTask);
+            updatingTask.Send(2);
 
             // --- Assert  ---
-            Thread.Sleep(TimeSpan.FromSeconds(2));
+            Thread.Sleep(TimeSpan.FromSeconds(5));
 
             _mockTaskManager.Verify(x => x.UpdateTask(It.IsAny<int>()), Times.Exactly(1));
         }
@@ -127,7 +132,7 @@
             // ---- Act ---
             _sut.RunOnStart();
 
-            removeingTask.Send(sampleTask);
+            removeingTask.Send(2);
 
             // --- Assert  ---
             Thread.Sleep(TimeSpan.FromSeconds(3));
@@ -141,6 +146,8 @@
             {
                 EventId = 2,
                 Interval = 60,
+                NextActionIdList = "1",
+                NextActionTargetIdList = "1",
                 IntervalType = "Second",
                 IsBackgroundProcess = true,
                 TaskPreconditions =
@@ -149,7 +156,7 @@
                     "select ans.custid,ans.matchid,ans.transid from bodb02.dbo.match tch inner join bodb02.dbo.bettrans ans on tch.matchid = ans.matchid  where tch.matchid in ($param1$) and (ans.stake >= 300 AND ans.statusid = 112)",
                 CaseId = 4,
                 TaskName = "Scan Match - Find Ticket",
-                TaskId = 80
+                TaskId = 2
             };
 
             return sampleTask;

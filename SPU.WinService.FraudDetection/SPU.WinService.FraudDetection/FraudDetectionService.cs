@@ -2,10 +2,11 @@
 {
     using System.Diagnostics;
     using System.ServiceProcess;
+    using Core.QueueManagement;
     using Fanex.Data.Configuration;
     using Fanex.MailDelivery.Client.Handlers;
-    using FD.Lib.QueueManagement;
-    using FD.Lib.TaskLoaders;
+    using Lib.QueueManagement;
+    using Lib.TaskLoaders;
 
     public partial class FraudDetectionService : ServiceBase
     {
@@ -66,7 +67,7 @@
         {
             MailClientHandler.Start();
 
-            var queue = new FDMessageQueue();
+            var queue = new MessageQueueReceiver();
             queue.Clear();
             ReceivingMessageHandler.TriggerReceivingMessage();
             TaskLoader.LoadTasks();

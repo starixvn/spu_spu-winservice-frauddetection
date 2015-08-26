@@ -247,10 +247,10 @@
       <LastGenOutput>MasterTemplate.txt</LastGenOutput>
     </None>
     <Content Include="ReportTemplateRenders\TableTemplates\MarginReport.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="ReportTemplateRenders\TableTemplates\SuspiciousStatisticsReport.cshtml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -264,7 +264,7 @@
   <ItemGroup>
     <Content Include="App_Data\SpName.xml">
       <SubType>Designer</SubType>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
@@ -273,6 +273,12 @@
   <ItemGroup>
     <Folder Include="bin\Debug\" />
     <Folder Include="bin\Release\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FD.WinService.FraudDetection.Core\FD.WinService.FraudDetection.Core.csproj">
+      <Project>{D655014F-B9BE-4C41-93A3-B035554A0ADE}</Project>
+      <Name>FD.WinService.FraudDetection.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
