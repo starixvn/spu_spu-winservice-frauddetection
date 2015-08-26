@@ -18,8 +18,7 @@
   <appSettings>
     <add key="ClientSettingsProvider.ServiceUri" value="" />
     <add key="RemoteRefURL" value="tcp://10.40.40.29:8098/CallGetRefFunction" />
-    <add key="RemoteCacheUrl" value="tcp://10.40.40.29:8098/CallGetOddsFunction" />
-    <!--<add key="queuePath" value="FormatName:DIRECT=http://10.40.40.127/msmq/Private$/fdmessagequeue"/>-->
+    <add key="RemoteCacheUrl" value="tcp://10.40.40.29:8098/CallGetOddsFunction" />    
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.40.40.127\private$\fdmessagequeue"/>
     <add key="FDUrl" value="tcp://10.40.40.150:8990/UMControllerInterface" />
   </appSettings>
