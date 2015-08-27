@@ -14,6 +14,7 @@ namespace FD.Lib.BusinessManager.ReportTemplateRenders
     using System.IO;
     using Lib.ReportTemplateRenders;
     using Model.ReportTemplate;
+    using WinService.FraudDetection.Core.ReportTemplateRenders;
     using WinService.FraudDetection.Core.ReportTemplateRenders.TableRenders;
 
     public class SuspiciousStatisticReporRenderAbstractFactory : IReportRenderAbstractFactory

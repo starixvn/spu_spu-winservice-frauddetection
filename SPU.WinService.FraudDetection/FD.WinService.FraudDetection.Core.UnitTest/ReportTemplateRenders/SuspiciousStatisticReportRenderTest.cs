@@ -3,9 +3,9 @@
     using System;
     using System.Collections.Generic;
     using FD.Lib.BusinessManager.ReportTemplateRenders;
-    using FD.Lib.BusinessManager.UnitTest.ReportTemplateRenders;
     using FD.Lib.Model.ReportTemplate;
     using FD.Lib.ReportTemplateRenders;
+    using FD.WinService.FraudDetection.Core.UnitTest.ReportTemplateRenders;
     using NUnit.Framework;
 
     [TestFixture]

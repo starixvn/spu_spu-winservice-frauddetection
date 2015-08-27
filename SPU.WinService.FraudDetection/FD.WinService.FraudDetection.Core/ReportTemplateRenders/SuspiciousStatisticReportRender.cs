@@ -7,10 +7,11 @@
 //   <change who="Long.Luu" date="2015.07.23">Created</change>
 // </history>
 
-namespace FD.Lib.ReportTemplateRenders
+namespace FD.WinService.FraudDetection.Core.ReportTemplateRenders
 {
     using System.Collections.Generic;
     using System.Text;
+    using Lib.ReportTemplateRenders;
     using WinService.FraudDetection.Core.ReportTemplateRenders.TableRenders;
 
     public class SuspiciousStatisticReportRender : IReportTemplateRender
