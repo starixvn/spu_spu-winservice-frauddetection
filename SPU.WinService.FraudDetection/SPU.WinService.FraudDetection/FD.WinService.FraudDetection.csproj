@@ -232,15 +232,15 @@
     </None>
     <Content Include="FD.WinService.FraudDetection.exe.LOCAL.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="FD.WinService.FraudDetection.exe.PRO.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="FD.WinService.FraudDetection.exe.UAT.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <None Include="packages.config" />
     <None Include="MasterTemplate.tt">

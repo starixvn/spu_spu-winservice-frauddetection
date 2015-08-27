@@ -27,7 +27,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     /// </summary>
     public class SavingSuspicious
     {
-        protected const int ChunkSize = 60;
+        protected const int ChunkSize = 50;
 
         private readonly IList<string> _matchIdList;
 
@@ -65,11 +65,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         {
             if (_suspiciousInfoList.Count > 0)
             {
-                //var task1 = System.Threading.Tasks.Task.Factory.StartNew(InsertSuspiciousInfo);
-                //var task2 = System.Threading.Tasks.Task.Factory.StartNew(InsertSuspiciousCustomers);
-
-                //System.Threading.Tasks.Task.WaitAll(task1, task2);
-
                 InsertSuspiciousCustomers();
                 InsertSuspiciousInfo();
             }
@@ -128,10 +123,16 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 return;
             }
 
-            InsertNewSuspiciousCustomers(newSuspiciousCustomers);
+            var newSuspiciousCustomerChunks = newSuspiciousCustomers.Chunk(ChunkSize);
+
+            foreach (var newSuspiciousCustomer in newSuspiciousCustomerChunks)
+            {
+
+                InsertNewSuspiciousCustomers(newSuspiciousCustomer);
+            }
         }
 
-        private void InsertNewSuspiciousCustomers(IList<int> suspiciousCustomers)
+        private void InsertNewSuspiciousCustomers(IEnumerable<int> suspiciousCustomers)
         {
             var customers = CustomerService.GetCustormersByCustIds(new CustomerSelectCriteria()
             {
@@ -147,12 +148,21 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         private IList<int> FindNewSuspiciousCustomers()
         {
             var custIds = _suspiciousInfoList.Select(t => t.CustId).Distinct().ToList();
-            var custStr = string.Join(",", custIds);
 
-            var newSuspiciousCustomers = SuspiciousCustomerService.GetNewSuspiciousCustomers(new NewSuspiciousCustomersGetCriteria
+            var custIdChunks = custIds.Chunk(ChunkSize);
+            var newSuspiciousCustomers = new List<int>();
+
+            foreach (var custIdChunk in custIdChunks)
             {
-                SuspiciousCustomers = custStr
-            });
+                var custStr = string.Join(",", custIdChunk);
+
+                var temp = SuspiciousCustomerService.GetNewSuspiciousCustomers(new NewSuspiciousCustomersGetCriteria
+                {
+                    SuspiciousCustomers = custStr
+                });
+
+                newSuspiciousCustomers.AddRange(temp);
+            }
 
             return newSuspiciousCustomers;
         }
@@ -167,7 +177,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 builder.Append("<Row>");
                 builder.Append(GetElement("CustId", suspiciousCustomer.CustId));
                 builder.Append(GetElement("CustName", suspiciousCustomer.CustName));
-                
+
                 builder.Append("</Row>");
             }
 
