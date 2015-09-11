@@ -7,12 +7,13 @@
 //   <change who="Long.Luu" date="2015.07.23">Created</change>
 // </history>
 
-namespace FD.Lib.TaskExecutors
+namespace FD.WinService.FraudDetection.Core.TaskExecutors
 {
     using System;
-    using BusinessManager.TaskExecutors;
-    using Core.Utilities;
-    using DTO;
+    using Lib.BusinessManager.TaskExecutors;
+    using Lib.Core.Utilities;
+    using Lib.DTO;
+    using Lib.TaskExecutors;
 
     public class TaskExecutorFactory
     {
@@ -27,6 +28,9 @@ namespace FD.Lib.TaskExecutors
 
                 case EventType.CountSuspiciousTimesByCustomer:
                     return new CountingSuspicousTimesTaskExecutor(task);
+
+                case EventType.ScanMatchAndFindBettingGroups:
+                    return new FindBettingGroupsTaskExecutor(task);
 
                 default:
                     throw new ArgumentOutOfRangeException();

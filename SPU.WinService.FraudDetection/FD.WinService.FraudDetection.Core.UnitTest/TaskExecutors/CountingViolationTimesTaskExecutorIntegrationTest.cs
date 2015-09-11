@@ -5,6 +5,7 @@
     using Lib.TaskExecutors;
     using NUnit.Framework;
     using Service.Implement;
+    using WinService.FraudDetection.Core.TaskExecutors;
 
     [TestFixture]
     public class CountingViolationTimesTaskExecutorIntegrationTest : IntegrationTest

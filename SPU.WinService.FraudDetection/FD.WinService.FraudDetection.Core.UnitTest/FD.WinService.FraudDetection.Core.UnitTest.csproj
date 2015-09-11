@@ -156,6 +156,7 @@
     <Compile Include="SendingMessage\ReceivingMessageHandlerTest.cs" />
     <Compile Include="SendingMessage\TaskManagerTest.cs" />
     <Compile Include="TaskExecutors\CountingViolationTimesTaskExecutorIntegrationTest.cs" />
+    <Compile Include="TaskExecutors\FindBettingGroupsTaskExecutorIntegrationTest.cs" />
     <Compile Include="TaskExecutors\ScanMatchTaskExecutorTest.cs" />
     <Compile Include="TaskLoader\TaskLoaderTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

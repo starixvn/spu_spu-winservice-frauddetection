@@ -5,6 +5,7 @@
     using Lib.TaskExecutors;
     using NUnit.Framework;
     using Service.Implement;
+    using WinService.FraudDetection.Core.TaskExecutors;
 
     [TestFixture]
     public class ScanMatchTaskExecutorIntegrationTest : IntegrationTest
@@ -16,7 +17,7 @@
 
             var task = taskService.GetTaskForExecuting(new TaskGetForExecutingCriteria
             {
-                TaskId = 3
+                TaskId = 18
             });
            
             // --- Arrange ---

@@ -18,6 +18,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     using Lib.TaskExecutors;
     using Service.Implement;
     using Service.Interface;
+    using WinService.FraudDetection.Core.TaskExecutors;
 
     /// <summary>
     ///     TaskManager Class.

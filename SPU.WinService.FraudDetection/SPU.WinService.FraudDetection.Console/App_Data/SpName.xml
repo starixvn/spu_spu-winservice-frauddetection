@@ -93,4 +93,15 @@
              DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
+  <Function Name="FD_SuspiciousGroupInfo">
+    <Setting Key="FD_SuspiciousGroupInfoInsert" SpName="FD_SuspiciousGroupInfoInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="CustomerBettingGroupDetails">
+    <Setting Key="FD_BettingGroupAutomaticallyCreate" SpName="FD_BettingGroupAutomaticallyCreate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_RelatedBettingGroupGet" SpName="FD_RelatedBettingGroupGet" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomersIntoBettingGroupInsert" SpName="FD_CustomersIntoBettingGroupInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_CustomerBettingGroupsMerge" SpName="FD_CustomerBettingGroupsMerge" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
 </Functions>

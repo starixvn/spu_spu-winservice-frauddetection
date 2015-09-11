@@ -24,6 +24,11 @@ namespace FD.Lib.TaskExecutors
         /// <summary>
         /// Count Suspicious Times By Customer.
         /// </summary>
-        CountSuspiciousTimesByCustomer = 2
+        CountSuspiciousTimesByCustomer = 2,
+
+        /// <summary>
+        /// Scan Match And Find Betting Groups.
+        /// </summary>
+        ScanMatchAndFindBettingGroups = 3
     }
 }
