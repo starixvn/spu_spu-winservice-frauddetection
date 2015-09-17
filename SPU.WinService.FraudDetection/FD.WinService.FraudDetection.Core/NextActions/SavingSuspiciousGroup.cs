@@ -90,7 +90,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             }
         }
 
-
         private void CreateAndMergeBettingGroup()
         {
             ConvertIntoRawBettingGroup();
@@ -157,7 +156,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                     GroupId = selectedGroup,
                     XmlDoc = CreateXmlParamForInsertingCustomerBettingGroups(chunk)
                 });
-            }            
+            }
         }
 
         private void CreateNewBettingGroups()
@@ -190,7 +189,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                     GroupId = criteria.NewGroupId,
                     XmlDoc = CreateXmlParamForInsertingCustomerBettingGroups(chunk)
                 });
-            }    
+            }
         }
 
         private void InsertScannedMatch()
@@ -248,7 +247,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
             foreach (var newSuspiciousCustomer in newSuspiciousCustomerChunks)
             {
-
                 InsertNewSuspiciousCustomers(newSuspiciousCustomer);
             }
         }

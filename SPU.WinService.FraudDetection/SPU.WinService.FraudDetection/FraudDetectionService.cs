@@ -4,6 +4,7 @@
     using System.ServiceProcess;
     using Core.QueueManagement;
     using Fanex.Data.Configuration;
+    using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
     using Lib.QueueManagement;
     using Lib.TaskLoaders;
@@ -25,18 +26,7 @@
 
         private void InitDependencies()
         {
-            InitializeComponent();
-
-            eventLog1 = new EventLog();
-
-            if (!EventLog.SourceExists("MySource"))
-            {
-                EventLog.CreateEventSource("MySource", "MyNewLog");
-            }
-
-            eventLog1.Source = "MySource";
-            eventLog1.Log = "MyNewLog";
-            eventLog1.WriteEntry("Installing Fraud Detection Windows Service");
+            InitializeComponent();       
         }
 
         public FraudDetectionService(ITaskLoader taskLoader, IReceivingMessageHandler receivingMessageHandler)
@@ -65,12 +55,16 @@
 
         public void RunOnStart()
         {
+            Logger.Log.Error("Starting Fraud-Detection-Service service", "Fraud-Detection-Service-UAT");
+
             MailClientHandler.Start();
 
             var queue = new MessageQueueReceiver();
             queue.Clear();
             ReceivingMessageHandler.TriggerReceivingMessage();
             TaskLoader.LoadTasks();
+
+            Logger.Log.Error("Loading tasks has done.", "Fraud-Detection-Service-UAT");
         }
     }
 }
