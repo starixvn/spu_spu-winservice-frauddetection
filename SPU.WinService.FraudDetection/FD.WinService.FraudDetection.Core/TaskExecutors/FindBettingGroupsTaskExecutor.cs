@@ -59,7 +59,8 @@ namespace FD.Lib.TaskExecutors
 
         protected override void ExecuteRule()
         {
-            FindSuspiciousGroupsOnAllMatches();
+            //FindSuspiciousGroupsOnAllMatches();
+            FindSuspiciousGroupsOnAllMatchesSequentially();
         }
 
         protected override void TakeNextAction()
@@ -126,6 +127,15 @@ namespace FD.Lib.TaskExecutors
                     CreateAndAddNewThread(int.Parse(_matchIdList[count]));
                     count++;
                 }
+            }
+        }
+
+
+        private void FindSuspiciousGroupsOnAllMatchesSequentially()
+        {
+            foreach (var matchId in _matchIdList)
+            {
+                _suspiciousList.AddRange(FindSuspiciousGroupsOnEachMatch(int.Parse(matchId)));
             }
         }
 
