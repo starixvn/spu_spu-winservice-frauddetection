@@ -94,18 +94,23 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         {
             ConvertIntoRawBettingGroup();
 
-            FindRelationBetweenNewGroupsWithOldBettingGroups();
-
-            MergeNewGroupsIntoOldBettingGroups();
-
-            CreateNewBettingGroups();
+            CreateAndMergeBettingNewGroupsOnTheFly();
         }
 
-        private void FindRelationBetweenNewGroupsWithOldBettingGroups()
+        private void CreateAndMergeBettingNewGroupsOnTheFly()
         {
             foreach (var group in rawBettingGroupList)
             {
                 FindRelationBetweenOneNewGroupWithOldBettingGroups(group);
+
+                if (group.RelatedBettingGroups.Any())
+                {
+                    MergeOneNewGroupIntoOldBettingGroups(group);
+                }
+                else
+                {
+                    CreateOneNewBettingGroup(group);
+                }
             }
         }
 
@@ -127,17 +132,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             group.RelatedBettingGroups.AddRange(relatedGroups.Distinct().OrderBy(t => t));
         }
 
-        private void MergeNewGroupsIntoOldBettingGroups()
-        {
-            var newGroupsRelatedToOldBettingGroups =
-                rawBettingGroupList.Where(t => t.RelatedBettingGroups.Any()).ToList();
-
-            foreach (var group in newGroupsRelatedToOldBettingGroups)
-            {
-                MergeOneNewGroupIntoOldBettingGroups(group);
-            }
-        }
-
         private void MergeOneNewGroupIntoOldBettingGroups(RawBettingGroup group)
         {
             var selectedGroup = group.RelatedBettingGroups.First();
@@ -156,17 +150,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                     GroupId = selectedGroup,
                     XmlDoc = CreateXmlParamForInsertingCustomerBettingGroups(chunk)
                 });
-            }
-        }
-
-        private void CreateNewBettingGroups()
-        {
-            var newGroupsNotRelatedToOldBettingGroups =
-                rawBettingGroupList.Where(t => !t.RelatedBettingGroups.Any()).ToList();
-
-            foreach (var group in newGroupsNotRelatedToOldBettingGroups)
-            {
-                CreateOneNewBettingGroup(group);
             }
         }
 
