@@ -199,21 +199,16 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         private void InsertSuspiciousGroupInfo()
         {
-            var suspiciousChunks = _suspiciousGroupInfoList.Chunk(ChunkSize);
-
-            foreach (var suspiciousChunk in suspiciousChunks)
+            var criteria = new SuspiciousGroupInfoInsertCriteria
             {
-                var criteria = new SuspiciousGroupInfoInsertCriteria
-                {
-                    SuspiciousDoc = CreateXmlParamForInsertingSuspiciousInfo(suspiciousChunk)
-                };
+                SuspiciousDoc = CreateXmlParamForInsertingSuspiciousInfo(_suspiciousGroupInfoList)
+            };
 
-                var result = SuspiciousGroupInfoService.InsertSuspiciousGroupInfo(criteria);
+            var result = SuspiciousGroupInfoService.InsertSuspiciousGroupInfo(criteria);
 
-                if (result.IsSuccessful == false)
-                {
-                    Logger.Log.Error("Error InsertSuspiciousInfo: " + result.Message);
-                }
+            if (result.IsSuccessful == false)
+            {
+                Logger.Log.Error("Error InsertSuspiciousInfo: " + result.Message);
             }
         }
 
