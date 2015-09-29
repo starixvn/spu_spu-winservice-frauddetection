@@ -139,6 +139,7 @@
     <Compile Include="MailSenders\IMailClient.cs" />
     <Compile Include="MailSenders\IMailSender.cs" />
     <Compile Include="NextActions\AssigningGroupNextAction.cs" />
+    <Compile Include="NextActions\SavingCapturedData.cs" />
     <Compile Include="NextActions\INextAction.cs" />
     <Compile Include="NextActions\NextActionFactory.cs" />
     <Compile Include="NextActions\NextActionType.cs" />
@@ -162,6 +163,8 @@
     <Compile Include="ReportTemplateRenders\TableRenders\SuspiciousStatisticsTableRender.cs" />
     <Compile Include="ReportTemplateRenders\TableRenders\TableRender.cs" />
     <Compile Include="ReportTemplateRenders\TemplateFileManager.cs" />
+    <Compile Include="TaskExecutors\CaptureDataTaskExecutor.cs" />
+    <Compile Include="TaskExecutors\MatchCheckingTaskExecutor.cs" />
     <Compile Include="TaskExecutors\CountingViolationTimesTaskExecutor.cs" />
     <Compile Include="TaskExecutors\EventType.cs" />
     <Compile Include="TaskExecutors\ITaskExecutor.cs" />

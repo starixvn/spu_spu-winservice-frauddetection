@@ -6,4 +6,9 @@
     <Setting Key="FD_SuspiciousInfoInsert" SpName="FD_SuspiciousInfoInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_CustomerGroupInsert" SpName="FD_CustomerGroupInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
+
+  <Function Name="DataCapture">
+    <Setting Key="FD_DataCaptureInsert" SpName="FD_DataCaptureInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_DataTypeCaptureGetAll" SpName="FD_DataTypeCaptureGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
 </Functions>

@@ -29,6 +29,16 @@ namespace FD.Lib.TaskExecutors
         /// <summary>
         /// Scan Match And Find Betting Groups.
         /// </summary>
-        ScanMatchAndFindBettingGroups = 3
+        ScanMatchAndFindBettingGroups = 3,
+
+        /// <summary>
+        /// Scan Match And Capture Data.
+        /// </summary>
+        ScanMatchAndCaptureData = 4,
+
+        /// <summary>
+        /// Match Checking.
+        /// </summary>
+        MatchChecking = 5
     }
 }

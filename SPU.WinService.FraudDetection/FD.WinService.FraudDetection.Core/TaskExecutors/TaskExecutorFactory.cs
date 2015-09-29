@@ -7,6 +7,8 @@
 //   <change who="Long.Luu" date="2015.07.23">Created</change>
 // </history>
 
+using System.Globalization;
+
 namespace FD.WinService.FraudDetection.Core.TaskExecutors
 {
     using System;
@@ -19,7 +21,7 @@ namespace FD.WinService.FraudDetection.Core.TaskExecutors
     {
         public static TaskExecutor GetTaskExecutor(Task task)
         {
-            var eventType = Utility.ParseEnum<EventType>(task.EventId.ToString());
+            var eventType = Utility.ParseEnum<EventType>(task.EventId.ToString(CultureInfo.InvariantCulture));
 
             switch (eventType)
             {
@@ -31,6 +33,12 @@ namespace FD.WinService.FraudDetection.Core.TaskExecutors
 
                 case EventType.ScanMatchAndFindBettingGroups:
                     return new FindBettingGroupsTaskExecutor(task);
+
+                case EventType.ScanMatchAndCaptureData:
+                    return new CaptureDataTaskExecutor(task);
+
+                case EventType.MatchChecking:
+                    return new MatchCheckingTaskExecutor(task);
 
                 default:
                     throw new ArgumentOutOfRangeException();

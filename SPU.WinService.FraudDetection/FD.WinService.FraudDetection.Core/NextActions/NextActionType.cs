@@ -24,6 +24,11 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         /// <summary>
         /// Send email to senior.
         /// </summary>
-        SendingEmail = 2
+        SendingEmail = 2,
+
+        /// <summary>
+        /// Send email to senior.
+        /// </summary>
+        CapturingData = 3
     }
 }

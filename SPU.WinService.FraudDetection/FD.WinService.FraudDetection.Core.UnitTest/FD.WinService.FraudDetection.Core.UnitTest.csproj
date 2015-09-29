@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
       <HintPath>..\packages\Fanex.MailStation.1.0.7.2\lib\net40\Common.Logging.dll</HintPath>
@@ -155,6 +158,7 @@
     <Compile Include="ReportTemplateRenders\TableRenders\SuspiciousStatisticsTableRenderTest.cs" />
     <Compile Include="SendingMessage\ReceivingMessageHandlerTest.cs" />
     <Compile Include="SendingMessage\TaskManagerTest.cs" />
+    <Compile Include="TaskExecutors\DataCaptureTaskExecutorIntegrationTest.cs" />
     <Compile Include="TaskExecutors\CountingViolationTimesTaskExecutorIntegrationTest.cs" />
     <Compile Include="TaskExecutors\FindBettingGroupsTaskExecutorIntegrationTest.cs" />
     <Compile Include="TaskExecutors\ScanMatchTaskExecutorTest.cs" />
