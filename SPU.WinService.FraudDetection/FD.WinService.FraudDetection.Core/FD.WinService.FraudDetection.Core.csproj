@@ -164,7 +164,7 @@
     <Compile Include="ReportTemplateRenders\TableRenders\TableRender.cs" />
     <Compile Include="ReportTemplateRenders\TemplateFileManager.cs" />
     <Compile Include="TaskExecutors\CaptureDataTaskExecutor.cs" />
-    <Compile Include="TaskExecutors\MatchCheckingTaskExecutor.cs" />
+    <Compile Include="TaskExecutors\CompareDataTaskExecutor.cs" />
     <Compile Include="TaskExecutors\CountingViolationTimesTaskExecutor.cs" />
     <Compile Include="TaskExecutors\EventType.cs" />
     <Compile Include="TaskExecutors\ITaskExecutor.cs" />

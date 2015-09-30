@@ -37,8 +37,8 @@ namespace FD.WinService.FraudDetection.Core.TaskExecutors
                 case EventType.ScanMatchAndCaptureData:
                     return new CaptureDataTaskExecutor(task);
 
-                case EventType.MatchChecking:
-                    return new MatchCheckingTaskExecutor(task);
+                case EventType.ScanMatchAndCompareData:
+                    return new CompareDataTaskExecutor(task);
 
                 default:
                     throw new ArgumentOutOfRangeException();

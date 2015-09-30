@@ -26,6 +26,9 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 case NextActionType.SendingEmail:
                     return new SendingEmailNextAction(targetId);
 
+                case NextActionType.CapturingData:
+                    return new SavingCapturedData(targetId);
+
                 default:
                     throw new ArgumentOutOfRangeException();
             }

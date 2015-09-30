@@ -1,5 +1,5 @@
 // --------------------------------------------------------------------------
-// <copyright file="MatchCheckingTaskExecutor.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="CompareDataTaskExecutor.cs" company="Nexcel Solutions Vietnam">
 // Copyright (coffee) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -20,7 +20,7 @@ namespace FD.Lib.TaskExecutors
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
 
-    public class MatchCheckingTaskExecutor : TaskExecutor
+    public class CompareDataTaskExecutor : TaskExecutor
     {
         private readonly List<SuspiciousInfo> _suspicionList;
 
@@ -28,7 +28,7 @@ namespace FD.Lib.TaskExecutors
 
         private IList<string> _matchIdList;
 
-        public MatchCheckingTaskExecutor(Task task)
+        public CompareDataTaskExecutor(Task task)
             : base(task)
         {
             _matchIdList = new List<string>();
@@ -36,7 +36,7 @@ namespace FD.Lib.TaskExecutors
             _threads = new List<Task<IList<SuspiciousInfo>>>();
         }
 
-        public MatchCheckingTaskExecutor(Task task, ITaskService taskService)
+        public CompareDataTaskExecutor(Task task, ITaskService taskService)
             : base(task, taskService)
         {
             _matchIdList = new List<string>();

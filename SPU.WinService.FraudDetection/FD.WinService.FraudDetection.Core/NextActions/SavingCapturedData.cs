@@ -20,12 +20,14 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     /// </summary>
     public class SavingCapturedData : INextAction
     {
-
         private readonly DataCaptureService _dataCaptureService;
 
-        public SavingCapturedData()
+        private readonly int _dataType;
+
+        public SavingCapturedData(int dataType)
         {
             _dataCaptureService = new DataCaptureService();
+            _dataType = dataType;
         }
 
         public IList<SuspiciousInfo> SuspicionList { get; set; }
@@ -51,11 +53,14 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                     OldValue = dataCapture.OldValue
                 };
 
-                var result = _dataCaptureService.InsertCapturedData(criteria);
-
-                if (!result.IsSuccessful)
+                if (_dataType == criteria.DataId)
                 {
-                    Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
+                    var result = _dataCaptureService.InsertCapturedData(criteria);
+
+                    if (!result.IsSuccessful)
+                    {
+                        Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
+                    }
                 }
             }
         }

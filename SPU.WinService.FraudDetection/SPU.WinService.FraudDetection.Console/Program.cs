@@ -2,12 +2,10 @@
 {
     using System;
     using Core.QueueManagement;
-    using Lib.QueueManagement;
-    using SPU.WinService.FraudDetection;
 
     internal class Program
     {
-        private static void Main(string[] args)
+        private static void Main()
         {
             var queue = new MessageQueueReceiver();
             queue.Clear();
@@ -19,7 +17,7 @@
             sut.RunOnStart();
 
             Console.WriteLine("Window service is running now.");
-            while (true) ;
+            while (true) { }
         }
     }
 }

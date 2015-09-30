@@ -37,8 +37,8 @@ namespace FD.Lib.TaskExecutors
         ScanMatchAndCaptureData = 4,
 
         /// <summary>
-        /// Match Checking.
+        /// Scan Match And Compare Data.
         /// </summary>
-        MatchChecking = 5
+        ScanMatchAndCompareData = 5
     }
 }

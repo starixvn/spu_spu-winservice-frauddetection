@@ -186,17 +186,9 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     {
         public int Compare(int x, int y)
         {
-            if (x < y)
-            {
-                return 1;
-            }
+            var result = x.CompareTo(y);
 
-            if (x == y)
-            {
-                return 0;
-            }
-
-            return -1;
+            return result == 0 ? 1 : result;
         }
     }
 }

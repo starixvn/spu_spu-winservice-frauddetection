@@ -7,6 +7,8 @@
 //   <change who="Aaron.Cao" date="2015.09.29">Created</change>
 // </history>
 
+using FD.Lib.Criteria.Common;
+
 namespace FD.Lib.TaskExecutors
 {
     using System;
@@ -32,11 +34,13 @@ namespace FD.Lib.TaskExecutors
 
         private readonly ScannedMatchesService _scannedMatchesService;
 
+        private readonly TaskService _taskService;
+
         private readonly int _taskId;
 
-        private readonly string _dataTypeList;
-
         private IList<string> _matchIdList;
+
+        private const int TicketChunk = 100000;
 
         public CaptureDataTaskExecutor(Task task)
             : base(task)
@@ -45,8 +49,8 @@ namespace FD.Lib.TaskExecutors
             _dataCaptureList = new List<DataCapture>();
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
+            _taskService = new TaskService();
             _taskId = task.TaskId;
-            _dataTypeList = task.NextActionTargetIdList;
         }
 
         public CaptureDataTaskExecutor(Task task, ITaskService taskService)
@@ -56,8 +60,8 @@ namespace FD.Lib.TaskExecutors
             _dataCaptureList = new List<DataCapture>();
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
+            _taskService = new TaskService();
             _taskId = task.TaskId;
-            _dataTypeList = task.NextActionTargetIdList;
         }
 
         protected override void ClearOldResult()
@@ -80,7 +84,13 @@ namespace FD.Lib.TaskExecutors
 
         protected override void TakeNextAction()
         {
-            SaveCapturedData();
+            foreach (var item in NextActionDictionary)
+            {
+                var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
+                var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
+                nextAction.DataCaptureList = _dataCaptureList;
+                nextAction.TakeAction();
+            }
 
             InsertScannedMatch();
         }
@@ -142,14 +152,21 @@ namespace FD.Lib.TaskExecutors
             var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
             var result = new List<DataCapture>();
 
-            var dataTypeList = _dataTypeList.Split(',');
+            var dataTypeList = _taskService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
 
             foreach (var dataType in dataTypeList)
             {
-                var value = TaskService.CaptureData(tickets, int.Parse(dataType));
+                var ticketChunks = tickets.Chunk(TicketChunk);
+                decimal value = 0; 
+                
+                foreach (var ticketChunk in ticketChunks)
+                {
+                    value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, dataType.DataId));
+                }
+                
                 var dataCapture = new DataCapture
                 {
-                    DataId = int.Parse(dataType),
+                    DataId = dataType.DataId,
                     MatchId = int.Parse(matchId),
                     NewValue = value,
                     OldValue = value,
@@ -161,13 +178,6 @@ namespace FD.Lib.TaskExecutors
             }
 
             return result;
-        }
-
-        private void SaveCapturedData()
-        {
-            var saveAction = new SavingCapturedData {DataCaptureList = _dataCaptureList};
-            
-            saveAction.TakeAction();
         }
 
         private void InsertScannedMatch()
@@ -190,6 +200,51 @@ namespace FD.Lib.TaskExecutors
                     Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
                 }
             }
+        }
+
+        private string GenerateSqlQuery(IEnumerable<string> tickets, int dataType)
+        {
+            var sqlQueryString = "select $data$ as DataCapture FROM bodb02.dbo.bettrans b with(nolock) where b.transid in " + "(" + string.Join(",", tickets.ToArray()) + ")";
+
+            switch (dataType)
+            {
+                case 1:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "SUM(b.stake * (1 -  b.tpositiontaking))");
+                    break;
+
+                case 2:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "SUM(b.stake * b.spositiontaking)");
+                    break;
+
+                case 3:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "SUM(b.stake * b.mpositiontaking)");
+                    break;
+
+                case 4:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "SUM(b.stake * b.apositiontaking)");
+                    break;
+
+                case 5:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
+                    sqlQueryString = sqlQueryString + " and b.statusid in (101, 102, 103, 111, 112, 113)";
+                    break;
+
+                case 6:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
+                    sqlQueryString = sqlQueryString + " and b.statusid in (111, 112, 113)";
+                    break;
+
+                case 7:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
+                    sqlQueryString = sqlQueryString + " and b.statusid in (101, 102, 103)";
+                    break;
+
+                default:
+                    sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
+                    break;
+            }
+
+            return sqlQueryString;
         }
     }
 }

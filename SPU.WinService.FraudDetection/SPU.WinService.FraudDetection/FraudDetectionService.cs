@@ -1,12 +1,10 @@
 ﻿namespace FD.WinService.FraudDetection
 {
-    using System.Diagnostics;
     using System.ServiceProcess;
     using Core.QueueManagement;
     using Fanex.Data.Configuration;
     using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
-    using Lib.QueueManagement;
     using Lib.TaskLoaders;
 
     public partial class FraudDetectionService : ServiceBase
@@ -26,7 +24,7 @@
 
         private void InitDependencies()
         {
-            InitializeComponent();       
+            InitializeComponent();
         }
 
         public FraudDetectionService(ITaskLoader taskLoader, IReceivingMessageHandler receivingMessageHandler)
