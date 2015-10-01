@@ -139,6 +139,7 @@
     <Compile Include="MailSenders\IMailClient.cs" />
     <Compile Include="MailSenders\IMailSender.cs" />
     <Compile Include="NextActions\AssigningGroupNextAction.cs" />
+    <Compile Include="NextActions\SavingSuspiciousCapturedData.cs" />
     <Compile Include="NextActions\SavingCapturedData.cs" />
     <Compile Include="NextActions\INextAction.cs" />
     <Compile Include="NextActions\NextActionFactory.cs" />

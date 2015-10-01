@@ -7,139 +7,170 @@
 //   <change who="Aaron.Cao" date="2015.09.29">Created</change>
 // </history>
 
+using FD.Lib.Criteria.Common;
+
 namespace FD.Lib.TaskExecutors
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
-    using System.Threading.Tasks;
     using BusinessManager.TaskExecutors;
     using Core.Utilities;
+    using Criteria.DataCapture;
+    using Criteria.ScannedMatch;
     using DTO;
+    using Fanex.Logging;
+    using Service.Implement;
     using Service.Interface;
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
 
     public class CompareDataTaskExecutor : TaskExecutor
     {
-        private readonly List<SuspiciousInfo> _suspicionList;
-
-        private readonly List<Task<IList<SuspiciousInfo>>> _threads;
+        private List<DataCapture> _suspiciousDataCaptureList;
 
         private IList<string> _matchIdList;
+
+        private IList<string> _notComparedMatchIdList;
+
+        private readonly DataCaptureService _dataCaptureService;
+
+        private readonly ScannedMatchesService _scannedMatchesService;
+
+        private readonly int _taskId;
+
+        private readonly Task _task;
 
         public CompareDataTaskExecutor(Task task)
             : base(task)
         {
             _matchIdList = new List<string>();
-            _suspicionList = new List<SuspiciousInfo>();
-            _threads = new List<Task<IList<SuspiciousInfo>>>();
+            _notComparedMatchIdList = new List<string>();
+            _suspiciousDataCaptureList = new List<DataCapture>();
+            _dataCaptureService = new DataCaptureService();
+            _scannedMatchesService = new ScannedMatchesService();
+            _taskId = task.TaskId;
+            _task = task;
         }
 
         public CompareDataTaskExecutor(Task task, ITaskService taskService)
             : base(task, taskService)
         {
             _matchIdList = new List<string>();
-            _suspicionList = new List<SuspiciousInfo>();
-            _threads = new List<Task<IList<SuspiciousInfo>>>();
+            _notComparedMatchIdList = new List<string>();
+            _suspiciousDataCaptureList = new List<DataCapture>();
+            _dataCaptureService = new DataCaptureService();
+            _scannedMatchesService = new ScannedMatchesService();
+            _taskId = task.TaskId;
+            _task = task;
         }
 
         protected override void ClearOldResult()
         {
-            _threads.Clear();
             _matchIdList.Clear();
-            _suspicionList.Clear();
+            _notComparedMatchIdList.Clear();
+            _suspiciousDataCaptureList.Clear();
         }
 
         protected override void ExecutePrecondition()
         {
-            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString());
+            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
             _matchIdList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
         }
 
         protected override void ExecuteRule()
         {
-            FindSuspiciousCustomerOnAllMatches();
+            GetAllNotComparedMatches();
+
+            FindSuspiciousMatches();
         }
 
         protected override void TakeNextAction()
         {
-            if (_suspicionList.Count > 0)
+            if (_suspiciousDataCaptureList.Count > 0)
             {
-                foreach (var item in NextActionDictionary)
-                {
-                    Console.WriteLine("<Key, Value> = <" + item.Key + ", " + item.Value + ">");
-                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString());
-                    var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
-                    nextAction.SuspicionList = _suspicionList;
-                    nextAction.TakeAction();
-                }
+                var saveAction = new SavingSuspiciousCapturedData();
+                saveAction.DataCaptureList = _suspiciousDataCaptureList;
+                saveAction.TakeAction();
             }
 
-            SaveSuspiciousCustomers();
+            UpdateDataCaptureTable();
+
+            InsertScannedMatch();
         }
 
-        private void FindSuspiciousCustomerOnAllMatches()
+        private void GetAllNotComparedMatches()
         {
-            var coreCount = Environment.ProcessorCount;
-            var matchCount = _matchIdList.Count;
-            int count = 0;
-
-            for (; count < matchCount; count++)
+            if (_matchIdList.Count > 0)
             {
-                if (count >= coreCount)
+                _notComparedMatchIdList = _dataCaptureService.GetAllNotComparedMacthes(new DataCaptureGetAllNotComparedMatchesCriteria
                 {
-                    break;
-                }
+                    DataIdList = GetDataCaptureTypes(),
+                    MatchIdList = string.Join(",", _matchIdList)
 
-                CreateAndAddNewThread(count);
-            }
-
-            int threadsHaveDone = 0;
-
-            while (threadsHaveDone < matchCount)
-            {
-                int index = System.Threading.Tasks.Task.WaitAny(_threads.ToArray());
-
-                if (_threads[index].Exception == null)
-                {
-                    _suspicionList.AddRange(_threads[index].Result);
-                }
-
-                threadsHaveDone++;
-                _threads.RemoveAt(index);
-
-                if (count < matchCount)
-                {
-                    CreateAndAddNewThread(count);
-                    count++;
-                }
+                }).ToList();
             }
         }
 
-        private void CreateAndAddNewThread(int count)
+        private void FindSuspiciousMatches()
         {
-            var thread = System.Threading.Tasks.Task.Factory.StartNew(
-                (obj) =>
+            if (_notComparedMatchIdList.Count > 0)
+            {
+                var matchList = string.Join(",", _notComparedMatchIdList.ToArray());
+                var ruleQuery = Task.TaskRules.Replace("$param1$", matchList);
+
+                _suspiciousDataCaptureList = TaskService.ExecuteRuleForComparingData(ruleQuery);
+            }
+        }
+
+        private void InsertScannedMatch()
+        {
+            var matchChunks = _notComparedMatchIdList.Chunk(ChunkSize);
+
+            foreach (var matchChunk in matchChunks)
+            {
+                var criteria = new MatchInsertCriteria
                 {
-                    var id = (string)obj;
-                    return FindSuspiciousCustomerOnEachMatch(id);
-                },
-            _matchIdList[count]);
+                    MatchIdList = string.Join(",", matchChunk),
+                    TaskId = _taskId,
+                    ScannedDate = DateTime.Now
+                };
 
-            _threads.Add(thread);
+                var result = _scannedMatchesService.InsertScannedMatch(criteria);
+
+                if (result.IsSuccessful == false)
+                {
+                    Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
+                }
+            }
         }
 
-        private IList<SuspiciousInfo> FindSuspiciousCustomerOnEachMatch(string matchId)
+        private void UpdateDataCaptureTable()
         {
-            var ruleQuery = Task.TaskRules.Replace("$param1$", matchId);
-            return TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId);
+            var dataCaptureUpdateCriteria = new DataCaptureUpdateCriteria
+            {
+                DataIdList = GetDataCaptureTypes(),
+                MatchIdList = string.Join(",", _notComparedMatchIdList)
+            };
+
+            _dataCaptureService.UpdateCapturedData(dataCaptureUpdateCriteria);
         }
 
-        private void SaveSuspiciousCustomers()
+        private string GetDataCaptureTypes()
         {
-            var saveAction = new SavingSuspicious(_suspicionList, _matchIdList, Task.TaskId);
-            saveAction.TakeAction();
+            var dataCaptureTypes = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
+            var listTypes = new List<int>();
+
+            foreach (var dataCaptureType in dataCaptureTypes)
+            {
+                if (_task.TaskRulesFormatted.Contains(dataCaptureType.DataName + " <> Has Changed From Latest Capture"))
+                {
+                    listTypes.Add(dataCaptureType.DataId);
+                }
+            }
+
+            return string.Join(",", listTypes);
         }
     }
 }

@@ -108,5 +108,8 @@
   <Function Name="DataCapture">
     <Setting Key="FD_DataCaptureInsert" SpName="FD_DataCaptureInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_DataTypeCaptureGetAll" SpName="FD_DataTypeCaptureGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_DataCaptureGetAllNotComparedMatches" SpName="FD_DataCaptureGetAllNotComparedMatches" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciousCapturedDataInsert" SpName="FD_SuspiciousCapturedDataInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_DataCaptureUpdate" SpName="FD_DataCaptureUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 </Functions>

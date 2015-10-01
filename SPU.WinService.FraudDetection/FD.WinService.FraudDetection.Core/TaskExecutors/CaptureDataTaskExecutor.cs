@@ -34,7 +34,9 @@ namespace FD.Lib.TaskExecutors
 
         private readonly ScannedMatchesService _scannedMatchesService;
 
-        private readonly TaskService _taskService;
+        private readonly DataCaptureService _dataCaptureService;
+
+        private readonly ITaskService _taskService;
 
         private readonly int _taskId;
 
@@ -50,6 +52,7 @@ namespace FD.Lib.TaskExecutors
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
             _taskService = new TaskService();
+            _dataCaptureService = new DataCaptureService();
             _taskId = task.TaskId;
         }
 
@@ -60,7 +63,8 @@ namespace FD.Lib.TaskExecutors
             _dataCaptureList = new List<DataCapture>();
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
-            _taskService = new TaskService();
+            _dataCaptureService = new DataCaptureService();
+            _taskService = taskService;
             _taskId = task.TaskId;
         }
 
@@ -152,7 +156,7 @@ namespace FD.Lib.TaskExecutors
             var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
             var result = new List<DataCapture>();
 
-            var dataTypeList = _taskService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
+            var dataTypeList = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
 
             foreach (var dataType in dataTypeList)
             {
