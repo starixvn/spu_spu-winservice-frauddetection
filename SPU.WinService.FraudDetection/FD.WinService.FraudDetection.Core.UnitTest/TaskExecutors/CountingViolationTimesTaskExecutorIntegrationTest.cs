@@ -2,7 +2,6 @@
 {
     using Core;
     using Criteria.Task;
-    using Lib.TaskExecutors;
     using NUnit.Framework;
     using Service.Implement;
     using WinService.FraudDetection.Core.TaskExecutors;

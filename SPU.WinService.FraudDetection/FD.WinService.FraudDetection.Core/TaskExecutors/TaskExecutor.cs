@@ -70,7 +70,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         private bool IsRunning { get; set; }
 
-        private bool IsStop { get; set; }
+        private bool IsStoppedManually { get; set; }
 
         #endregion Properties
 
@@ -95,7 +95,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         public virtual void Stop()
         {
-            IsStop = true;
+            IsStoppedManually = true;
             Timer.Elapsed -= PreExecute;
             Timer.Stop();
             Timer.Close();
@@ -104,7 +104,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         public virtual void PreExecute(object sender, ElapsedEventArgs elapsedEventArgs)
         {
-            if (IsRunning || IsStop)
+            if (IsRunning || IsStoppedManually)
             {
                 return;
             }

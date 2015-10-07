@@ -74,9 +74,17 @@ namespace FD.Lib.TaskExecutors
                     nextAction.SuspicionList = _suspicionList;
                     nextAction.TakeAction();
                 }
+
+                SaveSuspiciousCustomers();
             }
 
-            SaveSuspiciousCustomers();
+            SaveScannedMatches();
+        }
+
+        private void SaveScannedMatches()
+        {
+            var scannedMatch = new SavingScannedMatch(_matchIdList, Task.TaskId);
+            scannedMatch.TakeAction();
         }
 
         private void FindSuspiciousCustomerOnAllMatches()
@@ -138,7 +146,7 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveSuspiciousCustomers()
         {
-            var saveAction = new SavingSuspicious(_suspicionList, _matchIdList, Task.TaskId);
+            var saveAction = new SavingSuspicious(_suspicionList);
             saveAction.TakeAction();
         }
     }

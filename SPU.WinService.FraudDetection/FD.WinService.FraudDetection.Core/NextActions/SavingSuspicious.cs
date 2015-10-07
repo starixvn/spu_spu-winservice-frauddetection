@@ -9,13 +9,11 @@
 
 namespace FD.WinService.FraudDetection.Core.NextActions
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
     using Fanex.Logging;
     using Lib.Core.Utilities;
-    using Lib.Criteria.ScannedMatch;
     using Lib.Criteria.SuspiciousInfo;
     using Lib.Criteria.SuspiciousStatistic;
     using Lib.DTO;
@@ -29,25 +27,15 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     {
         protected const int ChunkSize = 50;
 
-        private readonly IList<string> _matchIdList;
-
-        private readonly int _taskId;
-
         private List<SuspiciousInfo> _suspiciousInfoList;
 
-        public SavingSuspicious(List<SuspiciousInfo> suspiciousInfoList, IList<string> matchIdList, int taskId)
+        public SavingSuspicious(List<SuspiciousInfo> suspiciousInfoList)
         {
             _suspiciousInfoList = suspiciousInfoList;
-            _matchIdList = matchIdList;
-            _taskId = taskId;
-
-            ScannedMatchesService = new ScannedMatchesService();
             SuspiciousInfoService = new SuspiciousInfoService();
             SuspiciousCustomerService = new SuspiciousCustomerService();
             CustomerService = new CustomerService();
         }
-
-        public IScannedMatchesService ScannedMatchesService { get; set; }
 
         public ISuspiciousInfoService SuspiciousInfoService { get; set; }
 
@@ -63,35 +51,8 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         public void TakeAction()
         {
-            if (_suspiciousInfoList.Count > 0)
-            {
-                InsertSuspiciousCustomers();
-                InsertSuspiciousInfo();
-            }
-
-            InsertScannedMatch();
-        }
-
-        private void InsertScannedMatch()
-        {
-            var matchChunks = _matchIdList.Chunk(ChunkSize);
-
-            foreach (var matchChunk in matchChunks)
-            {
-                var criteria = new MatchInsertCriteria
-                {
-                    MatchIdList = string.Join(",", matchChunk),
-                    TaskId = _taskId,
-                    ScannedDate = DateTime.Now
-                };
-
-                var result = ScannedMatchesService.InsertScannedMatch(criteria);
-
-                if (result.IsSuccessful == false)
-                {
-                    Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                }
-            }
+            InsertSuspiciousCustomers();
+            InsertSuspiciousInfo();
         }
 
         private void InsertSuspiciousInfo()
@@ -127,7 +88,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
             foreach (var newSuspiciousCustomer in newSuspiciousCustomerChunks)
             {
-
                 InsertNewSuspiciousCustomers(newSuspiciousCustomer);
             }
         }

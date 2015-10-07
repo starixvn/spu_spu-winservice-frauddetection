@@ -1,6 +1,5 @@
 namespace FD.WinService.FraudDetection.Core.NextActions
 {
-    using System;
     using System.Collections.Generic;
     using System.Linq;
     using System.Text;
@@ -8,7 +7,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     using Lib.Core.Utilities;
     using Lib.Criteria.CustomerBettingGroup;
     using Lib.Criteria.CustomerBettingGroupDetails;
-    using Lib.Criteria.ScannedMatch;
     using Lib.Criteria.SuspiciousInfo;
     using Lib.Criteria.SuspiciousStatistic;
     using Lib.DTO;
@@ -19,27 +17,18 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     {
         protected const int ChunkSize = 50;
 
-        private readonly IList<string> _matchIdList;
-
-        private readonly int _taskId;
-
         private List<SuspiciousGroupInfo> _suspiciousGroupInfoList;
 
-        public SavingSuspiciousGroup(List<SuspiciousGroupInfo> suspiciousInfoList, IList<string> matchIdList, int taskId)
+        public SavingSuspiciousGroup(List<SuspiciousGroupInfo> suspiciousInfoList)
         {
             _suspiciousGroupInfoList = suspiciousInfoList;
-            _matchIdList = matchIdList;
-            _taskId = taskId;
 
-            ScannedMatchesService = new ScannedMatchesService();
             SuspiciousGroupInfoService = new SuspiciousGroupInfoService();
             SuspiciousCustomerService = new SuspiciousCustomerService();
             CustomerService = new CustomerService();
             CustomerBettingGroupService = new CustomerBettingGroupService();
             CustomerBettingGroupDetailsService = new CustomerBettingGroupDetailsService();
         }
-
-        public IScannedMatchesService ScannedMatchesService { get; set; }
 
         public ISuspiciousGroupInfoService SuspiciousGroupInfoService { get; set; }
 
@@ -59,14 +48,9 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         public void TakeAction()
         {
-            if (_suspiciousGroupInfoList.Count > 0)
-            {
-                InsertSuspiciousCustomers();
-                InsertSuspiciousGroupInfo();
-                CreateAndMergeBettingGroup();
-            }
-
-            InsertScannedMatch();
+            InsertSuspiciousCustomers();
+            InsertSuspiciousGroupInfo();
+            CreateAndMergeBettingGroup();
         }
 
         private IList<RawBettingGroup> rawBettingGroupList;
@@ -172,28 +156,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                     GroupId = criteria.NewGroupId,
                     XmlDoc = CreateXmlParamForInsertingCustomerBettingGroups(chunk)
                 });
-            }
-        }
-
-        private void InsertScannedMatch()
-        {
-            var matchChunks = _matchIdList.Chunk(ChunkSize);
-
-            foreach (var matchChunk in matchChunks)
-            {
-                var criteria = new MatchInsertCriteria
-                {
-                    MatchIdList = string.Join(",", matchChunk),
-                    TaskId = _taskId,
-                    ScannedDate = DateTime.Now
-                };
-
-                var result = ScannedMatchesService.InsertScannedMatch(criteria);
-
-                if (result.IsSuccessful == false)
-                {
-                    Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                }
             }
         }
 

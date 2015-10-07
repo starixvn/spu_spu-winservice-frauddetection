@@ -74,9 +74,11 @@ namespace FD.Lib.TaskExecutors
                     nextAction.SuspicionList = ConvertIntoSuspiciousInfo(_suspiciousList);
                     nextAction.TakeAction();
                 }
+
+                SaveSuspiciousGroups();
             }
 
-            SaveSuspiciousGroups();
+            SaveScannedMatches();
         }
 
         private IList<SuspiciousInfo> ConvertIntoSuspiciousInfo(List<SuspiciousGroupInfo> _suspiciousList)
@@ -129,6 +131,12 @@ namespace FD.Lib.TaskExecutors
             }
         }
 
+        private void SaveScannedMatches()
+        {
+            var scannedMatch = new SavingScannedMatch(_matchIdList, Task.TaskId);
+            scannedMatch.TakeAction();
+        }
+
         private void CreateAndAddNewThread(int matchId)
         {
             var thread = System.Threading.Tasks.Task.Factory.StartNew(
@@ -152,7 +160,7 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveSuspiciousGroups()
         {
-            var saveAction = new SavingSuspiciousGroup(_suspiciousList, _matchIdList, Task.TaskId);
+            var saveAction = new SavingSuspiciousGroup(_suspiciousList);
             saveAction.TakeAction();
         }
     }
