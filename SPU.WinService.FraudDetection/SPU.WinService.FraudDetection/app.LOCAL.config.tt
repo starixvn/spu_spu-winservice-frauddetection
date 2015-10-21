@@ -14,11 +14,11 @@
       <add name="XmlDbSettingProvider" type="Fanex.Data.Configuration.XmlDbSettingProvider,Fanex.Data" resourcePath="App_Data" enableWatching="1" />
     </providers>
   </Fanex.Data.DbSettingProvider>
-  <Fanex.Logging msmqPath="FormatName:DIRECT=TCP:10.18.200.209\private$\entlib" defaultCategory="SPU.Local" />
+  <Fanex.Logging msmqPath="FormatName:DIRECT=TCP:10.18.200.124\private$\entlib" defaultCategory="SPU.Local" />
   <appSettings>
     <add key="ClientSettingsProvider.ServiceUri" value="" />    
-    <add key="RemoteRefURL" value="tcp://10.18.200.209:8888/CallGetRefFunction" />
-    <add key="RemoteCacheUrl" value="tcp://10.18.200.209:8888/CallGetOddsFunction" />
+    <add key="RemoteRefURL" value="tcp://10.18.200.124:8888/CallGetRefFunction" />
+    <add key="RemoteCacheUrl" value="tcp://10.18.200.124:8888/CallGetOddsFunction" />
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.18.200.209\private$\fdmessagequeue"/>
     <add key="FDUrl" value="" />
   </appSettings>
@@ -41,8 +41,8 @@
   </system.web>
 <Fanex.MailDelivery.Client environment="local" 
                            applicationSendMailId="1" 
-                           siteId="94" 
-                           rabbitMQConnectionString="host=10.18.200.209,10.18.200.202;virtualHost=/QCLocalTest;username=rabbitclient" 
+                           siteId="95" 
+                           rabbitMQConnectionString="host=10.18.200.124;virtualHost=/QCLocalTest;username=rabbitclient" 
                            messageBrokerLogCategory="MailCentralized">
         <Functions>
           <!--<add id="1" name="YourFunction" />-->
@@ -70,8 +70,12 @@
         <bindingRedirect oldVersion="0.0.0.0-2.0.6.0" newVersion="2.0.6.0" />
       </dependentAssembly>
       <dependentAssembly>
+        <assemblyIdentity name="RabbitMQ.Client" publicKeyToken="89e7d7c5feba84ce" culture="neutral" />
+        <bindingRedirect oldVersion="0.0.0.0-3.5.4.0" newVersion="3.5.4.0" />
+      </dependentAssembly>
+      <dependentAssembly>
         <assemblyIdentity name="Quartz" publicKeyToken="f6b8c98a402cc8a4" culture="neutral" />
-        <bindingRedirect oldVersion="0.0.0.0-2.3.1.0" newVersion="2.2.4.400" />
+        <bindingRedirect oldVersion="0.0.0.0-2.3.3.0" newVersion="2.3.3.0" />
       </dependentAssembly>
     </assemblyBinding>
   </runtime>
