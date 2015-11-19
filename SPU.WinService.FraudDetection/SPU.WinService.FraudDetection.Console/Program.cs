@@ -7,8 +7,8 @@
     {
         private static void Main()
         {
-            var queue = new MessageQueueReceiver();
-            queue.Clear();
+            //var queue = new MessageQueueReceiver();
+            //queue.Clear();
 
             var sut = new FraudDetectionService();
 
@@ -17,7 +17,7 @@
             sut.RunOnStart();
 
             Console.WriteLine("Window service is running now.");
-            while (true) { }
+            //while (true) { }
         }
     }
 }

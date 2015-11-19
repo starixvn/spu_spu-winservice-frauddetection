@@ -12,7 +12,7 @@
         {
             var servicesToRun = new ServiceBase[]
             {
-                new FraudDetectionService(),
+                new FraudDetectionService()
             };
             ServiceBase.Run(servicesToRun);
         }

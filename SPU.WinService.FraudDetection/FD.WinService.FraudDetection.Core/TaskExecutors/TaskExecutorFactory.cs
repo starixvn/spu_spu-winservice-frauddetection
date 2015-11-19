@@ -7,37 +7,37 @@
 //   <change who="Long.Luu" date="2015.07.23">Created</change>
 // </history>
 
-using System.Globalization;
-
 namespace FD.WinService.FraudDetection.Core.TaskExecutors
 {
     using System;
+    using System.Globalization;
     using Lib.BusinessManager.TaskExecutors;
     using Lib.Core.Utilities;
     using Lib.DTO;
+    using Lib.QueryGenerator;
     using Lib.TaskExecutors;
 
     public class TaskExecutorFactory
     {
         public static TaskExecutor GetTaskExecutor(Task task)
         {
-            var eventType = Utility.ParseEnum<EventType>(task.EventId.ToString(CultureInfo.InvariantCulture));
+            var eventType = Utility.ParseEnum<ActivityType>(task.EventId.ToString(CultureInfo.InvariantCulture));
 
             switch (eventType)
             {
-                case EventType.ScanMatchAndFindTicket:
+                case ActivityType.ScanMathFindTicket:
                     return new ScanMatchTaskExecutor(task);
 
-                case EventType.CountSuspiciousTimesByCustomer:
+                case ActivityType.CountSuspiciousTimes:
                     return new CountingSuspicousTimesTaskExecutor(task);
 
-                case EventType.ScanMatchAndFindBettingGroups:
+                case ActivityType.ScanMatchFindBettingGroups:
                     return new FindBettingGroupsTaskExecutor(task);
 
-                case EventType.ScanMatchAndCaptureData:
+                case ActivityType.ScanMatchCaptureData:
                     return new CaptureDataTaskExecutor(task);
 
-                case EventType.ScanMatchAndCompareData:
+                case ActivityType.ScanMatchCompareData:
                     return new CompareDataTaskExecutor(task);
 
                 default:

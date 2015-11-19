@@ -28,6 +28,7 @@
     <Setting Key="FD_TaskUpdate" SpName="FD_TaskUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_TaskUpdateStatus" SpName="FD_TaskUpdateStatus" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_TaskGetAllByCaseId" SpName="FD_TaskGetAllByCaseId" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskGetForTriggering" SpName="FD_TaskGetForTriggering" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_TaskGetByCaseId" SpName="FD_TaskGetByCaseId" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_SuspiciousCustomerGetAll" SpName="FD_SuspiciousCustomerGetAll"
              DbName="DBFD.FraudDetection.bodbSPUNet" />

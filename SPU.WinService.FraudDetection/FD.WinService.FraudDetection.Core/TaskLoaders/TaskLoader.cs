@@ -10,6 +10,7 @@
 namespace FD.Lib.TaskLoaders
 {
     using Criteria.Task;
+    using QueryGenerator;
     using QueueManagement;
     using QueueManagement.SendingTasks;
     using Service.Implement;
@@ -38,7 +39,7 @@ namespace FD.Lib.TaskLoaders
 
             foreach (var task in taskList)
             {
-                if (task.IsActive)
+                if (task.IsActive && task.EventId == (int)EventType.BackGround)
                 {
                     _sendingTask.Send(task.TaskId);
                 }

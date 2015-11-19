@@ -59,8 +59,10 @@
 
             var queue = new MessageQueueReceiver();
             queue.Clear();
-            ReceivingMessageHandler.TriggerReceivingMessage();
+            
             TaskLoader.LoadTasks();
+
+            ReceivingMessageHandler.TriggerReceivingMessage();
 
             Logger.Log.Error("Loading tasks has done.", "Fraud-Detection-Service-UAT");
         }

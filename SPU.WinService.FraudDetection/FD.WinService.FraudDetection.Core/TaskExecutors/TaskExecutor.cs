@@ -14,12 +14,15 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
+    using System.Linq;
     using System.Timers;
+    using Criteria.Task;
     using Fanex.Logging;
     using Lib.TaskExecutors;
     using Service.Implement;
     using Service.Interface;
     using Sunplus.UMControllerLibrary;
+    using WinService.FraudDetection.Core.TaskExecutors;
     using Task = DTO.Task;
 
     /// <summary>
@@ -42,6 +45,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             IsRunning = false;
             GetNextActionDictionary();
             MaintenanceService = new UMBusiness();
+            TaskService = new TaskService();
         }
 
         protected TaskExecutor(Task task, ITaskService taskService)
@@ -142,6 +146,8 @@ namespace FD.Lib.BusinessManager.TaskExecutors
                     ExecuteRule();
 
                     TakeNextAction();
+
+                    TriggerOtherTasks();
                 }
             }
             catch (Exception ex)
@@ -177,6 +183,29 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             {
                 NextActionDictionary.Add(int.Parse(nextActionIdList[i]), int.Parse(nextActionTargetIdList[i]));
             }
+        }
+
+        private void TriggerOtherTasks()
+        {
+            var tasks = TaskService.GetTaskForTriggering(new TaskGetForTriggeringCriteria
+            {
+                TaskId = TaskId
+            });
+
+            var threads = new System.Threading.Tasks.Task[tasks.Count()];
+            var index = 0;
+
+            foreach (var task in tasks)
+            {
+                threads[index] = System.Threading.Tasks.Task.Factory.StartNew(() =>
+                    {
+                        var taskExecutor = TaskExecutorFactory.GetTaskExecutor(task);
+                        taskExecutor.Execute();
+                    });
+                index++;
+            }
+
+            System.Threading.Tasks.Task.WaitAll(threads);
         }
 
         #endregion Execute task
