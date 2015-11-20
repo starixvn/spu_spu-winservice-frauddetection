@@ -21,7 +21,7 @@ namespace FD.WinService.FraudDetection.Core.TaskExecutors
     {
         public static TaskExecutor GetTaskExecutor(Task task)
         {
-            var eventType = Utility.ParseEnum<ActivityType>(task.EventId.ToString(CultureInfo.InvariantCulture));
+            var eventType = Utility.ParseEnum<ActivityType>(task.ActivityId.ToString(CultureInfo.InvariantCulture));
 
             switch (eventType)
             {

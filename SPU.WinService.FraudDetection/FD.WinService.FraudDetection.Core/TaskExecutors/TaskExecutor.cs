@@ -114,7 +114,6 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             }
 
 #if DEBUG
-            Console.WriteLine("{0} - {1} - {2} is running", Task.CaseId, Task.TaskId, Task.TaskName);
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 #endif
@@ -141,6 +140,9 @@ namespace FD.Lib.BusinessManager.TaskExecutors
                 {
                     ClearOldResult();
 
+#if DEBUG
+                    Console.WriteLine("{0} - {1} - {2} is running", Task.CaseId, Task.TaskId, Task.TaskName);
+#endif
                     ExecutePrecondition();
 
                     ExecuteRule();
@@ -192,14 +194,16 @@ namespace FD.Lib.BusinessManager.TaskExecutors
                 TaskId = TaskId
             });
 
-            var threads = new System.Threading.Tasks.Task[tasks.Count()];
+            var taskList = tasks as Task[] ?? tasks.ToArray();
+            var threads = new System.Threading.Tasks.Task[taskList.Count()];
             var index = 0;
 
-            foreach (var task in tasks)
+            foreach (var task in taskList)
             {
+                var executingTask = task;
                 threads[index] = System.Threading.Tasks.Task.Factory.StartNew(() =>
                     {
-                        var taskExecutor = TaskExecutorFactory.GetTaskExecutor(task);
+                        var taskExecutor = TaskExecutorFactory.GetTaskExecutor(executingTask);
                         taskExecutor.Execute();
                     });
                 index++;

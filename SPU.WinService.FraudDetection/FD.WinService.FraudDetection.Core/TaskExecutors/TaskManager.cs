@@ -64,7 +64,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         public void AddTasksInCase(int caseId)
         {
-            var tasks = _taskService.GetTasksByCaseId(new TaskGetByCaseIdCriteria()
+            var tasks = _taskService.GetTasksByCaseId(new TaskGetByCaseIdCriteria
             {
                 CaseId = caseId
             });
