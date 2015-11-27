@@ -30,7 +30,7 @@ namespace FD.Lib.TaskExecutors
     {
         private List<DataCapture> _suspiciousDataCaptureList;
 
-        private IList<string> _matchIdList;
+        private IList<Match> _matchList;
 
         private IList<string> _notComparedMatchIdList;
 
@@ -45,7 +45,7 @@ namespace FD.Lib.TaskExecutors
         public CompareDataTaskExecutor(Task task)
             : base(task)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _notComparedMatchIdList = new List<string>();
             _suspiciousDataCaptureList = new List<DataCapture>();
             _dataCaptureService = new DataCaptureService();
@@ -57,7 +57,7 @@ namespace FD.Lib.TaskExecutors
         public CompareDataTaskExecutor(Task task, ITaskService taskService)
             : base(task, taskService)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _notComparedMatchIdList = new List<string>();
             _suspiciousDataCaptureList = new List<DataCapture>();
             _dataCaptureService = new DataCaptureService();
@@ -68,7 +68,7 @@ namespace FD.Lib.TaskExecutors
 
         protected override void ClearOldResult()
         {
-            _matchIdList.Clear();
+            _matchList.Clear();
             _notComparedMatchIdList.Clear();
             _suspiciousDataCaptureList.Clear();
         }
@@ -76,7 +76,7 @@ namespace FD.Lib.TaskExecutors
         protected override void ExecutePrecondition()
         {
             var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
-            _matchIdList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
         }
 
         protected override void ExecuteRule()
@@ -90,8 +90,11 @@ namespace FD.Lib.TaskExecutors
         {
             if (_suspiciousDataCaptureList.Count > 0)
             {
-                var saveAction = new SavingSuspiciousCapturedData();
-                saveAction.DataCaptureList = _suspiciousDataCaptureList;
+                var saveAction = new SavingSuspiciousCapturedData
+                {
+                    DataCaptureList = _suspiciousDataCaptureList
+                };
+
                 saveAction.TakeAction();
             }
 
@@ -102,12 +105,13 @@ namespace FD.Lib.TaskExecutors
 
         private void GetAllNotComparedMatches()
         {
-            if (_matchIdList.Count > 0)
+            if (_matchList.Count > 0)
             {
+                var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
                 _notComparedMatchIdList = _dataCaptureService.GetAllNotComparedMacthes(new DataCaptureGetAllNotComparedMatchesCriteria
                 {
                     DataIdList = GetDataCaptureTypes(),
-                    MatchIdList = string.Join(",", _matchIdList)
+                    MatchIdList = string.Join(",", matchIdList)
 
                 }).ToList();
             }

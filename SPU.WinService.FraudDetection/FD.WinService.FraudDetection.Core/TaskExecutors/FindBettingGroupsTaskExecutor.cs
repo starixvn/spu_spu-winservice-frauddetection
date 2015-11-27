@@ -7,6 +7,8 @@
 //   <change who="Long.Luu" date="2015.07.23">Created</change>
 // </history>
 
+using System.Globalization;
+
 namespace FD.Lib.TaskExecutors
 {
     using System;
@@ -26,12 +28,12 @@ namespace FD.Lib.TaskExecutors
 
         private readonly List<Task<IList<SuspiciousGroupInfo>>> _threads;
 
-        private IList<string> _matchIdList;
+        private IList<Match> _matchList;
 
         public FindBettingGroupsTaskExecutor(Task task)
             : base(task)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _suspiciousList = new List<SuspiciousGroupInfo>();
             _threads = new List<Task<IList<SuspiciousGroupInfo>>>();
         }
@@ -39,7 +41,7 @@ namespace FD.Lib.TaskExecutors
         public FindBettingGroupsTaskExecutor(Task task, ITaskService taskService)
             : base(task, taskService)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _suspiciousList = new List<SuspiciousGroupInfo>();
             _threads = new List<Task<IList<SuspiciousGroupInfo>>>();
         }
@@ -47,14 +49,14 @@ namespace FD.Lib.TaskExecutors
         protected override void ClearOldResult()
         {
             _threads.Clear();
-            _matchIdList.Clear();
+            _matchList.Clear();
             _suspiciousList.Clear();
         }
 
         protected override void ExecutePrecondition()
         {
-            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString());
-            _matchIdList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
+            _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
         }
 
         protected override void ExecuteRule()
@@ -69,7 +71,7 @@ namespace FD.Lib.TaskExecutors
                 foreach (var item in NextActionDictionary)
                 {
                     Console.WriteLine("<Key, Value> = <" + item.Key + ", " + item.Value + ">");
-                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString());
+                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
                     var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
                     nextAction.SuspicionList = ConvertIntoSuspiciousInfo(_suspiciousList);
                     nextAction.TakeAction();
@@ -83,7 +85,7 @@ namespace FD.Lib.TaskExecutors
 
         private IList<SuspiciousInfo> ConvertIntoSuspiciousInfo(List<SuspiciousGroupInfo> _suspiciousList)
         {
-            return _suspiciousList.Select(suspicious => new SuspiciousInfo()
+            return _suspiciousList.Select(suspicious => new SuspiciousInfo
             {
                 CaseId = suspicious.CaseId,
                 CustId = suspicious.CustId,
@@ -96,7 +98,7 @@ namespace FD.Lib.TaskExecutors
         private void FindSuspiciousGroupsOnAllMatches()
         {
             var coreCount = Environment.ProcessorCount;
-            var matchCount = _matchIdList.Count;
+            var matchCount = _matchList.Count;
             int count = 0;
 
             for (; count < matchCount; count++)
@@ -106,7 +108,7 @@ namespace FD.Lib.TaskExecutors
                     break;
                 }
 
-                CreateAndAddNewThread(int.Parse(_matchIdList[count]));
+                CreateAndAddNewThread(_matchList[count].MatchId);
             }
 
             int threadsHaveDone = 0;
@@ -125,7 +127,7 @@ namespace FD.Lib.TaskExecutors
 
                 if (count < matchCount)
                 {
-                    CreateAndAddNewThread(int.Parse(_matchIdList[count]));
+                    CreateAndAddNewThread(_matchList[count].MatchId);
                     count++;
                 }
             }
@@ -133,7 +135,9 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveScannedMatches()
         {
-            var scannedMatch = new SavingScannedMatch(_matchIdList, Task.TaskId);
+            var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
+            var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
+
             scannedMatch.TakeAction();
         }
 

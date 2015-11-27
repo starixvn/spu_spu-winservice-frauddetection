@@ -47,7 +47,7 @@ namespace FD.Lib.TaskExecutors
         protected override void ExecutePrecondition()
         {
             var preConditionQuery = Task.TaskPreconditions;
-            _customerIdList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            _customerIdList = TaskService.ExecutePreconditionForCountingSuspiciousTimes(preConditionQuery).ToList();
         }
 
         protected override void ExecuteRule()

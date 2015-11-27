@@ -36,22 +36,19 @@ namespace FD.Lib.TaskExecutors
 
         private readonly DataCaptureService _dataCaptureService;
 
-        private readonly ITaskService _taskService;
-
         private readonly int _taskId;
 
-        private IList<string> _matchIdList;
+        private IList<Match> _matchList;
 
         private const int TicketChunk = 100000;
 
         public CaptureDataTaskExecutor(Task task)
             : base(task)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _dataCaptureList = new List<DataCapture>();
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
-            _taskService = new TaskService();
             _dataCaptureService = new DataCaptureService();
             _taskId = task.TaskId;
         }
@@ -59,26 +56,25 @@ namespace FD.Lib.TaskExecutors
         public CaptureDataTaskExecutor(Task task, ITaskService taskService)
             : base(task, taskService)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _dataCaptureList = new List<DataCapture>();
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
             _dataCaptureService = new DataCaptureService();
-            _taskService = taskService;
             _taskId = task.TaskId;
         }
 
         protected override void ClearOldResult()
         {
             _threads.Clear();
-            _matchIdList.Clear();
+            _matchList.Clear();
             _dataCaptureList.Clear();
         }
 
         protected override void ExecutePrecondition()
         {
             var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
-            _matchIdList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
         }
 
         protected override void ExecuteRule()
@@ -102,8 +98,8 @@ namespace FD.Lib.TaskExecutors
         private void FindTicketsOnAllMatches()
         {
             var coreCount = Environment.ProcessorCount;
-            var matchCount = _matchIdList.Count;
-            int count = 0;
+            var matchCount = _matchList.Count;
+            var count = 0;
 
             for (; count < matchCount; count++)
             {
@@ -115,11 +111,11 @@ namespace FD.Lib.TaskExecutors
                 CreateAndAddNewThread(count);
             }
 
-            int threadsHaveDone = 0;
+            var threadsHaveDone = 0;
 
             while (threadsHaveDone < matchCount)
             {
-                int index = System.Threading.Tasks.Task.WaitAny(_threads.ToArray());
+                var index = System.Threading.Tasks.Task.WaitAny(_threads.ToArray());
 
                 if (_threads[index].Exception == null)
                 {
@@ -129,30 +125,28 @@ namespace FD.Lib.TaskExecutors
                 threadsHaveDone++;
                 _threads.RemoveAt(index);
 
-                if (count < matchCount)
-                {
-                    CreateAndAddNewThread(count);
-                    count++;
-                }
+                if (count >= matchCount) continue;
+                CreateAndAddNewThread(count);
+                count++;
             }
         }
 
         private void CreateAndAddNewThread(int count)
         {
             var thread = System.Threading.Tasks.Task.Factory.StartNew(
-                (obj) =>
+                obj =>
                 {
-                    var id = (string)obj;
-                    return CaptureDataOnEachMatch(id);
+                    var match = (Match)obj;
+                    return CaptureDataOnEachMatch(match);
                 },
-            _matchIdList[count]);
+            _matchList[count]);
 
             _threads.Add(thread);
         }
 
-        private IList<DataCapture> CaptureDataOnEachMatch(string matchId)
+        private IList<DataCapture> CaptureDataOnEachMatch(Match match)
         {
-            var ruleQuery = Task.TaskRules.Replace("$param1$", matchId);
+            var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
             var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
             var result = new List<DataCapture>();
 
@@ -161,17 +155,17 @@ namespace FD.Lib.TaskExecutors
             foreach (var dataType in dataTypeList)
             {
                 var ticketChunks = tickets.Chunk(TicketChunk);
-                decimal value = 0; 
-                
+                decimal value = 0;
+
                 foreach (var ticketChunk in ticketChunks)
                 {
                     value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, dataType.DataId));
                 }
-                
+
                 var dataCapture = new DataCapture
                 {
                     DataId = dataType.DataId,
-                    MatchId = int.Parse(matchId),
+                    MatchId = match.MatchId,
                     NewValue = value,
                     OldValue = value,
                     NewDate = DateTime.Now,
@@ -186,7 +180,8 @@ namespace FD.Lib.TaskExecutors
 
         private void InsertScannedMatch()
         {
-            var matchChunks = _matchIdList.Chunk(ChunkSize);
+            var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
+            var matchChunks = matchIdList.Chunk(ChunkSize);
 
             foreach (var matchChunk in matchChunks)
             {

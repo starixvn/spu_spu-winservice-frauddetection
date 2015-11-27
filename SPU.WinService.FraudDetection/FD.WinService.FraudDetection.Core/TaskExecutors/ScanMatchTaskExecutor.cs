@@ -11,6 +11,7 @@ namespace FD.Lib.TaskExecutors
 {
     using System;
     using System.Collections.Generic;
+    using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
     using BusinessManager.TaskExecutors;
@@ -26,12 +27,12 @@ namespace FD.Lib.TaskExecutors
 
         private readonly List<Task<IList<SuspiciousInfo>>> _threads;
 
-        private IList<string> _matchIdList;
+        private IList<Match> _matchList;
 
         public ScanMatchTaskExecutor(Task task)
             : base(task)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _suspicionList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
         }
@@ -39,7 +40,7 @@ namespace FD.Lib.TaskExecutors
         public ScanMatchTaskExecutor(Task task, ITaskService taskService)
             : base(task, taskService)
         {
-            _matchIdList = new List<string>();
+            _matchList = new List<Match>();
             _suspicionList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
         }
@@ -47,14 +48,14 @@ namespace FD.Lib.TaskExecutors
         protected override void ClearOldResult()
         {
             _threads.Clear();
-            _matchIdList.Clear();
+            _matchList.Clear();
             _suspicionList.Clear();
         }
 
         protected override void ExecutePrecondition()
         {
-            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString());
-            _matchIdList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
+            _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
         }
 
         protected override void ExecuteRule()
@@ -68,8 +69,7 @@ namespace FD.Lib.TaskExecutors
             {
                 foreach (var item in NextActionDictionary)
                 {
-                    //Console.WriteLine("<Key, Value> = <" + item.Key + ", " + item.Value + ">");
-                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString());
+                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
                     var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
                     nextAction.SuspicionList = _suspicionList;
                     nextAction.TakeAction();
@@ -83,15 +83,16 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveScannedMatches()
         {
-            var scannedMatch = new SavingScannedMatch(_matchIdList, Task.TaskId);
+            var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
+            var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
             scannedMatch.TakeAction();
         }
 
         private void FindSuspiciousCustomerOnAllMatches()
         {
             var coreCount = Environment.ProcessorCount;
-            var matchCount = _matchIdList.Count;
-            int count = 0;
+            var matchCount = _matchList.Count;
+            var count = 0;
 
             for (; count < matchCount; count++)
             {
@@ -103,11 +104,11 @@ namespace FD.Lib.TaskExecutors
                 CreateAndAddNewThread(count);
             }
 
-            int threadsHaveDone = 0;
+            var threadsHaveDone = 0;
 
             while (threadsHaveDone < matchCount)
             {
-                int index = System.Threading.Tasks.Task.WaitAny(_threads.ToArray());
+                var index = System.Threading.Tasks.Task.WaitAny(_threads.ToArray());
 
                 if (_threads[index].Exception == null)
                 {
@@ -117,31 +118,29 @@ namespace FD.Lib.TaskExecutors
                 threadsHaveDone++;
                 _threads.RemoveAt(index);
 
-                if (count < matchCount)
-                {
-                    CreateAndAddNewThread(count);
-                    count++;
-                }
+                if (count >= matchCount) continue;
+                CreateAndAddNewThread(count);
+                count++;
             }
         }
 
         private void CreateAndAddNewThread(int count)
         {
             var thread = System.Threading.Tasks.Task.Factory.StartNew(
-                (obj) =>
+                obj =>
                 {
-                    var id = (string)obj;
+                    var id = (Match)obj;
                     return FindSuspiciousCustomerOnEachMatch(id);
                 },
-            _matchIdList[count]);
+            _matchList[count]);
 
             _threads.Add(thread);
         }
 
-        private IList<SuspiciousInfo> FindSuspiciousCustomerOnEachMatch(string matchId)
+        private IList<SuspiciousInfo> FindSuspiciousCustomerOnEachMatch(Match match)
         {
-            var ruleQuery = Task.TaskRules.Replace("$param1$", matchId);
-            return TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId);
+            var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
+            return TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId, match.EventDate);
         }
 
         private void SaveSuspiciousCustomers()

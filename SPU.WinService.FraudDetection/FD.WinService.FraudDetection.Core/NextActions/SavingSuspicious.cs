@@ -10,12 +10,10 @@
 namespace FD.WinService.FraudDetection.Core.NextActions
 {
     using System.Collections.Generic;
-    using System.Linq;
     using System.Text;
     using Fanex.Logging;
     using Lib.Core.Utilities;
     using Lib.Criteria.SuspiciousInfo;
-    using Lib.Criteria.SuspiciousStatistic;
     using Lib.DTO;
     using Lib.Service.Implement;
     using Lib.Service.Interface;
@@ -46,12 +44,15 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         public List<SuspiciousInfo> AssignGroupList
         {
             get { return _suspiciousInfoList; }
-            set { _suspiciousInfoList = AssignGroupList; }
+            set
+            {
+                _suspiciousInfoList = value;
+                _suspiciousInfoList = AssignGroupList;
+            }
         }
 
         public void TakeAction()
         {
-            InsertSuspiciousCustomers();
             InsertSuspiciousInfo();
         }
 
@@ -75,77 +76,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             }
         }
 
-        private void InsertSuspiciousCustomers()
-        {
-            var newSuspiciousCustomers = FindNewSuspiciousCustomers();
-
-            if (newSuspiciousCustomers.Count == 0)
-            {
-                return;
-            }
-
-            var newSuspiciousCustomerChunks = newSuspiciousCustomers.Chunk(ChunkSize);
-
-            foreach (var newSuspiciousCustomer in newSuspiciousCustomerChunks)
-            {
-                InsertNewSuspiciousCustomers(newSuspiciousCustomer);
-            }
-        }
-
-        private void InsertNewSuspiciousCustomers(IEnumerable<int> suspiciousCustomers)
-        {
-            var customers = CustomerService.GetCustormersByCustIds(new CustomerSelectCriteria()
-            {
-                ListCustIds = string.Join(",", suspiciousCustomers)
-            });
-
-            SuspiciousCustomerService.InsertSuspiciousCustomer(new SuspiciousCustomerInsertCriteria()
-            {
-                SuspiciousDoc = CreateXmlParamForInsertingSuspiciousCustomers(customers)
-            });
-        }
-
-        private IList<int> FindNewSuspiciousCustomers()
-        {
-            var custIds = _suspiciousInfoList.Select(t => t.CustId).Distinct().ToList();
-
-            var custIdChunks = custIds.Chunk(ChunkSize);
-            var newSuspiciousCustomers = new List<int>();
-
-            foreach (var custIdChunk in custIdChunks)
-            {
-                var custStr = string.Join(",", custIdChunk);
-
-                var temp = SuspiciousCustomerService.GetNewSuspiciousCustomers(new NewSuspiciousCustomersGetCriteria
-                {
-                    SuspiciousCustomers = custStr
-                });
-
-                newSuspiciousCustomers.AddRange(temp);
-            }
-
-            return newSuspiciousCustomers;
-        }
-
-        private string CreateXmlParamForInsertingSuspiciousCustomers(IEnumerable<Customer> suspiciousCustomers)
-        {
-            var builder = new StringBuilder();
-            builder.Append("<Root>");
-
-            foreach (var suspiciousCustomer in suspiciousCustomers)
-            {
-                builder.Append("<Row>");
-                builder.Append(GetElement("CustId", suspiciousCustomer.CustId));
-                builder.Append(GetElement("CustName", suspiciousCustomer.CustName));
-
-                builder.Append("</Row>");
-            }
-
-            builder.Append("</Root>");
-
-            return builder.ToString();
-        }
-
         private string CreateXmlParamForInsertingSuspiciousInfo(IEnumerable<SuspiciousInfo> suspiciousInfos)
         {
             var builder = new StringBuilder();
@@ -155,10 +85,13 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             {
                 builder.Append("<Row>");
                 builder.Append(GetElement("CustId", suspiciousInfo.CustId));
+                builder.Append(GetElement("CustName", suspiciousInfo.CustName));
+                builder.Append(GetElement("EventDate", suspiciousInfo.EventDate));
                 builder.Append(GetElement("MatchId", suspiciousInfo.MatchId));
                 builder.Append(GetElement("TransId", suspiciousInfo.TransId));
                 builder.Append(GetElement("TaskId", suspiciousInfo.TaskId));
                 builder.Append(GetElement("CaseId", suspiciousInfo.CaseId));
+                builder.Append(GetElement("ViolationCounter", suspiciousInfo.ViolationCounter));
                 builder.Append("</Row>");
             }
 
