@@ -180,7 +180,6 @@
                 EventId = 2,
                 Interval = 60,
                 IntervalType = "Second",
-                IsBackgroundProcess = true,
                 TaskPreconditions =
                     @"select top 100 tch.matchid from bodb02.dbo.match tch left join dbo.ScannedMatches hes on tch.matchid = hes.matchid  where tch.matchid in (select tch.matchid from bodb02.dbo.match tch with(nolock) where tch.matchid not in (select hes.MatchId from dbo.ScannedMatches hes where hes.CaseId = $param1$)) and (tch.eventdate < '6/4/2015' AND tch.eventstatus = 'completed' )",
                 TaskRules =
