@@ -122,7 +122,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
     <Reference Include="UMControllerLibrary">
-      <HintPath>..\packages\UMControllerLibrary.1.0.0\lib\net40\UMControllerLibrary.dll</HintPath>
+      <HintPath>..\SPU.WinService.FraudDetection\Dependencies\UMControler\UMControllerLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

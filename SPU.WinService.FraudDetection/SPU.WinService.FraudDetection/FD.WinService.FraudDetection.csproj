@@ -154,8 +154,9 @@
     <Reference Include="System.Data" />
     <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml" />
-    <Reference Include="UMControllerLibrary">
-      <HintPath>..\packages\UMControllerLibrary.1.0.0\lib\net40\UMControllerLibrary.dll</HintPath>
+    <Reference Include="UMControllerLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dependencies\UMControler\UMControllerLibrary.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -200,6 +201,7 @@
     <Content Include="Dependencies\FD.Lib.DTO.dll" />
     <Content Include="Dependencies\FD.Lib.Model.dll" />
     <Content Include="Dependencies\FD.Lib.Service.dll" />
+    <Content Include="Dependencies\UMControler\UMControllerLibrary.dll" />
     <Content Include="Install Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
