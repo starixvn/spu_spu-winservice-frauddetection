@@ -18,6 +18,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     using System.Timers;
     using Criteria.Task;
     using Fanex.Logging;
+    using Fanex.MailDelivery.Client.Handlers;
     using Lib.TaskExecutors;
     using Service.Implement;
     using Service.Interface;
@@ -28,7 +29,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     /// <summary>
     ///     Task Class.
     /// </summary>
-    public abstract class TaskExecutor : ITaskExecutor
+    public abstract class TaskExecutor: ITaskExecutor
     {
         protected const int ChunkSize = 60;
 
@@ -61,20 +62,43 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         #region Properties
 
-        public Task Task { get; set; }
+        public Task Task
+        {
+            get;
+            set;
+        }
 
-        public ITaskService TaskService { get; set; }
+        public ITaskService TaskService
+        {
+            get;
+            set;
+        }
 
-        public Timer Timer { get; set; }
+        public Timer Timer
+        {
+            get;
+            set;
+        }
 
         public int TaskId
         {
-            get { return Task.TaskId; }
+            get
+            {
+                return Task.TaskId;
+            }
         }
 
-        private bool IsRunning { get; set; }
+        private bool IsRunning
+        {
+            get;
+            set;
+        }
 
-        private bool IsStoppedManually { get; set; }
+        private bool IsStoppedManually
+        {
+            get;
+            set;
+        }
 
         #endregion Properties
 
@@ -168,9 +192,10 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         protected void WriteLog(Exception exception)
         {
-            var message = "\r\nError:" + exception.Message +
+            var message = "\r\nError: " + exception.Message +
                           "\r\nStackTrace: " + exception.StackTrace;
 
+            SendMailInform(message);
             Logger.Log.Error(message);
         }
 
@@ -212,10 +237,23 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             System.Threading.Tasks.Task.WaitAll(threads);
         }
 
+        private void SendMailInform(string message)
+        {
+            var newMail = new Fanex.MailDelivery.Client.Models.Mail
+            {
+                Subject = "SPU FS Error",
+                Title = "SPU FS Error",
+                Body = message,
+                MailingListId = int.Parse(ConfigurationManager.AppSettings["MailingListId"])
+            };
+
+            MailClientHandler.SendMail(newMail);
+        }
+
         #endregion Execute task
     }
 
-    public class KeyComparer : IComparer<int>
+    public class KeyComparer: IComparer<int>
     {
         public int Compare(int x, int y)
         {

@@ -17,7 +17,7 @@
             sut.RunOnStart();
 
             Console.WriteLine("Window service is running now.");
-            //while (true) { }
+            while (true) { }
         }
     }
 }

@@ -21,7 +21,7 @@ namespace FD.Lib.TaskExecutors
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
 
-    public class ScanMatchTaskExecutor : TaskExecutor
+    public class ScanMatchTaskExecutor: TaskExecutor
     {
         private readonly List<SuspiciousInfo> _suspicionList;
 
@@ -83,7 +83,8 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveScannedMatches()
         {
-            var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
+            var matchIdList = (from m in _matchList
+                               select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
             var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
             scannedMatch.TakeAction();
         }
@@ -114,11 +115,16 @@ namespace FD.Lib.TaskExecutors
                 {
                     _suspicionList.AddRange(_threads[index].Result);
                 }
+                else
+                {
+                    throw _threads[index].Exception;
+                }
 
                 threadsHaveDone++;
                 _threads.RemoveAt(index);
 
-                if (count >= matchCount) continue;
+                if (count >= matchCount)
+                    continue;
                 CreateAndAddNewThread(count);
                 count++;
             }
@@ -139,8 +145,11 @@ namespace FD.Lib.TaskExecutors
 
         private IList<SuspiciousInfo> FindSuspiciousCustomerOnEachMatch(Match match)
         {
+            var result = new List<SuspiciousInfo>();
             var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
-            return TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId, match.EventDate);
+            result = TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId, match.EventDate);
+
+            return result;
         }
 
         private void SaveSuspiciousCustomers()

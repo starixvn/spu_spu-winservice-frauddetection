@@ -121,6 +121,10 @@ namespace FD.Lib.TaskExecutors
                 {
                     _suspiciousList.AddRange(_threads[index].Result);
                 }
+                else
+                {
+                    throw _threads[index].Exception;
+                }
 
                 threadsHaveDone++;
                 _threads.RemoveAt(index);
