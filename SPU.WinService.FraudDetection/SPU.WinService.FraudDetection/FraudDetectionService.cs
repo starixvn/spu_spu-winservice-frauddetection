@@ -45,7 +45,7 @@
         {
             SendMailInform(false);
 
-            Logger.Log.Error("SPU FS Service Stopped");
+            Logger.Log.Info("SPU FS Service Stopped");
 
             ReceivingMessageHandler.ClearTasks();
 
@@ -56,8 +56,8 @@
         {
             SendMailInform(false);
 
-            //// Logger.Log.Error("Stop Fraud-Detection-Service service", "Fraud-Detection-Service-UAT");
-            Logger.Log.Error("SPU FS Service Stopped");
+            Logger.Log.Info("Stop Fraud-Detection-Service service", "Fraud-Detection-Service-UAT");
+            //// Logger.Log.Error("SPU FS Service Stopped");
 
             ReceivingMessageHandler.ClearTasks();
 
@@ -66,8 +66,8 @@
 
         public void RunOnStart()
         {
-            //// Logger.Log.Error("Starting Fraud-Detection-Service service", "Fraud-Detection-Service-UAT");
-            Logger.Log.Error("SPU FS Service Started");
+            Logger.Log.Info("Starting Fraud-Detection-Service service", "Fraud-Detection-Service-UAT");
+            //// Logger.Log.Error("SPU FS Service Started");
 
             MailClientHandler.Start();
 
@@ -79,7 +79,7 @@
             ReceivingMessageHandler.TriggerReceivingMessage();
             SendMailInform(true);
 
-            Logger.Log.Error("Loading tasks has done.", "Fraud-Detection-Service-UAT");
+            Logger.Log.Info("Loading tasks has done.", "Fraud-Detection-Service-UAT");
         }
 
         private void SendMailInform(bool serviceStarting)

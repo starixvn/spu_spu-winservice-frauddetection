@@ -17,6 +17,7 @@ namespace FD.Lib.TaskExecutors
     using BusinessManager.TaskExecutors;
     using Core.Utilities;
     using DTO;
+    using Fanex.Logging;
     using Service.Interface;
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
@@ -146,8 +147,19 @@ namespace FD.Lib.TaskExecutors
         private IList<SuspiciousInfo> FindSuspiciousCustomerOnEachMatch(Match match)
         {
             var result = new List<SuspiciousInfo>();
-            var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
-            result = TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId, match.EventDate);
+            var ruleQuery = string.Empty;
+
+            try
+            {
+                ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
+                result = TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId, match.EventDate);
+            }
+            catch (Exception ex)
+            {
+                Logger.Log.Error("MatchId = " + match.MatchId.ToString() + ", ruleQuery = " + ruleQuery);
+
+                throw ex;
+            }
 
             return result;
         }
