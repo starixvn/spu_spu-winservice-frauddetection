@@ -17,7 +17,7 @@
   <Fanex.Logging msmqPath="FormatName:DIRECT=TCP:10.18.200.124\private$\entlib" defaultCategory="SPU.Local" />
   <appSettings>
     <add key="ClientSettingsProvider.ServiceUri" value="" />    
-    <add key="RemoteRefURL" value="tcp://10.18.200.124:8888/CallGetRefFunction" />
+    <add key="RemoteRefURL" value="tcp://10.70.70.242:8888/CallGetRefFunction" />
     <add key="RemoteCacheUrl" value="tcp://10.18.200.124:8888/CallGetOddsFunction" />
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.18.200.209\private$\fdmessagequeue"/>
     <add key="FDUrl" value="" />
