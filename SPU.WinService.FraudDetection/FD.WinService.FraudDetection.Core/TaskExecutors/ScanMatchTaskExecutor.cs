@@ -156,9 +156,14 @@ namespace FD.Lib.TaskExecutors
             }
             catch (Exception ex)
             {
-                Logger.Log.Error("MatchId = " + match.MatchId.ToString() + ", ruleQuery = " + ruleQuery);
+                _matchList.Remove(match);
+                result = new List<SuspiciousInfo>();
 
-                throw ex;
+                var error = "<b>Error:</b> " + ex.Message +
+                          "<br><b>StackTrace:</b> " + ex.StackTrace;
+                var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
+
+                SendMailInform(message);
             }
 
             return result;

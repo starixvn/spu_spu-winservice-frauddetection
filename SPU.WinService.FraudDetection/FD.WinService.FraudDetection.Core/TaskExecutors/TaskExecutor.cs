@@ -237,7 +237,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             System.Threading.Tasks.Task.WaitAll(threads);
         }
 
-        private void SendMailInform(string message)
+        protected void SendMailInform(string message)
         {
             var newMail = new Fanex.MailDelivery.Client.Models.Mail
             {
