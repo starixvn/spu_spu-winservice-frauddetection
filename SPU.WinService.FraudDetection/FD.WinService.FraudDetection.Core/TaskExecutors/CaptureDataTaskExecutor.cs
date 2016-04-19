@@ -150,33 +150,47 @@ namespace FD.Lib.TaskExecutors
 
         private IList<DataCapture> CaptureDataOnEachMatch(Match match)
         {
-            var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
-            var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
             var result = new List<DataCapture>();
 
-            var dataTypeList = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
-
-            foreach (var dataType in dataTypeList)
+            try
             {
-                var ticketChunks = tickets.Chunk(TicketChunk);
-                decimal value = 0;
+                var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
+                var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
+                var dataTypeList = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
 
-                foreach (var ticketChunk in ticketChunks)
+                foreach (var dataType in dataTypeList)
                 {
-                    value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, dataType.DataId));
+                    var ticketChunks = tickets.Chunk(TicketChunk);
+                    decimal value = 0;
+
+                    foreach (var ticketChunk in ticketChunks)
+                    {
+                        value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, dataType.DataId));
+                    }
+
+                    var dataCapture = new DataCapture
+                    {
+                        DataId = dataType.DataId,
+                        MatchId = match.MatchId,
+                        NewValue = value,
+                        OldValue = value,
+                        NewDate = DateTime.Now,
+                        OldDate = DateTime.Now
+                    };
+
+                    result.Add(dataCapture);
                 }
+            }
+            catch (Exception ex)
+            {
+                _matchList.Remove(match);
+                result = new List<DataCapture>();
 
-                var dataCapture = new DataCapture
-                {
-                    DataId = dataType.DataId,
-                    MatchId = match.MatchId,
-                    NewValue = value,
-                    OldValue = value,
-                    NewDate = DateTime.Now,
-                    OldDate = DateTime.Now
-                };
+                var error = "<b>Error:</b> " + ex.Message +
+                          "<br><b>StackTrace:</b> " + ex.StackTrace;
+                var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
 
-                result.Add(dataCapture);
+                SendMailInform(message);
             }
 
             return result;
