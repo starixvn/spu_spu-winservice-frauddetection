@@ -20,6 +20,7 @@
   <Function Name="FD_Task">
     <Setting Key="FD_EventGetAll" SpName="FD_EventGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_ConfigGetAll" SpName="FD_ConfigGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_TaskCheckAllTicketsSettled" SpName="FD_TaskCheckAllTicketsSettled" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_SBSportGetAll" SpName="FD_SBSportGetAll" DbName="DBFD.bodb02.bodbSPUNet" />
     <Setting Key="FD_SBBettypeGetAll" SpName="FD_SBBettypeGetAll" DbName="DBFD.bodb02.bodbSPUNet" />
     <Setting Key="FD_TaskInsert" SpName="FD_TaskInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />

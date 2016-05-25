@@ -22,7 +22,7 @@ namespace FD.Lib.TaskExecutors
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
 
-    public class ScanMatchTaskExecutor: TaskExecutor
+    public class ScanMatchTaskExecutor : TaskExecutor
     {
         private readonly List<SuspiciousInfo> _suspicionList;
 
@@ -94,6 +94,8 @@ namespace FD.Lib.TaskExecutors
         {
             var coreCount = Environment.ProcessorCount;
             var matchCount = _matchList.Count;
+            var newMatchList = _matchList.Select(m => m).ToList();
+
             var count = 0;
 
             for (; count < matchCount; count++)
@@ -103,7 +105,7 @@ namespace FD.Lib.TaskExecutors
                     break;
                 }
 
-                CreateAndAddNewThread(count);
+                CreateAndAddNewThread(newMatchList.ElementAt(count));
             }
 
             var threadsHaveDone = 0;
@@ -126,12 +128,12 @@ namespace FD.Lib.TaskExecutors
 
                 if (count >= matchCount)
                     continue;
-                CreateAndAddNewThread(count);
+                CreateAndAddNewThread(newMatchList.ElementAt(count));
                 count++;
             }
         }
 
-        private void CreateAndAddNewThread(int count)
+        private void CreateAndAddNewThread(Match match)
         {
             var thread = System.Threading.Tasks.Task.Factory.StartNew(
                 obj =>
@@ -139,7 +141,7 @@ namespace FD.Lib.TaskExecutors
                     var id = (Match)obj;
                     return FindSuspiciousCustomerOnEachMatch(id);
                 },
-            _matchList[count]);
+            match);
 
             _threads.Add(thread);
         }
@@ -148,22 +150,37 @@ namespace FD.Lib.TaskExecutors
         {
             var result = new List<SuspiciousInfo>();
             var ruleQuery = string.Empty;
+            var shouldBeChecked = true;
 
-            try
+            if (IsCheckingCompletedMatches)
             {
-                ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
-                result = TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId, match.EventDate);
+                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, BettypeIds);
             }
-            catch (Exception ex)
+
+            if (shouldBeChecked)
+            {
+                try
+                {
+                    ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
+                    result = TaskService.ExecuteRule(ruleQuery, Task.TaskId, Task.CaseId, match.EventDate);
+                }
+                catch (Exception ex)
+                {
+                    _matchList.Remove(match);
+                    result = new List<SuspiciousInfo>();
+
+                    var error = "<b>Error:</b> " + ex.Message +
+                              "<br><b>StackTrace:</b> " + ex.StackTrace;
+                    var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
+
+                    SendMailInform(message);
+                }
+            }
+            else
             {
                 _matchList.Remove(match);
-                result = new List<SuspiciousInfo>();
 
-                var error = "<b>Error:</b> " + ex.Message +
-                          "<br><b>StackTrace:</b> " + ex.StackTrace;
-                var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
-
-                SendMailInform(message);
+                Logger.Log.Info(match.MatchId + ": All tickets are not settled (TaskID = " + Task.TaskId + ")");
             }
 
             return result;
@@ -172,6 +189,7 @@ namespace FD.Lib.TaskExecutors
         private void SaveSuspiciousCustomers()
         {
             var saveAction = new SavingSuspicious(_suspicionList);
+
             saveAction.TakeAction();
         }
     }

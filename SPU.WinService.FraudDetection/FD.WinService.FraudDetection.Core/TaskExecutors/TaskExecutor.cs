@@ -25,6 +25,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     using Sunplus.UMControllerLibrary;
     using WinService.FraudDetection.Core.TaskExecutors;
     using Task = DTO.Task;
+    using FD.Lib.Criteria.Config;
 
     /// <summary>
     ///     Task Class.
@@ -37,6 +38,10 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         protected UMBusiness MaintenanceService;
 
+        protected bool IsCheckingCompletedMatches;
+
+        protected string BettypeIds;
+
         #region Constructor
 
         protected TaskExecutor(Task task)
@@ -47,6 +52,30 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             GetNextActionDictionary();
             MaintenanceService = new UMBusiness();
             TaskService = new TaskService();
+            IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
+            BettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
+        }
+
+        private string GetBettypeIdList(string taskRules)
+        {
+            var result = new List<string>();
+
+            var rules = taskRules.Split('@');
+
+            var configBettypeId = new ConfigurationsService().
+                GetConfigs(new ConfigGetAllCriteria()).
+                Where(t => t.ConfigName == "Bet Type").
+                FirstOrDefault().ConfigId;
+
+            foreach(var rule in rules)
+            {
+                if(int.Parse(rule.Split('#')[1]) == configBettypeId)
+                {
+                    result.Add(rule.Split('#')[3].Split(',')[0]);
+                }
+            }
+
+            return string.Join(",", result);
         }
 
         protected TaskExecutor(Task task, ITaskService taskService)
@@ -56,6 +85,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             IsRunning = false;
             GetNextActionDictionary();
             MaintenanceService = new UMBusiness();
+            IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("compeleted");
         }
 
         #endregion Constructor

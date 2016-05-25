@@ -99,6 +99,8 @@ namespace FD.Lib.TaskExecutors
         {
             var coreCount = Environment.ProcessorCount;
             var matchCount = _matchList.Count;
+            var newMatchList = _matchList.Select(m => m).ToList();
+
             var count = 0;
 
             for (; count < matchCount; count++)
@@ -108,7 +110,7 @@ namespace FD.Lib.TaskExecutors
                     break;
                 }
 
-                CreateAndAddNewThread(count);
+                CreateAndAddNewThread(newMatchList.ElementAt(count));
             }
 
             var threadsHaveDone = 0;
@@ -130,20 +132,20 @@ namespace FD.Lib.TaskExecutors
                 _threads.RemoveAt(index);
 
                 if (count >= matchCount) continue;
-                CreateAndAddNewThread(count);
+                CreateAndAddNewThread(newMatchList.ElementAt(count));
                 count++;
             }
         }
 
-        private void CreateAndAddNewThread(int count)
+        private void CreateAndAddNewThread(Match match)
         {
             var thread = System.Threading.Tasks.Task.Factory.StartNew(
                 obj =>
                 {
-                    var match = (Match)obj;
-                    return CaptureDataOnEachMatch(match);
+                    var id = (Match)obj;
+                    return CaptureDataOnEachMatch(id);
                 },
-            _matchList[count]);
+            match);
 
             _threads.Add(thread);
         }
@@ -151,46 +153,61 @@ namespace FD.Lib.TaskExecutors
         private IList<DataCapture> CaptureDataOnEachMatch(Match match)
         {
             var result = new List<DataCapture>();
+            var shouldBeChecked = true;
 
-            try
+            if (IsCheckingCompletedMatches)
             {
-                var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
-                var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
-                var dataTypeList = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
+                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, BettypeIds);
+            }
 
-                foreach (var dataType in dataTypeList)
+            if (shouldBeChecked)
+            {
+                try
                 {
-                    var ticketChunks = tickets.Chunk(TicketChunk);
-                    decimal value = 0;
+                    var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
+                    var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
+                    var dataTypeList = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
 
-                    foreach (var ticketChunk in ticketChunks)
+                    foreach (var dataType in dataTypeList)
                     {
-                        value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, dataType.DataId));
+                        var ticketChunks = tickets.Chunk(TicketChunk);
+                        decimal value = 0;
+
+                        foreach (var ticketChunk in ticketChunks)
+                        {
+                            value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, dataType.DataId));
+                        }
+
+                        var dataCapture = new DataCapture
+                        {
+                            DataId = dataType.DataId,
+                            MatchId = match.MatchId,
+                            NewValue = value,
+                            OldValue = value,
+                            NewDate = DateTime.Now,
+                            OldDate = DateTime.Now
+                        };
+
+                        result.Add(dataCapture);
                     }
+                }
+                catch (Exception ex)
+                {
+                    _matchList.Remove(match);
+                    result = new List<DataCapture>();
 
-                    var dataCapture = new DataCapture
-                    {
-                        DataId = dataType.DataId,
-                        MatchId = match.MatchId,
-                        NewValue = value,
-                        OldValue = value,
-                        NewDate = DateTime.Now,
-                        OldDate = DateTime.Now
-                    };
+                    var error = "<b>Error:</b> " + ex.Message +
+                              "<br><b>StackTrace:</b> " + ex.StackTrace;
+                    var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
 
-                    result.Add(dataCapture);
+                    SendMailInform(message);
                 }
             }
-            catch (Exception ex)
+            else
             {
                 _matchList.Remove(match);
-                result = new List<DataCapture>();
 
-                var error = "<b>Error:</b> " + ex.Message +
-                          "<br><b>StackTrace:</b> " + ex.StackTrace;
-                var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
-
-                SendMailInform(message);
+                Logger.Log.Info(match.MatchId + ": All tickets are not settled (Captured Data)");
             }
 
             return result;
