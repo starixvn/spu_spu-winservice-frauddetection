@@ -207,7 +207,7 @@ namespace FD.Lib.TaskExecutors
             {
                 _matchList.Remove(match);
 
-                Logger.Log.Info(match.MatchId + ": All tickets are not settled (Captured Data)");
+                //Logger.Log.Info(match.MatchId + ": All tickets are not settled (Captured Data)");
             }
 
             return result;

@@ -180,7 +180,7 @@ namespace FD.Lib.TaskExecutors
             {
                 _matchList.Remove(match);
 
-                Logger.Log.Info(match.MatchId + ": All tickets are not settled (TaskID = " + Task.TaskId + ")");
+                //Logger.Log.Info(match.MatchId + ": All tickets are not settled (TaskID = " + Task.TaskId + ")");
             }
 
             return result;
