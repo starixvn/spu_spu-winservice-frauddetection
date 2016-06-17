@@ -51,6 +51,7 @@ namespace FD.Lib.TaskExecutors
             _scannedMatchesService = new ScannedMatchesService();
             _dataCaptureService = new DataCaptureService();
             _taskId = task.TaskId;
+            Task = task;
         }
 
         public CaptureDataTaskExecutor(Task task, ITaskService taskService)
@@ -62,6 +63,7 @@ namespace FD.Lib.TaskExecutors
             _scannedMatchesService = new ScannedMatchesService();
             _dataCaptureService = new DataCaptureService();
             _taskId = task.TaskId;
+            Task = task;
         }
 
         protected override void ClearOldResult()
@@ -166,21 +168,20 @@ namespace FD.Lib.TaskExecutors
                 {
                     var ruleQuery = Task.TaskRules.Replace("$param1$", match.MatchId.ToString(CultureInfo.InvariantCulture));
                     var tickets = TaskService.ExecuteRuleForCapturingData(ruleQuery);
-                    var dataTypeList = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
 
-                    foreach (var dataType in dataTypeList)
+                    foreach (var item in NextActionDictionary)
                     {
                         var ticketChunks = tickets.Chunk(TicketChunk);
                         decimal value = 0;
 
                         foreach (var ticketChunk in ticketChunks)
                         {
-                            value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, dataType.DataId));
+                            value += TaskService.CaptureData(GenerateSqlQuery(ticketChunk, item.Value));
                         }
 
                         var dataCapture = new DataCapture
                         {
-                            DataId = dataType.DataId,
+                            DataId = item.Value,
                             MatchId = match.MatchId,
                             NewValue = value,
                             OldValue = value,

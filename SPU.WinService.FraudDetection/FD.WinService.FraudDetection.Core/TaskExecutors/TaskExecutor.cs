@@ -30,7 +30,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     /// <summary>
     ///     Task Class.
     /// </summary>
-    public abstract class TaskExecutor: ITaskExecutor
+    public abstract class TaskExecutor : ITaskExecutor
     {
         protected const int ChunkSize = 60;
 
@@ -48,12 +48,23 @@ namespace FD.Lib.BusinessManager.TaskExecutors
         {
             Task = task;
             TaskService = new TaskService();
-            IsRunning = false;
-            GetNextActionDictionary();
             MaintenanceService = new UMBusiness();
-            TaskService = new TaskService();
-            IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
-            BettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
+            IsRunning = false;
+
+            if (Task.HasNextAction)
+            {
+                GetNextActionDictionary();
+            }
+
+            if (Task.HasPrecondition)
+            {
+                IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
+            }
+
+            if (Task.HasRule)
+            {
+                BettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
+            }
         }
 
         private string GetBettypeIdList(string taskRules)
@@ -67,9 +78,9 @@ namespace FD.Lib.BusinessManager.TaskExecutors
                 Where(t => t.ConfigName == "Bet Type").
                 FirstOrDefault().ConfigId;
 
-            foreach(var rule in rules)
+            foreach (var rule in rules)
             {
-                if(int.Parse(rule.Split('#')[1]) == configBettypeId)
+                if (int.Parse(rule.Split('#')[1]) == configBettypeId)
                 {
                     result.Add(rule.Split('#')[3].Split(',')[0]);
                 }
@@ -80,12 +91,25 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         protected TaskExecutor(Task task, ITaskService taskService)
         {
+            MaintenanceService = new UMBusiness();
             Task = task;
             TaskService = taskService;
             IsRunning = false;
-            GetNextActionDictionary();
-            MaintenanceService = new UMBusiness();
-            IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("compeleted");
+
+            if (Task.HasNextAction)
+            {
+                GetNextActionDictionary();
+            }
+
+            if (Task.HasPrecondition)
+            {
+                IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
+            }
+
+            if (Task.HasRule)
+            {
+                BettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
+            }
         }
 
         #endregion Constructor
@@ -197,11 +221,20 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 #if DEBUG
                     Console.WriteLine("{0} - {1} - {2} is running", Task.CaseId, Task.TaskId, Task.TaskName);
 #endif
-                    ExecutePrecondition();
+                    if (Task.HasPrecondition)
+                    {
+                        ExecutePrecondition();
+                    }
 
-                    ExecuteRule();
+                    if (Task.HasRule)
+                    {
+                        ExecuteRule();
+                    }
 
-                    TakeNextAction();
+                    if (Task.HasNextAction)
+                    {
+                        TakeNextAction();
+                    }
 
                     TriggerOtherTasks();
                 }
@@ -283,7 +316,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
         #endregion Execute task
     }
 
-    public class KeyComparer: IComparer<int>
+    public class KeyComparer : IComparer<int>
     {
         public int Compare(int x, int y)
         {
