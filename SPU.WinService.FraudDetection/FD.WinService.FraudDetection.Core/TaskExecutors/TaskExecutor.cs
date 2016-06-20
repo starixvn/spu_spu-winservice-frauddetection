@@ -40,6 +40,8 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         protected bool IsCheckingCompletedMatches;
 
+        protected bool IsCheckingRunningMatches;
+
         protected string BettypeIds;
 
         #region Constructor
@@ -59,6 +61,8 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             if (Task.HasPrecondition)
             {
                 IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
+
+                IsCheckingRunningMatches = task.TaskPreconditions.ToLower().Contains("running");
             }
 
             if (Task.HasRule)
@@ -221,20 +225,11 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 #if DEBUG
                     Console.WriteLine("{0} - {1} - {2} is running", Task.CaseId, Task.TaskId, Task.TaskName);
 #endif
-                    if (Task.HasPrecondition)
-                    {
-                        ExecutePrecondition();
-                    }
+                    ExecutePrecondition();
 
-                    if (Task.HasRule)
-                    {
-                        ExecuteRule();
-                    }
+                    ExecuteRule();
 
-                    if (Task.HasNextAction)
-                    {
-                        TakeNextAction();
-                    }
+                    TakeNextAction();
 
                     TriggerOtherTasks();
                 }

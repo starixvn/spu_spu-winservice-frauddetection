@@ -21,12 +21,17 @@ namespace FD.Lib.TaskExecutors
     using Service.Interface;
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
+    using FD.Lib.Criteria.DataCapture;
+    using FD.Lib.Service.Implement;
+    using FD.Lib.Criteria.Common;
 
     public class ScanMatchTaskExecutor : TaskExecutor
     {
         private readonly List<SuspiciousInfo> _suspicionList;
 
         private readonly List<Task<IList<SuspiciousInfo>>> _threads;
+
+        private readonly DataCaptureService _dataCaptureService;
 
         private IList<Match> _matchList;
 
@@ -36,6 +41,7 @@ namespace FD.Lib.TaskExecutors
             _matchList = new List<Match>();
             _suspicionList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
+            _dataCaptureService = new DataCaptureService();
         }
 
         public ScanMatchTaskExecutor(Task task, ITaskService taskService)
@@ -44,6 +50,7 @@ namespace FD.Lib.TaskExecutors
             _matchList = new List<Match>();
             _suspicionList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
+            _dataCaptureService = new DataCaptureService();
         }
 
         protected override void ClearOldResult()
@@ -78,6 +85,8 @@ namespace FD.Lib.TaskExecutors
 
                 SaveSuspiciousCustomers();
             }
+
+            UpdateDataCaptureTable();
 
             SaveScannedMatches();
         }
@@ -191,6 +200,38 @@ namespace FD.Lib.TaskExecutors
             var saveAction = new SavingSuspicious(_suspicionList);
 
             saveAction.TakeAction();
+        }
+
+        private void UpdateDataCaptureTable()
+        {
+            var dataTypeListString = GetDataCaptureTypes();
+
+            if (dataTypeListString.Length > 0 && _matchList.Count > 0)
+            {
+                var dataCaptureUpdateCriteria = new DataCaptureUpdateCriteria
+                {
+                    DataIdList = GetDataCaptureTypes(),
+                    MatchIdList = string.Join(",", _matchList.Select(m=>m.MatchId).ToList())
+                };
+
+                _dataCaptureService.UpdateCapturedData(dataCaptureUpdateCriteria);
+            }
+        }
+
+        private string GetDataCaptureTypes()
+        {
+            var dataCaptureTypes = _dataCaptureService.GetAllDataTypeCapture(new DataTypeCaptureGetAllCriteria());
+            var listTypes = new List<int>();
+
+            foreach (var dataCaptureType in dataCaptureTypes)
+            {
+                if (Task.TaskPreconditionsFormatted.Contains(dataCaptureType.DataName + " <> Has Changed"))
+                {
+                    listTypes.Add(dataCaptureType.DataId);
+                }
+            }
+
+            return string.Join(",", listTypes);
         }
     }
 }
