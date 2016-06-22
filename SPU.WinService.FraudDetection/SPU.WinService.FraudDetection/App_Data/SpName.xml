@@ -90,7 +90,7 @@
   <Function Name="FD_FraudDetection">
     <Setting Key="FD_TaskGetAll" SpName="FD_TaskGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_MatchInsert" SpName="FD_MatchInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_SuspiciousInfoInsert" SpName="FD_SuspiciousInfoInsert"
+    <Setting Key="FD_SuspiciousInfoInsert" SpName="FD_SuspiciousInfoInsert_xtest"
              DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_CustomerGroupInsert" SpName="FD_CustomerGroupInsert"
              DbName="DBFD.FraudDetection.bodbSPUNet" />
@@ -113,5 +113,6 @@
     <Setting Key="FD_DataCaptureGetAllNotComparedMatches" SpName="FD_DataCaptureGetAllNotComparedMatches" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_SuspiciousCapturedDataInsert" SpName="FD_SuspiciousCapturedDataInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_DataCaptureUpdate" SpName="FD_DataCaptureUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_DataCaptureListInsert" SpName="FD_DataCaptureListInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 </Functions>

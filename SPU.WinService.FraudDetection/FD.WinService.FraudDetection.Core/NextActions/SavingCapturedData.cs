@@ -14,6 +14,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     using Lib.Criteria.DataCapture;
     using Lib.DTO;
     using Lib.Service.Implement;
+    using System.Text;
 
     /// <summary>
     /// Save suspicious info.
@@ -41,28 +42,54 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         private void InsertCapturedData()
         {
+            var dataCaptureList = new List<DataCapture>();
+
             foreach (var dataCapture in DataCaptureList)
             {
-                var criteria = new DataCaptureInsertCriteria
+                if (_dataType == dataCapture.DataId)
                 {
-                    DataId = dataCapture.DataId,
-                    MatchId = dataCapture.MatchId,
-                    NewDate = dataCapture.NewDate,
-                    NewValue = dataCapture.NewValue,
-                    OldDate = dataCapture.OldDate,
-                    OldValue = dataCapture.OldValue
-                };
-
-                if (_dataType == criteria.DataId)
-                {
-                    var result = _dataCaptureService.InsertCapturedData(criteria);
-
-                    if (!result.IsSuccessful)
-                    {
-                        Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                    }
+                    dataCaptureList.Add(dataCapture);
                 }
             }
+
+            if(dataCaptureList.Count > 0)
+            {
+                var criteria = new DataCaptureListInsertCriteria
+                {
+                    DataCaptureDoc = CreateXmlParamForInsertingDataCapture(dataCaptureList)
+                };
+
+                var result = _dataCaptureService.InsertCapturedDataList(criteria);
+
+                if (!result.IsSuccessful)
+                {
+                    Logger.Log.Error("Error Saving Data Capture: " + result.Message);
+                }
+            }
+        }
+
+        private string CreateXmlParamForInsertingDataCapture(IEnumerable<DataCapture> dataCaptureList)
+        {
+            var builder = new StringBuilder();
+            builder.Append("<Root>");
+
+            foreach (var data in dataCaptureList)
+            {
+                builder.Append("<Row>");
+                builder.Append(GetElement("DataId", data.DataId));
+                builder.Append(GetElement("MatchId", data.MatchId));
+                builder.Append(GetElement("NewValue", data.NewValue));
+                builder.Append("</Row>");
+            }
+
+            builder.Append("</Root>");
+
+            return builder.ToString();
+        }
+
+        private string GetElement(string tagName, object value)
+        {
+            return string.Format("<{0}>{1}</{0}>", tagName, value);
         }
     }
 }

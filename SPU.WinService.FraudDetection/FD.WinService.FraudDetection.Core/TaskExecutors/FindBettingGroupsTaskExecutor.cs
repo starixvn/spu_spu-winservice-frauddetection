@@ -55,26 +55,35 @@ namespace FD.Lib.TaskExecutors
 
         protected override void ExecutePrecondition()
         {
-            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
-            _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            if (Task.HasPrecondition)
+            {
+                var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
+                _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            }
         }
 
         protected override void ExecuteRule()
         {
-            FindSuspiciousGroupsOnAllMatches();
+            if (Task.HasRule)
+            {
+                FindSuspiciousGroupsOnAllMatches();
+            }
         }
 
         protected override void TakeNextAction()
         {
             if (_suspiciousList.Count > 0)
             {
-                foreach (var item in NextActionDictionary)
+                if (Task.HasNextAction)
                 {
-                    Console.WriteLine("<Key, Value> = <" + item.Key + ", " + item.Value + ">");
-                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
-                    var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
-                    nextAction.SuspicionList = ConvertIntoSuspiciousInfo(_suspiciousList);
-                    nextAction.TakeAction();
+                    foreach (var item in NextActionDictionary)
+                    {
+                        Console.WriteLine("<Key, Value> = <" + item.Key + ", " + item.Value + ">");
+                        var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
+                        var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
+                        nextAction.SuspicionList = ConvertIntoSuspiciousInfo(_suspiciousList);
+                        nextAction.TakeAction();
+                    }
                 }
 
                 SaveSuspiciousGroups();

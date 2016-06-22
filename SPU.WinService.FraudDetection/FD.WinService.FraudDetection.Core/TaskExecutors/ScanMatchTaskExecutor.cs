@@ -62,31 +62,43 @@ namespace FD.Lib.TaskExecutors
 
         protected override void ExecutePrecondition()
         {
-            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
-            _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            if (Task.HasPrecondition)
+            {
+                var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
+                _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            }
         }
 
         protected override void ExecuteRule()
         {
-            FindSuspiciousCustomerOnAllMatches();
+            if (Task.HasRule)
+            {
+                FindSuspiciousCustomerOnAllMatches();
+            }
         }
 
         protected override void TakeNextAction()
         {
             if (_suspicionList.Count > 0)
             {
-                foreach (var item in NextActionDictionary)
+                if (Task.HasNextAction)
                 {
-                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
-                    var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
-                    nextAction.SuspicionList = _suspicionList;
-                    nextAction.TakeAction();
+                    foreach (var item in NextActionDictionary)
+                    {
+                        var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
+                        var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
+                        nextAction.SuspicionList = _suspicionList;
+                        nextAction.TakeAction();
+                    }
                 }
 
                 SaveSuspiciousCustomers();
             }
 
-            UpdateDataCaptureTable();
+            if (IsNeedUpdateDataCapture)
+            {
+                UpdateDataCaptureTable();
+            }
 
             SaveScannedMatches();
         }
@@ -188,8 +200,6 @@ namespace FD.Lib.TaskExecutors
             else
             {
                 _matchList.Remove(match);
-
-                //Logger.Log.Info(match.MatchId + ": All tickets are not settled (TaskID = " + Task.TaskId + ")");
             }
 
             return result;
@@ -211,7 +221,7 @@ namespace FD.Lib.TaskExecutors
                 var dataCaptureUpdateCriteria = new DataCaptureUpdateCriteria
                 {
                     DataIdList = GetDataCaptureTypes(),
-                    MatchIdList = string.Join(",", _matchList.Select(m=>m.MatchId).ToList())
+                    MatchIdList = string.Join(",", _matchList.Select(m => m.MatchId).ToList())
                 };
 
                 _dataCaptureService.UpdateCapturedData(dataCaptureUpdateCriteria);

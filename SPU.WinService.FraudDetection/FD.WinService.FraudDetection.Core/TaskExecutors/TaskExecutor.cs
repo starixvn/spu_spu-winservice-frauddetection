@@ -42,6 +42,8 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         protected bool IsCheckingRunningMatches;
 
+        protected bool IsNeedUpdateDataCapture;
+
         protected string BettypeIds;
 
         #region Constructor
@@ -63,6 +65,8 @@ namespace FD.Lib.BusinessManager.TaskExecutors
                 IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
 
                 IsCheckingRunningMatches = task.TaskPreconditions.ToLower().Contains("running");
+
+                IsNeedUpdateDataCapture = Task.TaskPreconditionsFormatted.ToLower().Contains("has changed");
             }
 
             if (Task.HasRule)

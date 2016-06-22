@@ -75,27 +75,36 @@ namespace FD.Lib.TaskExecutors
 
         protected override void ExecutePrecondition()
         {
-            var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
-            _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            if (Task.HasPrecondition)
+            {
+                var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
+                _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+            }
         }
 
         protected override void ExecuteRule()
         {
-            GetAllNotComparedMatches();
+            if (Task.HasRule)
+            {
+                GetAllNotComparedMatches();
 
-            FindSuspiciousMatches();
+                FindSuspiciousMatches();
+            }
         }
 
         protected override void TakeNextAction()
         {
-            if (_suspiciousDataCaptureList.Count > 0)
+            if (Task.HasNextAction)
             {
-                var saveAction = new SavingSuspiciousCapturedData
+                if (_suspiciousDataCaptureList.Count > 0)
                 {
-                    DataCaptureList = _suspiciousDataCaptureList
-                };
+                    var saveAction = new SavingSuspiciousCapturedData
+                    {
+                        DataCaptureList = _suspiciousDataCaptureList
+                    };
 
-                saveAction.TakeAction();
+                    saveAction.TakeAction();
+                }
             }
 
             UpdateDataCaptureTable();

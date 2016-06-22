@@ -46,49 +46,58 @@ namespace FD.Lib.TaskExecutors
 
         protected override void ExecutePrecondition()
         {
-            var preConditionQuery = Task.TaskPreconditions;
-            _customerIdList = TaskService.ExecutePreconditionForCountingSuspiciousTimes(preConditionQuery).ToList();
+            if (Task.HasPrecondition)
+            {
+                var preConditionQuery = Task.TaskPreconditions;
+                _customerIdList = TaskService.ExecutePreconditionForCountingSuspiciousTimes(preConditionQuery).ToList();
+            }
         }
 
         protected override void ExecuteRule()
         {
-            var ruleQuery = Task.TaskRules;
-
-            if (_customerIdList.Any())
+            if (Task.HasRule)
             {
-                var taskRule = Task.TaskRules + " AND susCust.CustId in ($param1$)";
-                ruleQuery = taskRule.Replace("$param1$", string.Join(",", _customerIdList));
-                _suspiciousCustomers = TaskService.GetSuspiciousCustomers(ruleQuery, Task.TaskId);
+                var ruleQuery = Task.TaskRules;
+
+                if (_customerIdList.Any())
+                {
+                    var taskRule = Task.TaskRules + " AND susCust.CustId in ($param1$)";
+                    ruleQuery = taskRule.Replace("$param1$", string.Join(",", _customerIdList));
+                    _suspiciousCustomers = TaskService.GetSuspiciousCustomers(ruleQuery, Task.TaskId);
+                }
             }
         }
 
         protected override void TakeNextAction()
         {
-            if (_suspiciousCustomers.Count == 0)
+            if (Task.HasNextAction)
             {
-                return;
-            }
-
-            var suspiciousCustomerChunks = _suspiciousCustomers.Chunk(ChunkSize);
-            var suspciousList = new List<SuspiciousInfo>();
-
-            foreach (var suspiciousCustomerChunk in suspiciousCustomerChunks)
-            {
-                var criteria = new SuspiciousHistoryCriteria
+                if (_suspiciousCustomers.Count == 0)
                 {
-                    CustIdList = string.Join(",", suspiciousCustomerChunk.Select(t => t.CustId)),
-                    CaseId = Task.CaseId
-                };
+                    return;
+                }
 
-                suspciousList.AddRange(TaskService.GetSuspiciousCustomerHistory(criteria));
-            }
+                var suspiciousCustomerChunks = _suspiciousCustomers.Chunk(ChunkSize);
+                var suspciousList = new List<SuspiciousInfo>();
 
-            foreach (var item in NextActionDictionary)
-            {
-                var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString());
-                var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
-                nextAction.SuspicionList = suspciousList;
-                nextAction.TakeAction();
+                foreach (var suspiciousCustomerChunk in suspiciousCustomerChunks)
+                {
+                    var criteria = new SuspiciousHistoryCriteria
+                    {
+                        CustIdList = string.Join(",", suspiciousCustomerChunk.Select(t => t.CustId)),
+                        CaseId = Task.CaseId
+                    };
+
+                    suspciousList.AddRange(TaskService.GetSuspiciousCustomerHistory(criteria));
+                }
+
+                foreach (var item in NextActionDictionary)
+                {
+                    var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString());
+                    var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
+                    nextAction.SuspicionList = suspciousList;
+                    nextAction.TakeAction();
+                }
             }
         }
     }
