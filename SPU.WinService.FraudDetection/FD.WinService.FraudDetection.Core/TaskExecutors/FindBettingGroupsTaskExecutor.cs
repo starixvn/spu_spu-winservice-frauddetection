@@ -89,7 +89,10 @@ namespace FD.Lib.TaskExecutors
                 SaveSuspiciousGroups();
             }
 
-            SaveScannedMatches();
+            if (_matchList != null && _matchList.Count > 0)
+            {
+                SaveScannedMatches();
+            }
         }
 
         private IList<SuspiciousInfo> ConvertIntoSuspiciousInfo(List<SuspiciousGroupInfo> _suspiciousList)
@@ -148,10 +151,13 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveScannedMatches()
         {
-            var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
-            var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
+            if(_matchList != null)
+            {
+                var matchIdList = _matchList.Select(m => m.MatchId.ToString()).ToList();
+                var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
 
-            scannedMatch.TakeAction();
+                scannedMatch.TakeAction();
+            }
         }
 
         private void CreateAndAddNewThread(int matchId)

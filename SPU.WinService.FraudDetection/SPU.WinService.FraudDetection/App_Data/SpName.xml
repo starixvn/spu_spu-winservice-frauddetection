@@ -90,7 +90,7 @@
   <Function Name="FD_FraudDetection">
     <Setting Key="FD_TaskGetAll" SpName="FD_TaskGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_MatchInsert" SpName="FD_MatchInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
-    <Setting Key="FD_SuspiciousInfoInsert" SpName="FD_SuspiciousInfoInsert_xtest"
+    <Setting Key="FD_SuspiciousInfoInsert" SpName="FD_SuspiciousInfoInsert"
              DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_CustomerGroupInsert" SpName="FD_CustomerGroupInsert"
              DbName="DBFD.FraudDetection.bodbSPUNet" />

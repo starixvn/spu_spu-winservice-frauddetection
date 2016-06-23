@@ -32,6 +32,8 @@ namespace FD.Lib.TaskExecutors
 
         private IList<Match> _matchList;
 
+        private IList<Match> _removeMatchList;
+
         private IList<string> _notComparedMatchIdList;
 
         private readonly DataCaptureService _dataCaptureService;
@@ -46,6 +48,7 @@ namespace FD.Lib.TaskExecutors
             : base(task)
         {
             _matchList = new List<Match>();
+            _removeMatchList = new List<Match>();
             _notComparedMatchIdList = new List<string>();
             _suspiciousDataCaptureList = new List<DataCapture>();
             _dataCaptureService = new DataCaptureService();
@@ -58,6 +61,7 @@ namespace FD.Lib.TaskExecutors
             : base(task, taskService)
         {
             _matchList = new List<Match>();
+            _removeMatchList = new List<Match>();
             _notComparedMatchIdList = new List<string>();
             _suspiciousDataCaptureList = new List<DataCapture>();
             _dataCaptureService = new DataCaptureService();
@@ -69,6 +73,7 @@ namespace FD.Lib.TaskExecutors
         protected override void ClearOldResult()
         {
             _matchList.Clear();
+            _removeMatchList.Clear();
             _notComparedMatchIdList.Clear();
             _suspiciousDataCaptureList.Clear();
         }
@@ -109,14 +114,22 @@ namespace FD.Lib.TaskExecutors
 
             UpdateDataCaptureTable();
 
-            InsertScannedMatch();
+            if (_matchList != null && _matchList.Count > 0)
+            {
+                foreach (var match in _removeMatchList)
+                {
+                    _matchList.Remove(match);
+                }
+
+                InsertScannedMatch();
+            }
         }
 
         private void GetAllNotComparedMatches()
         {
             if (_matchList.Count > 0)
             {
-                var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
+                var matchIdList = _matchList.Select(m => m.MatchId);
                 _notComparedMatchIdList = _dataCaptureService.GetAllNotComparedMacthes(new DataCaptureGetAllNotComparedMatchesCriteria
                 {
                     DataIdList = GetDataCaptureTypes(),
@@ -139,24 +152,27 @@ namespace FD.Lib.TaskExecutors
 
         private void InsertScannedMatch()
         {
-            var matchChunks = _notComparedMatchIdList.Chunk(ChunkSize);
+             if(_notComparedMatchIdList != null)
+             {
+                 var matchChunks = _notComparedMatchIdList.Chunk(ChunkSize);
 
-            foreach (var matchChunk in matchChunks)
-            {
-                var criteria = new MatchInsertCriteria
-                {
-                    MatchIdList = string.Join(",", matchChunk),
-                    TaskId = _taskId,
-                    ScannedDate = DateTime.Now
-                };
+                 foreach (var matchChunk in matchChunks)
+                 {
+                     var criteria = new MatchInsertCriteria
+                     {
+                         MatchIdList = string.Join(",", matchChunk),
+                         TaskId = _taskId,
+                         ScannedDate = DateTime.Now
+                     };
 
-                var result = _scannedMatchesService.InsertScannedMatch(criteria);
+                     var result = _scannedMatchesService.InsertScannedMatch(criteria);
 
-                if (result.IsSuccessful == false)
-                {
-                    Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                }
-            }
+                     if (result.IsSuccessful == false)
+                     {
+                         Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
+                     }
+                 }
+             }
         }
 
         private void UpdateDataCaptureTable()

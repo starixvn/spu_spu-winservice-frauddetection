@@ -40,12 +40,15 @@ namespace FD.Lib.TaskExecutors
 
         private IList<Match> _matchList;
 
+        private IList<Match> _removeMatchList;
+
         private const int TicketChunk = 100000;
 
         public CaptureDataTaskExecutor(Task task)
             : base(task)
         {
             _matchList = new List<Match>();
+            _removeMatchList = new List<Match>();
             _dataCaptureList = new List<DataCapture>();
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
@@ -58,6 +61,7 @@ namespace FD.Lib.TaskExecutors
             : base(task, taskService)
         {
             _matchList = new List<Match>();
+            _removeMatchList = new List<Match>();
             _dataCaptureList = new List<DataCapture>();
             _threads = new List<Task<IList<DataCapture>>>();
             _scannedMatchesService = new ScannedMatchesService();
@@ -71,6 +75,7 @@ namespace FD.Lib.TaskExecutors
             _threads.Clear();
             _matchList.Clear();
             _dataCaptureList.Clear();
+            _removeMatchList.Clear();
         }
 
         protected override void ExecutePrecondition()
@@ -107,7 +112,15 @@ namespace FD.Lib.TaskExecutors
                 }
             }
 
-            InsertScannedMatch();
+            if (_matchList != null && _matchList.Count > 0)
+            {
+                foreach (var match in _removeMatchList)
+                {
+                    _matchList.Remove(match);
+                }
+
+                InsertScannedMatch();
+            }
         }
 
         private void CaptureDataByMatchOnAllMatches()
@@ -268,7 +281,8 @@ namespace FD.Lib.TaskExecutors
                 }
                 catch (Exception ex)
                 {
-                    _matchList.Remove(match);
+                    //_matchList.Remove(match);
+                    _removeMatchList.Add(match);
                     result = new List<DataCapture>();
 
                     var error = "<b>Error:</b> " + ex.Message +
@@ -280,7 +294,8 @@ namespace FD.Lib.TaskExecutors
             }
             else
             {
-                _matchList.Remove(match);
+                //_matchList.Remove(match);
+                _removeMatchList.Add(match);
             }
 
             return result;
@@ -319,7 +334,8 @@ namespace FD.Lib.TaskExecutors
                 }
                 catch (Exception ex)
                 {
-                    _matchList.Remove(match);
+                    //_matchList.Remove(match);
+                    _removeMatchList.Add(match);
                     result = new List<DataCapture>();
 
                     var error = "<b>Error:</b> " + ex.Message +
@@ -331,7 +347,8 @@ namespace FD.Lib.TaskExecutors
             }
             else
             {
-                _matchList.Remove(match);
+                //_matchList.Remove(match);
+                _removeMatchList.Add(match);
             }
 
             return result;
@@ -339,25 +356,28 @@ namespace FD.Lib.TaskExecutors
 
         private void InsertScannedMatch()
         {
-            var matchIdList = (from m in _matchList select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
-            var matchChunks = matchIdList.Chunk(ChunkSize);
+             if(_matchList != null)
+             {
+                 var matchIdList = _matchList.Select(m => m.MatchId);
+                 var matchChunks = matchIdList.Chunk(ChunkSize);
 
-            foreach (var matchChunk in matchChunks)
-            {
-                var criteria = new MatchInsertCriteria
-                {
-                    MatchIdList = string.Join(",", matchChunk),
-                    TaskId = _taskId,
-                    ScannedDate = DateTime.Now
-                };
+                 foreach (var matchChunk in matchChunks)
+                 {
+                     var criteria = new MatchInsertCriteria
+                     {
+                         MatchIdList = string.Join(",", matchChunk),
+                         TaskId = _taskId,
+                         ScannedDate = DateTime.Now
+                     };
 
-                var result = _scannedMatchesService.InsertScannedMatch(criteria);
+                     var result = _scannedMatchesService.InsertScannedMatch(criteria);
 
-                if (result.IsSuccessful == false)
-                {
-                    Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                }
-            }
+                     if (result.IsSuccessful == false)
+                     {
+                         Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
+                     }
+                 }
+             }
         }
 
         private string GenerateSqlQueryByTickets(int matchId, IEnumerable<string> tickets, int dataType)

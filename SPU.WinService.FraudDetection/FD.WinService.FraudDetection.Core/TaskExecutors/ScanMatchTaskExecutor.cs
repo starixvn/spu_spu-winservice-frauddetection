@@ -35,10 +35,13 @@ namespace FD.Lib.TaskExecutors
 
         private IList<Match> _matchList;
 
+        private IList<Match> _removeMatchList;
+
         public ScanMatchTaskExecutor(Task task)
             : base(task)
         {
             _matchList = new List<Match>();
+            _removeMatchList = new List<Match>();
             _suspicionList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
             _dataCaptureService = new DataCaptureService();
@@ -48,6 +51,7 @@ namespace FD.Lib.TaskExecutors
             : base(task, taskService)
         {
             _matchList = new List<Match>();
+            _removeMatchList = new List<Match>();
             _suspicionList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
             _dataCaptureService = new DataCaptureService();
@@ -58,6 +62,7 @@ namespace FD.Lib.TaskExecutors
             _threads.Clear();
             _matchList.Clear();
             _suspicionList.Clear();
+            _removeMatchList.Clear();
         }
 
         protected override void ExecutePrecondition()
@@ -100,15 +105,25 @@ namespace FD.Lib.TaskExecutors
                 UpdateDataCaptureTable();
             }
 
-            SaveScannedMatches();
+            if (_matchList != null && _matchList.Count > 0)
+            {
+                foreach (var match in _removeMatchList)
+                {
+                    _matchList.Remove(match);
+                }
+
+                SaveScannedMatches();
+            }
         }
 
         private void SaveScannedMatches()
         {
-            var matchIdList = (from m in _matchList
-                               select m.MatchId.ToString(CultureInfo.InvariantCulture)).Distinct().ToList();
-            var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
-            scannedMatch.TakeAction();
+            if(_matchList != null)
+            {
+                var matchIdList = _matchList.Select(m => m.MatchId.ToString()).ToList();
+                var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
+                scannedMatch.TakeAction();
+            }
         }
 
         private void FindSuspiciousCustomerOnAllMatches()
@@ -187,7 +202,8 @@ namespace FD.Lib.TaskExecutors
                 }
                 catch (Exception ex)
                 {
-                    _matchList.Remove(match);
+                    //_matchList.Remove(match);
+                    _removeMatchList.Add(match);
                     result = new List<SuspiciousInfo>();
 
                     var error = "<b>Error:</b> " + ex.Message +
@@ -199,7 +215,8 @@ namespace FD.Lib.TaskExecutors
             }
             else
             {
-                _matchList.Remove(match);
+                //_matchList.Remove(match);
+                _removeMatchList.Add(match);
             }
 
             return result;
