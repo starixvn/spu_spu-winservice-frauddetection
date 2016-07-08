@@ -11,24 +11,10 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 {
     public enum NextActionType
     {
-        /// <summary>
-        /// No Next Action.
-        /// </summary>
         None = 0,
-
-        /// <summary>
-        /// Assign customers to group.
-        /// </summary>
         AssigningGroup = 1,
-
-        /// <summary>
-        /// Send email to senior.
-        /// </summary>
         SendingEmail = 2,
-
-        /// <summary>
-        /// Send email to senior.
-        /// </summary>
-        CapturingData = 3
+        CapturingData = 3,
+        SendingMessage = 4
     }
 }

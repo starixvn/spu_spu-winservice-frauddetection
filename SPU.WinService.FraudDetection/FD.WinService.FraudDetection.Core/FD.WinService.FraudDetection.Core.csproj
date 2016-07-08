@@ -148,6 +148,7 @@
     <Compile Include="NextActions\RawBettingGroup.cs" />
     <Compile Include="NextActions\SavingSuspicious.cs" />
     <Compile Include="NextActions\SavingSuspiciousGroup.cs" />
+    <Compile Include="NextActions\SendingMessagelNextAction.cs" />
     <Compile Include="NextActions\SendingEmailNextAction.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="QueueManagement\IMessageQueueReceiver.cs" />
