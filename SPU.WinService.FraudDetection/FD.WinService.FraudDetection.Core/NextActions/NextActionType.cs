@@ -15,6 +15,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         AssigningGroup = 1,
         SendingEmail = 2,
         CapturingData = 3,
-        SendingMessage = 4
+        PostMessage = 4
     }
 }

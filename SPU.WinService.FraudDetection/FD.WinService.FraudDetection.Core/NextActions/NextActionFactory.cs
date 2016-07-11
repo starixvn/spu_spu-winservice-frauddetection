@@ -9,6 +9,7 @@
 
 namespace FD.WinService.FraudDetection.Core.NextActions
 {
+    using FD.Lib.DTO;
     using System;
 
     /// <summary>
@@ -16,12 +17,12 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     /// </summary>
     public static class NextActionFactory
     {
-        public static INextAction GetNextAction(NextActionType actionType, int targetId, int caseId)
+        public static INextAction GetNextAction(NextActionType actionType, int targetId, Task task)
         {
             switch (actionType)
             {
                 case NextActionType.AssigningGroup:
-                    return new AssigningGroupNextAction(targetId, caseId);
+                    return new AssigningGroupNextAction(targetId, task.CaseId);
 
                 case NextActionType.SendingEmail:
                     return new SendingEmailNextAction(targetId);
@@ -29,8 +30,8 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 case NextActionType.CapturingData:
                     return new SavingCapturedData(targetId);
 
-                case NextActionType.SendingMessage:
-                    return new SendingMessagelNextAction(targetId);
+                case NextActionType.PostMessage:
+                    return new PostMessageNextAction(targetId, task);
 
                 default:
                     throw new ArgumentOutOfRangeException();

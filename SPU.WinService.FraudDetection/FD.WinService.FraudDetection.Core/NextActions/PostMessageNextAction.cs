@@ -1,5 +1,5 @@
 ﻿// --------------------------------------------------------------------------
-// <copyright file="SendingMessagelNextAction.cs" company="Nexcel Solutions Vietnam">
+// <copyright file="PostMessageNextAction.cs" company="Nexcel Solutions Vietnam">
 // Copyright (coffee) Nexcel Solutions Vietnam. All rights reserved.
 // </copyright>
 // --------------------------------------------------------------------------
@@ -17,16 +17,20 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     using WinService.FraudDetection.Core.MailMasterRenders;
     using WinService.FraudDetection.Core.MailSenders;
     using FD.Lib.Criteria.MessageMaster;
+    using FD.Lib.Criteria.UserMesssage;
 
-    public class SendingMessagelNextAction : INextAction
+    public class PostMessageNextAction : INextAction
     {
         private readonly NotificationService _notificationService;
 
         public readonly int _messageId;
 
-        public SendingMessagelNextAction(int messageMasterId)
+        private readonly Task _task;
+
+        public PostMessageNextAction(int messageMasterId, Task task)
         {
             _messageId = messageMasterId;
+            _task = task;
             _notificationService = new NotificationService();
         }
 
@@ -36,17 +40,26 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         public void TakeAction()
         {
-
-            return;
-            //if (SuspicionList.Count <= 0)
-            //{
-            //    return;
-            //}
+            if (SuspicionList.Count <= 0)
+            {
+                return;
+            }
 
             //var messageMaster = new MessageMasterService().GetMessageById(new MessageMasterGetByIdCriteria
             //{
             //    MessageId = _messageId
             //});
+
+            //var listUsersOnline = _notificationService.GetUsersOnline(new NotificationGetUserOnlineCriteria 
+            //{
+            //    ExpriredTime = 15*60,
+            //    UserIdList = messageMaster.OnlineRecipient
+            //});
+
+            //foreach(var userId in listUsersOnline)
+            //{
+
+            //}
         }
     }
 }

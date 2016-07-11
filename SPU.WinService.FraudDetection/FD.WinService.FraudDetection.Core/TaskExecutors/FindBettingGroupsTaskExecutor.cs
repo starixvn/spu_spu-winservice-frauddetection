@@ -80,7 +80,7 @@ namespace FD.Lib.TaskExecutors
                     {
                         Console.WriteLine("<Key, Value> = <" + item.Key + ", " + item.Value + ">");
                         var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
-                        var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
+                        var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task);
                         nextAction.SuspicionList = ConvertIntoSuspiciousInfo(_suspiciousList);
                         nextAction.TakeAction();
                     }

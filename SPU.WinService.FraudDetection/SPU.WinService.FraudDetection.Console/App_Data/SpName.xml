@@ -111,4 +111,10 @@
     <Setting Key="FD_DataCaptureListInsert" SpName="FD_DataCaptureListInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
+  <Function Name="Notification">
+    <Setting Key="FD_NotificationGetUserOnline" SpName="FD_NotificationGetUserOnline" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_NotificationInsertUserAction" SpName="FD_NotificationInsertUserAction" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_NotificationInsertUserMesssage" SpName="FD_NotificationInsertUserMesssage" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
 </Functions>

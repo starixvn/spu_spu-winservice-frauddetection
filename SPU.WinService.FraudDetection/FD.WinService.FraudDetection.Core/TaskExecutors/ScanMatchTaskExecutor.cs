@@ -91,7 +91,7 @@ namespace FD.Lib.TaskExecutors
                     foreach (var item in NextActionDictionary)
                     {
                         var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
-                        var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task.CaseId);
+                        var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task);
                         nextAction.SuspicionList = _suspicionList;
                         nextAction.TakeAction();
                     }
