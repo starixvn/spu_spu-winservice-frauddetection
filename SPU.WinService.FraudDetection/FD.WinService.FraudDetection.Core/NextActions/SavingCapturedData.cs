@@ -31,9 +31,9 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             _dataType = dataType;
         }
 
-        public IList<SuspiciousInfo> SuspicionList { get; set; }
-
         public IList<DataCapture> DataCaptureList { get; set; }
+
+        public IList<SuspiciousInfo> SuspiciousList { get; set; }
 
         public void TakeAction()
         {
@@ -52,7 +52,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 }
             }
 
-            if(dataCaptureList.Count > 0)
+            if (dataCaptureList.Count > 0)
             {
                 var criteria = new DataCaptureListInsertCriteria
                 {

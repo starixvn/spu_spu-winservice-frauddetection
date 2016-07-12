@@ -41,7 +41,6 @@
             _mockTaskLoader = new TaskLoader(_mockTaskService.Object, _mockSpuQueueSender);
             _mockMessageHandler = new ReceivingMessageHandler(_mockTaskManager.Object, _mockSpuQueueReceiver);
             _sut = new FraudDetectionService(_mockTaskLoader, _mockMessageHandler);
-            
         }
 
         [TearDown]
@@ -108,7 +107,6 @@
 
             // ---- Act ---
 
-            
             _sut.RunOnStart();
 
             updatingTask.Send(2);

@@ -19,6 +19,8 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         private List<SuspiciousGroupInfo> _suspiciousGroupInfoList;
 
+        private IList<RawBettingGroup> rawBettingGroupList;
+
         public SavingSuspiciousGroup(List<SuspiciousGroupInfo> suspiciousInfoList)
         {
             _suspiciousGroupInfoList = suspiciousInfoList;
@@ -52,8 +54,6 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             InsertSuspiciousGroupInfo();
             CreateAndMergeBettingGroup();
         }
-
-        private IList<RawBettingGroup> rawBettingGroupList;
 
         private void ConvertIntoRawBettingGroup()
         {

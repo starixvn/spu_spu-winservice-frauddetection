@@ -95,7 +95,7 @@ namespace FD.Lib.TaskExecutors
                 {
                     var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString());
                     var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task);
-                    nextAction.SuspicionList = suspciousList;
+                    nextAction.SuspiciousList = suspciousList;
                     nextAction.TakeAction();
                 }
             }

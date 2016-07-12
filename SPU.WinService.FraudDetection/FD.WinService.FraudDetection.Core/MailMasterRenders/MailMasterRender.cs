@@ -9,12 +9,12 @@
 
 namespace FD.WinService.FraudDetection.Core.MailMasterRenders
 {
+    using Fanex.Data.Repository;
     using Lib.Criteria.MailMaster;
     using Lib.DTO;
     using Lib.ReportTemplateRenders;
     using Lib.Service.Implement;
     using Lib.Service.Interface;
-    using Fanex.Data.Repository;
 
     public class MailMasterRender : IMailMasterRender
     {

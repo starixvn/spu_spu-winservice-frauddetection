@@ -6,13 +6,13 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
     public class RawBettingGroup
     {
-        public List<CustomerBettingGroupDetail> Customers { get; set; }
-
-        public List<int> RelatedBettingGroups { get; set; }
-
         public RawBettingGroup()
         {
             RelatedBettingGroups = new List<int>();
         }
+
+        public List<CustomerBettingGroupDetail> Customers { get; set; }
+
+        public List<int> RelatedBettingGroups { get; set; }
     }
 }

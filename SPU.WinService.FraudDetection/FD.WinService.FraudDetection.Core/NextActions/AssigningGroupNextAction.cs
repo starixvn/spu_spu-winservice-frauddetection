@@ -29,7 +29,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         {
             CaseId = caseId;
             GroupId = groupId;
-            SuspicionList = new List<SuspiciousInfo>();
+            SuspiciousList = new List<SuspiciousInfo>();
             CustomerGroupService = new CustomerGroupService();
         }
 
@@ -37,7 +37,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
         {
             CaseId = caseId;
             GroupId = groupId;
-            SuspicionList = new List<SuspiciousInfo>();
+            SuspiciousList = new List<SuspiciousInfo>();
             CustomerGroupService = groupService;
         }
 
@@ -45,9 +45,11 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         public int CaseId { get; set; }
 
-        public IList<SuspiciousInfo> SuspicionList { get; set; }
-
         public IList<DataCapture> DataCaptureList { get; set; }
+
+        public IList<SuspiciousInfo> SuspiciousList { get; set; }
+
+        public IList<Match> MatchList { get; set; }
 
         public ICustomerGroupService CustomerGroupService { get; set; }
 
@@ -58,7 +60,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         private void AssignSuspiciousCustomersToGroup()
         {
-            var custIdList = SuspicionList.Select(t => t.CustId).Distinct().ToList();
+            var custIdList = SuspiciousList.Select(t => t.CustId).Distinct().ToList();
 
             var custIdChunks = custIdList.Chunk(ChunkSize);
 

@@ -28,6 +28,8 @@ namespace FD.Lib.TaskExecutors
 
     public class CaptureDataTaskExecutor : TaskExecutor
     {
+        private const int TicketChunk = 100000;
+
         private readonly List<DataCapture> _dataCaptureList;
 
         private readonly List<Task<IList<DataCapture>>> _threads;
@@ -41,8 +43,6 @@ namespace FD.Lib.TaskExecutors
         private IList<Match> _matchList;
 
         private IList<Match> _removeMatchList;
-
-        private const int TicketChunk = 100000;
 
         public CaptureDataTaskExecutor(Task task)
             : base(task)
@@ -138,12 +138,14 @@ namespace FD.Lib.TaskExecutors
                     break;
                 }
 
-                var thread = System.Threading.Tasks.Task.Factory.StartNew(obj =>
-                {
-                    var id = (Match)obj;
+                var thread = System.Threading.Tasks.Task.Factory.StartNew(
+                    obj =>
+                    {
+                        var id = (Match)obj;
 
-                    return CaptureDataByMatch(id);
-                }, newMatchList.ElementAt(count));
+                        return CaptureDataByMatch(id);
+                    },
+                newMatchList.ElementAt(count));
 
                 _threads.Add(thread);
             }
@@ -166,14 +168,17 @@ namespace FD.Lib.TaskExecutors
                 threadsHaveDone++;
                 _threads.RemoveAt(index);
 
-                if (count >= matchCount) continue;
+                if (count >= matchCount)
+                    continue;
 
-                var thread = System.Threading.Tasks.Task.Factory.StartNew(obj =>
-                {
-                    var id = (Match)obj;
+                var thread = System.Threading.Tasks.Task.Factory.StartNew(
+                    obj =>
+                    {
+                        var id = (Match)obj;
 
-                    return CaptureDataByMatch(id);
-                }, newMatchList.ElementAt(count));
+                        return CaptureDataByMatch(id);
+                    },
+                newMatchList.ElementAt(count));
 
                 _threads.Add(thread);
 
@@ -196,12 +201,14 @@ namespace FD.Lib.TaskExecutors
                     break;
                 }
 
-                var thread = System.Threading.Tasks.Task.Factory.StartNew(obj =>
-                {
-                    var id = (Match)obj;
+                var thread = System.Threading.Tasks.Task.Factory.StartNew(
+                    obj =>
+                    {
+                        var id = (Match)obj;
 
-                    return CaptureDataByTicketsOnEachMatch(id);
-                }, newMatchList.ElementAt(count));
+                        return CaptureDataByTicketsOnEachMatch(id);
+                    },
+                newMatchList.ElementAt(count));
 
                 _threads.Add(thread);
             }
@@ -226,12 +233,14 @@ namespace FD.Lib.TaskExecutors
 
                 if (count >= matchCount) continue;
 
-                var thread = System.Threading.Tasks.Task.Factory.StartNew(obj =>
-                {
-                    var id = (Match)obj;
+                var thread = System.Threading.Tasks.Task.Factory.StartNew(
+                    obj =>
+                    {
+                        var id = (Match)obj;
 
-                    return CaptureDataByTicketsOnEachMatch(id);
-                }, newMatchList.ElementAt(count));
+                        return CaptureDataByTicketsOnEachMatch(id);
+                    },
+                newMatchList.ElementAt(count));
 
                 _threads.Add(thread);
 
@@ -244,12 +253,12 @@ namespace FD.Lib.TaskExecutors
             var result = new List<DataCapture>();
             var shouldBeChecked = true;
 
-            if (IsCheckingCompletedMatches)
+            if (isCheckingCompletedMatches)
             {
-                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, BettypeIds);
+                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds);
             }
 
-            if (shouldBeChecked || IsCheckingRunningMatches)
+            if (shouldBeChecked || isCheckingRunningMatches)
             {
                 try
                 {
@@ -281,7 +290,6 @@ namespace FD.Lib.TaskExecutors
                 }
                 catch (Exception ex)
                 {
-                    //_matchList.Remove(match);
                     _removeMatchList.Add(match);
                     result = new List<DataCapture>();
 
@@ -294,7 +302,6 @@ namespace FD.Lib.TaskExecutors
             }
             else
             {
-                //_matchList.Remove(match);
                 _removeMatchList.Add(match);
             }
 
@@ -306,12 +313,12 @@ namespace FD.Lib.TaskExecutors
             var result = new List<DataCapture>();
             var shouldBeChecked = true;
 
-            if (IsCheckingCompletedMatches)
+            if (isCheckingCompletedMatches)
             {
-                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, BettypeIds);
+                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds);
             }
 
-            if (shouldBeChecked || IsCheckingRunningMatches)
+            if (shouldBeChecked || isCheckingRunningMatches)
             {
                 try
                 {
@@ -334,7 +341,6 @@ namespace FD.Lib.TaskExecutors
                 }
                 catch (Exception ex)
                 {
-                    //_matchList.Remove(match);
                     _removeMatchList.Add(match);
                     result = new List<DataCapture>();
 
@@ -347,7 +353,6 @@ namespace FD.Lib.TaskExecutors
             }
             else
             {
-                //_matchList.Remove(match);
                 _removeMatchList.Add(match);
             }
 
@@ -356,33 +361,34 @@ namespace FD.Lib.TaskExecutors
 
         private void InsertScannedMatch()
         {
-             if(_matchList != null)
-             {
-                 var matchIdList = _matchList.Select(m => m.MatchId);
-                 var matchChunks = matchIdList.Chunk(ChunkSize);
+            if (_matchList != null)
+            {
+                var matchIdList = _matchList.Select(m => m.MatchId);
+                var matchChunks = matchIdList.Chunk(ChunkSize);
 
-                 foreach (var matchChunk in matchChunks)
-                 {
-                     var criteria = new MatchInsertCriteria
-                     {
-                         MatchIdList = string.Join(",", matchChunk),
-                         TaskId = _taskId,
-                         ScannedDate = DateTime.Now
-                     };
+                foreach (var matchChunk in matchChunks)
+                {
+                    var criteria = new MatchInsertCriteria
+                    {
+                        MatchIdList = string.Join(",", matchChunk),
+                        TaskId = _taskId,
+                        ScannedDate = DateTime.Now
+                    };
 
-                     var result = _scannedMatchesService.InsertScannedMatch(criteria);
+                    var result = _scannedMatchesService.InsertScannedMatch(criteria);
 
-                     if (result.IsSuccessful == false)
-                     {
-                         Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                     }
-                 }
-             }
+                    if (result.IsSuccessful == false)
+                    {
+                        Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
+                    }
+                }
+            }
         }
 
         private string GenerateSqlQueryByTickets(int matchId, IEnumerable<string> tickets, int dataType)
         {
-            var sqlQueryString = "select $data$ as DataCapture FROM bodb02.dbo.bettrans b with(nolock) where b.transid in " + "(" + string.Join(",", tickets.ToArray()) + ")";
+            var sqlQueryString =
+                "select $data$ as DataCapture FROM bodb02.dbo.bettrans b with(nolock) where b.transid in " + "(" + string.Join(",", tickets.ToArray()) + ")";
 
             switch (dataType)
             {
@@ -418,7 +424,8 @@ namespace FD.Lib.TaskExecutors
                     break;
 
                 case 8:
-                    sqlQueryString = "select ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) as DataCapture FROM bodb02.dbo.match m with(nolock) where m.matchid in " + "(" + matchId.ToString() + ")";
+                    sqlQueryString =
+                        "select ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) as DataCapture FROM bodb02.dbo.match m with(nolock) where m.matchid in " + "(" + matchId.ToString() + ")";
                     break;
 
                 default:
@@ -467,7 +474,8 @@ namespace FD.Lib.TaskExecutors
                     break;
 
                 case 8:
-                    sqlQueryString = "select ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) as DataCapture FROM bodb02.dbo.match m with(nolock) where m.matchid in " + "(" + matchId.ToString() + ")";
+                    sqlQueryString =
+                        "select ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) as DataCapture FROM bodb02.dbo.match m with(nolock) where m.matchid in " + "(" + matchId.ToString() + ")";
                     break;
 
                 default:

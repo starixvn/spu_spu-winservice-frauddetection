@@ -24,18 +24,11 @@ namespace FD.Lib.TaskExecutors
     using Service.Implement;
     using Service.Interface;
     using WinService.FraudDetection.Core.NextActions;
+
     using Task = DTO.Task;
 
     public class CompareDataTaskExecutor : TaskExecutor
     {
-        private List<DataCapture> _suspiciousDataCaptureList;
-
-        private IList<Match> _matchList;
-
-        private IList<Match> _removeMatchList;
-
-        private IList<string> _notComparedMatchIdList;
-
         private readonly DataCaptureService _dataCaptureService;
 
         private readonly ScannedMatchesService _scannedMatchesService;
@@ -43,6 +36,14 @@ namespace FD.Lib.TaskExecutors
         private readonly int _taskId;
 
         private readonly Task _task;
+
+        private List<DataCapture> _suspiciousDataCaptureList;
+
+        private IList<Match> _matchList;
+
+        private IList<Match> _removeMatchList;
+
+        private IList<string> _notComparedMatchIdList;
 
         public CompareDataTaskExecutor(Task task)
             : base(task)
@@ -134,7 +135,6 @@ namespace FD.Lib.TaskExecutors
                 {
                     DataIdList = GetDataCaptureTypes(),
                     MatchIdList = string.Join(",", matchIdList)
-
                 }).ToList();
             }
         }
@@ -152,27 +152,27 @@ namespace FD.Lib.TaskExecutors
 
         private void InsertScannedMatch()
         {
-             if(_notComparedMatchIdList != null)
-             {
-                 var matchChunks = _notComparedMatchIdList.Chunk(ChunkSize);
+            if (_notComparedMatchIdList != null)
+            {
+                var matchChunks = _notComparedMatchIdList.Chunk(ChunkSize);
 
-                 foreach (var matchChunk in matchChunks)
-                 {
-                     var criteria = new MatchInsertCriteria
-                     {
-                         MatchIdList = string.Join(",", matchChunk),
-                         TaskId = _taskId,
-                         ScannedDate = DateTime.Now
-                     };
+                foreach (var matchChunk in matchChunks)
+                {
+                    var criteria = new MatchInsertCriteria
+                    {
+                        MatchIdList = string.Join(",", matchChunk),
+                        TaskId = _taskId,
+                        ScannedDate = DateTime.Now
+                    };
 
-                     var result = _scannedMatchesService.InsertScannedMatch(criteria);
+                    var result = _scannedMatchesService.InsertScannedMatch(criteria);
 
-                     if (result.IsSuccessful == false)
-                     {
-                         Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                     }
-                 }
-             }
+                    if (result.IsSuccessful == false)
+                    {
+                        Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
+                    }
+                }
+            }
         }
 
         private void UpdateDataCaptureTable()

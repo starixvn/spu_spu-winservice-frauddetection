@@ -81,7 +81,7 @@ namespace FD.Lib.TaskExecutors
                         Console.WriteLine("<Key, Value> = <" + item.Key + ", " + item.Value + ">");
                         var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
                         var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task);
-                        nextAction.SuspicionList = ConvertIntoSuspiciousInfo(_suspiciousList);
+                        nextAction.SuspiciousList = ConvertIntoSuspiciousInfo(_suspiciousList);
                         nextAction.TakeAction();
                     }
                 }
@@ -151,7 +151,7 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveScannedMatches()
         {
-            if(_matchList != null)
+            if (_matchList != null)
             {
                 var matchIdList = _matchList.Select(m => m.MatchId.ToString()).ToList();
                 var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
@@ -168,8 +168,8 @@ namespace FD.Lib.TaskExecutors
                     var id = (int)obj;
                     var result = FindSuspiciousGroupsOnEachMatch(id);
                     return result;
-                }, matchId
-            );
+                },
+                matchId);
 
             _threads.Add(thread);
         }

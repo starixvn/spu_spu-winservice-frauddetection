@@ -22,25 +22,25 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     /// </summary>
     public class SendingEmailNextAction : INextAction
     {
+        private readonly int _mailMasterId;
+
         public SendingEmailNextAction(int mailMasterId)
         {
-            MailMasterId = mailMasterId;
+            _mailMasterId = mailMasterId;
             MailSender = new FDMailSender();
             ReportService = new SuspiciousStatisticsReportService();
         }
 
         public SendingEmailNextAction(int mailMasterId, IMailSender mailSender, IReportService reportService)
         {
-            MailMasterId = mailMasterId;
+            _mailMasterId = mailMasterId;
             MailSender = mailSender;
             ReportService = reportService;
         }
 
-        public int MailMasterId { get; set; }
-
-        public IList<SuspiciousInfo> SuspicionList { get; set; }
-
         public IList<DataCapture> DataCaptureList { get; set; }
+
+        public IList<SuspiciousInfo> SuspiciousList { get; set; }
 
         public IMailSender MailSender { get; set; }
 
@@ -48,12 +48,12 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         public void TakeAction()
         {
-            if (SuspicionList.Count <= 0)
+            if (SuspiciousList.Count <= 0)
             {
                 return;
             }
 
-            var model = ReportService.GetSuspiciousCustomerStatistics(SuspicionList);
+            var model = ReportService.GetSuspiciousCustomerStatistics(SuspiciousList);
 
             var renderFactory = new SuspiciousStatisticReporRenderAbstractFactory
             {
@@ -66,7 +66,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             };
 
             MailSender.MailMasterRenderAbstractFactory = mailMasterRenderAbstractFactory;
-            MailSender.SendMail(MailMasterId);
+            MailSender.SendMail(_mailMasterId);
         }
     }
 }

@@ -108,7 +108,19 @@
   <Function Name="DataCapture">
     <Setting Key="FD_DataCaptureInsert" SpName="FD_DataCaptureInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_DataTypeCaptureGetAll" SpName="FD_DataTypeCaptureGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_DataCaptureGetAllNotComparedMatches" SpName="FD_DataCaptureGetAllNotComparedMatches" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_SuspiciousCapturedDataInsert" SpName="FD_SuspiciousCapturedDataInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_DataCaptureUpdate" SpName="FD_DataCaptureUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_DataCaptureListInsert" SpName="FD_DataCaptureListInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+  </Function>
+
+  <Function Name="MessageMaster">
+    <Setting Key="FD_MessageMasterGetAll" SpName="FD_MessageMasterGetAll" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MessageMasterDelete" SpName="FD_MessageMasterDelete" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MessageMasterGetById" SpName="FD_MessageMasterGetById" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MessageMasterInsert" SpName="FD_MessageMasterInsert" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MessageMasterUpdate" SpName="FD_MessageMasterUpdate" DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_MessageMasterUpdateStatus" SpName="FD_MessageMasterUpdateStatus" DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
   <Function Name="Notification">

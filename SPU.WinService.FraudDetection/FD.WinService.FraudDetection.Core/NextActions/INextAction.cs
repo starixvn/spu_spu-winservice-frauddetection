@@ -17,7 +17,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     /// </summary>
     public interface INextAction
     {
-        IList<SuspiciousInfo> SuspicionList { get; set; }
+        IList<SuspiciousInfo> SuspiciousList { get; set; }
 
         IList<DataCapture> DataCaptureList { get; set; }
 

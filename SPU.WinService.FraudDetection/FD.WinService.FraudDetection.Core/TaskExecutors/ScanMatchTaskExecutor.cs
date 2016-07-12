@@ -9,25 +9,24 @@
 
 namespace FD.Lib.TaskExecutors
 {
+    using BusinessManager.TaskExecutors;
+    using Core.Utilities;
+    using DTO;
+    using FD.Lib.Criteria.Common;
+    using FD.Lib.Criteria.DataCapture;
+    using FD.Lib.Service.Implement;
+    using Service.Interface;
     using System;
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
     using System.Threading.Tasks;
-    using BusinessManager.TaskExecutors;
-    using Core.Utilities;
-    using DTO;
-    using Fanex.Logging;
-    using Service.Interface;
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
-    using FD.Lib.Criteria.DataCapture;
-    using FD.Lib.Service.Implement;
-    using FD.Lib.Criteria.Common;
 
     public class ScanMatchTaskExecutor : TaskExecutor
     {
-        private readonly List<SuspiciousInfo> _suspicionList;
+        private readonly List<SuspiciousInfo> _suspiciousList;
 
         private readonly List<Task<IList<SuspiciousInfo>>> _threads;
 
@@ -42,7 +41,7 @@ namespace FD.Lib.TaskExecutors
         {
             _matchList = new List<Match>();
             _removeMatchList = new List<Match>();
-            _suspicionList = new List<SuspiciousInfo>();
+            _suspiciousList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
             _dataCaptureService = new DataCaptureService();
         }
@@ -52,7 +51,7 @@ namespace FD.Lib.TaskExecutors
         {
             _matchList = new List<Match>();
             _removeMatchList = new List<Match>();
-            _suspicionList = new List<SuspiciousInfo>();
+            _suspiciousList = new List<SuspiciousInfo>();
             _threads = new List<Task<IList<SuspiciousInfo>>>();
             _dataCaptureService = new DataCaptureService();
         }
@@ -61,7 +60,7 @@ namespace FD.Lib.TaskExecutors
         {
             _threads.Clear();
             _matchList.Clear();
-            _suspicionList.Clear();
+            _suspiciousList.Clear();
             _removeMatchList.Clear();
         }
 
@@ -84,7 +83,7 @@ namespace FD.Lib.TaskExecutors
 
         protected override void TakeNextAction()
         {
-            if (_suspicionList.Count > 0)
+            if (_suspiciousList.Count > 0)
             {
                 if (Task.HasNextAction)
                 {
@@ -92,7 +91,7 @@ namespace FD.Lib.TaskExecutors
                     {
                         var actionType = Utility.ParseEnum<NextActionType>(item.Key.ToString(CultureInfo.InvariantCulture));
                         var nextAction = NextActionFactory.GetNextAction(actionType, item.Value, Task);
-                        nextAction.SuspicionList = _suspicionList;
+                        nextAction.SuspiciousList = _suspiciousList;
                         nextAction.TakeAction();
                     }
                 }
@@ -100,7 +99,7 @@ namespace FD.Lib.TaskExecutors
                 SaveSuspiciousCustomers();
             }
 
-            if (IsNeedUpdateDataCapture)
+            if (isNeedUpdateDataCapture)
             {
                 UpdateDataCaptureTable();
             }
@@ -118,7 +117,7 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveScannedMatches()
         {
-            if(_matchList != null)
+            if (_matchList != null)
             {
                 var matchIdList = _matchList.Select(m => m.MatchId.ToString()).ToList();
                 var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
@@ -152,7 +151,7 @@ namespace FD.Lib.TaskExecutors
 
                 if (_threads[index].Exception == null)
                 {
-                    _suspicionList.AddRange(_threads[index].Result);
+                    _suspiciousList.AddRange(_threads[index].Result);
                 }
                 else
                 {
@@ -188,9 +187,9 @@ namespace FD.Lib.TaskExecutors
             var ruleQuery = string.Empty;
             var shouldBeChecked = true;
 
-            if (IsCheckingCompletedMatches)
+            if (isCheckingCompletedMatches)
             {
-                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, BettypeIds);
+                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds);
             }
 
             if (shouldBeChecked)
@@ -202,7 +201,6 @@ namespace FD.Lib.TaskExecutors
                 }
                 catch (Exception ex)
                 {
-                    //_matchList.Remove(match);
                     _removeMatchList.Add(match);
                     result = new List<SuspiciousInfo>();
 
@@ -215,7 +213,6 @@ namespace FD.Lib.TaskExecutors
             }
             else
             {
-                //_matchList.Remove(match);
                 _removeMatchList.Add(match);
             }
 
@@ -224,7 +221,7 @@ namespace FD.Lib.TaskExecutors
 
         private void SaveSuspiciousCustomers()
         {
-            var saveAction = new SavingSuspicious(_suspicionList);
+            var saveAction = new SavingSuspicious(_suspiciousList);
 
             saveAction.TakeAction();
         }

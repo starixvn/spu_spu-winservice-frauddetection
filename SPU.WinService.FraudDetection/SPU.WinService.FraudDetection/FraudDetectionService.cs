@@ -8,7 +8,7 @@
     using Fanex.MailDelivery.Client.Handlers;
     using Lib.TaskLoaders;
 
-    public partial class FraudDetectionService: ServiceBase
+    public partial class FraudDetectionService : ServiceBase
     {
         public readonly ITaskLoader TaskLoader;
         public readonly IReceivingMessageHandler ReceivingMessageHandler;
@@ -21,11 +21,6 @@
             ReceivingMessageHandler = new ReceivingMessageHandler();
 
             DbSettingProviderManager.Current.Start();
-        }
-
-        private void InitDependencies()
-        {
-            InitializeComponent();
         }
 
         public FraudDetectionService(ITaskLoader taskLoader, IReceivingMessageHandler receivingMessageHandler)
@@ -56,7 +51,6 @@
         {
             SendMailInform(false);
 
-            //Logger.Log.Info("Stop Fraud-Detection-Service service", "Fraud-Detection-Service-UAT");
             Logger.Log.Info("SPU FS Service Stopped");
 
             ReceivingMessageHandler.ClearTasks();
@@ -66,7 +60,6 @@
 
         public void RunOnStart()
         {
-            //Logger.Log.Info("Starting Fraud-Detection-Service service", "Fraud-Detection-Service-UAT");
             Logger.Log.Info("SPU FS Service Started");
 
             MailClientHandler.Start();
@@ -89,6 +82,7 @@
             {
                 subject = "SPU FS Service Stopped";
             }
+
             var newMail = new Fanex.MailDelivery.Client.Models.Mail
             {
                 Subject = subject,
@@ -98,6 +92,11 @@
             };
 
             MailClientHandler.SendMail(newMail);
+        }
+
+        private void InitDependencies()
+        {
+            InitializeComponent();
         }
     }
 }

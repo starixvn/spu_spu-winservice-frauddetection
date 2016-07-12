@@ -45,7 +45,10 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         public List<SuspiciousInfo> AssignGroupList
         {
-            get { return _suspiciousInfoList; }
+            get
+            {
+                return _suspiciousInfoList;
+            }
             set
             {
                 _suspiciousInfoList = value;

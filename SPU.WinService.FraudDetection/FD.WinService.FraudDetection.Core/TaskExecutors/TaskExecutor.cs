@@ -10,22 +10,22 @@
 
 namespace FD.Lib.BusinessManager.TaskExecutors
 {
+    using Criteria.Task;
+    using Fanex.Logging;
+    using Fanex.MailDelivery.Client.Handlers;
+    using FD.Lib.Criteria.Config;
+    using Lib.TaskExecutors;
+    using Service.Implement;
+    using Service.Interface;
+    using Sunplus.UMControllerLibrary;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
     using System.Linq;
     using System.Timers;
-    using Criteria.Task;
-    using Fanex.Logging;
-    using Fanex.MailDelivery.Client.Handlers;
-    using Lib.TaskExecutors;
-    using Service.Implement;
-    using Service.Interface;
-    using Sunplus.UMControllerLibrary;
     using WinService.FraudDetection.Core.TaskExecutors;
     using Task = DTO.Task;
-    using FD.Lib.Criteria.Config;
 
     /// <summary>
     ///     Task Class.
@@ -34,17 +34,17 @@ namespace FD.Lib.BusinessManager.TaskExecutors
     {
         protected const int ChunkSize = 60;
 
-        protected SortedDictionary<int, int> NextActionDictionary;
+        protected SortedDictionary<int, int> NextActionDictionary { get; set; }
 
-        protected UMBusiness MaintenanceService;
+        protected UMBusiness MaintenanceService { get; set; }
 
-        protected bool IsCheckingCompletedMatches;
+        protected bool isCheckingCompletedMatches { get; set; }
 
-        protected bool IsCheckingRunningMatches;
+        protected bool isCheckingRunningMatches { get; set; }
 
-        protected bool IsNeedUpdateDataCapture;
+        protected bool isNeedUpdateDataCapture { get; set; }
 
-        protected string BettypeIds;
+        protected string bettypeIds { get; set; }
 
         #region Constructor
 
@@ -62,39 +62,17 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
             if (Task.HasPrecondition)
             {
-                IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
+                isCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
 
-                IsCheckingRunningMatches = task.TaskPreconditions.ToLower().Contains("running");
+                isCheckingRunningMatches = task.TaskPreconditions.ToLower().Contains("running");
 
-                IsNeedUpdateDataCapture = Task.TaskPreconditionsFormatted.ToLower().Contains("has changed");
+                isNeedUpdateDataCapture = Task.TaskPreconditionsFormatted.ToLower().Contains("has changed");
             }
 
             if (Task.HasRule)
             {
-                BettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
+                bettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
             }
-        }
-
-        private string GetBettypeIdList(string taskRules)
-        {
-            var result = new List<string>();
-
-            var rules = taskRules.Split('@');
-
-            var configBettypeId = new ConfigurationsService().
-                GetConfigs(new ConfigGetAllCriteria()).
-                Where(t => t.ConfigName == "Bet Type").
-                FirstOrDefault().ConfigId;
-
-            foreach (var rule in rules)
-            {
-                if (int.Parse(rule.Split('#')[1]) == configBettypeId)
-                {
-                    result.Add(rule.Split('#')[3].Split(',')[0]);
-                }
-            }
-
-            return string.Join(",", result);
         }
 
         protected TaskExecutor(Task task, ITaskService taskService)
@@ -111,12 +89,12 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
             if (Task.HasPrecondition)
             {
-                IsCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
+                isCheckingCompletedMatches = task.TaskPreconditions.ToLower().Contains("completed");
             }
 
             if (Task.HasRule)
             {
-                BettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
+                bettypeIds = GetBettypeIdList(Task.TaskRulesOriginal);
             }
         }
 
@@ -259,6 +237,25 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
             SendMailInform(message);
             Logger.Log.Error(message);
+        }
+
+        private string GetBettypeIdList(string taskRules)
+        {
+            var result = new List<string>();
+
+            var rules = taskRules.Split('@');
+
+            var configBettypeId = new ConfigurationsService().GetConfigs(new ConfigGetAllCriteria()).Where(t => t.ConfigName == "Bet Type").FirstOrDefault().ConfigId;
+
+            foreach (var rule in rules)
+            {
+                if (int.Parse(rule.Split('#')[1]) == configBettypeId)
+                {
+                    result.Add(rule.Split('#')[3].Split(',')[0]);
+                }
+            }
+
+            return string.Join(",", result);
         }
 
         private void GetNextActionDictionary()
