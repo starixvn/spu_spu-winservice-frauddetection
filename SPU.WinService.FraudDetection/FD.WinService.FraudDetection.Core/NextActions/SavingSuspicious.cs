@@ -25,7 +25,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     /// </summary>
     public class SavingSuspicious
     {
-        protected const int ChunkSize = 50;
+        protected const int ChunkSize = int.MaxValue;
 
         private List<SuspiciousInfo> _suspiciousInfoList;
 
