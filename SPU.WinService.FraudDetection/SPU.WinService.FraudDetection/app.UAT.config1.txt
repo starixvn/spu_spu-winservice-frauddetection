@@ -19,6 +19,9 @@
     <add key="RemoteCacheUrl" value="tcp://10.40.40.29:8098/CallGetOddsFunction" />    
     <add key="queuePath" value="FormatName:DIRECT=TCP:10.40.40.73\private$\fdmessagequeue"/>
     <add key="FDUrl" value="" />
+    <add key="MailingListId" value="82" />
+    <add key="ExpiredTime" value="900" />
+    <!--15 minutes-->
   </appSettings>
   <connectionStrings>
     <add name="DBFD.bodb02.bodbSPUNet" connectionString="Data Source=10.40.40.95;Initial Catalog=bodb02;User Id=bodbSPUNet;Password=l4exNQ2KUgCjzhehUWfktg===" providerName="System.Data.SqlClient" />

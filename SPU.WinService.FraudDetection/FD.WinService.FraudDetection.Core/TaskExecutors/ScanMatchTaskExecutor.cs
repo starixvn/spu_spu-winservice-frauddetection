@@ -119,7 +119,7 @@ namespace FD.Lib.TaskExecutors
         {
             if (_matchList != null)
             {
-                var matchIdList = _matchList.Select(m => m.MatchId.ToString()).ToList();
+                var matchIdList = _matchList.Select(m => m.MatchId.ToString()).Distinct().ToList();
                 var scannedMatch = new SavingScannedMatch(matchIdList, Task.TaskId);
                 scannedMatch.TakeAction();
             }

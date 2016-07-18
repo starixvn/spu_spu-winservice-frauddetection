@@ -130,7 +130,7 @@ namespace FD.Lib.TaskExecutors
         {
             if (_matchList.Count > 0)
             {
-                var matchIdList = _matchList.Select(m => m.MatchId);
+                var matchIdList = _matchList.Select(m => m.MatchId).Distinct();
                 _notComparedMatchIdList = _dataCaptureService.GetAllNotComparedMacthes(new DataCaptureGetAllNotComparedMatchesCriteria
                 {
                     DataIdList = GetDataCaptureTypes(),

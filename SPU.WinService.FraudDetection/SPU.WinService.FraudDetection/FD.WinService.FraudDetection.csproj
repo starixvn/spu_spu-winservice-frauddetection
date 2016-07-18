@@ -180,9 +180,9 @@
       <SubType>Designer</SubType>
     </None>
     <Content Include="app.PRO.config.txt">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
       <DependentUpon>app.PRO.config.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Content>
     <Content Include="app.UAT.config.txt">
       <AutoGen>True</AutoGen>
@@ -214,11 +214,6 @@
     <Content Include="Uninstall Service.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="app.LOCAL.config.config">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>app.LOCAL.config.tt</DependentUpon>
-    </None>
     <None Include="app.LOCAL.config.tt">
       <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -230,9 +225,9 @@
       <DependentUpon>app.LOCAL.config.tt</DependentUpon>
     </None>
     <None Include="app.PRO.config.tt">
+      <SubType>Designer</SubType>
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>app.PRO.config.txt</LastGenOutput>
-      <SubType>Designer</SubType>
     </None>
     <None Include="app.UAT.config.tt">
       <SubType>Designer</SubType>

@@ -363,7 +363,7 @@ namespace FD.Lib.TaskExecutors
         {
             if (_matchList != null)
             {
-                var matchIdList = _matchList.Select(m => m.MatchId);
+                var matchIdList = _matchList.Select(m => m.MatchId).Distinct();
                 var matchChunks = matchIdList.Chunk(ChunkSize);
 
                 foreach (var matchChunk in matchChunks)
