@@ -68,7 +68,9 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 MessageId = _messageId
             });
 
-            var userList = string.IsNullOrEmpty(messageMaster.Recipient) ? new List<string>() : messageMaster.Recipient.Split(',').ToList();
+            var userList = string.IsNullOrEmpty(messageMaster.Recipient) ? 
+                new List<string>() : 
+                messageMaster.Recipient.Split(';').Where(u => !string.IsNullOrEmpty(u)).ToList();
 
             var listUsersOnline = _notificationService.GetUsersOnline(new NotificationGetUserOnlineCriteria
             {
@@ -81,7 +83,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 userList.Add(userId.UserId.ToString());
             }
 
-            return userList;
+            return userList.Distinct().ToList();
         }
 
         private List<int> GetMatchIdList()
