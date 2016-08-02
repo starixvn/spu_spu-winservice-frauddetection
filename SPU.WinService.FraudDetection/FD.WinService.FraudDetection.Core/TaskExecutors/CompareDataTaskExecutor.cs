@@ -152,25 +152,23 @@ namespace FD.Lib.TaskExecutors
 
         private void InsertScannedMatch()
         {
-            if (_notComparedMatchIdList != null)
+            var matchIdList = _matchList.Select(m => m.MatchId).Distinct();
+            var matchChunks = matchIdList.Chunk(ChunkSize);
+
+            foreach (var matchChunk in matchChunks)
             {
-                var matchChunks = _notComparedMatchIdList.Chunk(ChunkSize);
-
-                foreach (var matchChunk in matchChunks)
+                var criteria = new MatchInsertCriteria
                 {
-                    var criteria = new MatchInsertCriteria
-                    {
-                        MatchIdList = string.Join(",", matchChunk),
-                        TaskId = _taskId,
-                        ScannedDate = DateTime.Now
-                    };
+                    MatchIdList = string.Join(",", matchChunk),
+                    TaskId = _taskId,
+                    ScannedDate = DateTime.Now
+                };
 
-                    var result = _scannedMatchesService.InsertScannedMatch(criteria);
+                var result = _scannedMatchesService.InsertScannedMatch(criteria);
 
-                    if (result.IsSuccessful == false)
-                    {
-                        Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
-                    }
+                if (result.IsSuccessful == false)
+                {
+                    Logger.Log.Error("Error UpdateScannedMatch: " + result.Message);
                 }
             }
         }
