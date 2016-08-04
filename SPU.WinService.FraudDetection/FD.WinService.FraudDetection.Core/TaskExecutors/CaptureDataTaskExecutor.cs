@@ -7,22 +7,21 @@
 //   <change who="Aaron.Cao" date="2015.09.29">Created</change>
 // </history>
 
-using FD.Lib.Criteria.Common;
-
 namespace FD.Lib.TaskExecutors
 {
-    using System;
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Threading.Tasks;
     using BusinessManager.TaskExecutors;
     using Core.Utilities;
     using Criteria.ScannedMatch;
     using DTO;
     using Fanex.Logging;
+    using FD.Lib.Criteria.SuspiciousStatistic;
     using Service.Implement;
     using Service.Interface;
+    using System;
+    using System.Collections.Generic;
+    using System.Globalization;
+    using System.Linq;
+    using System.Threading.Tasks;
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
 
@@ -40,9 +39,9 @@ namespace FD.Lib.TaskExecutors
 
         private readonly int _taskId;
 
-        private IList<Match> _matchList;
+        private List<Match> _matchList;
 
-        private IList<Match> _removeMatchList;
+        private List<Match> _removeMatchList;
 
         public CaptureDataTaskExecutor(Task task)
             : base(task)
@@ -84,6 +83,12 @@ namespace FD.Lib.TaskExecutors
             {
                 var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
                 _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+                
+                if (_matchList.Count == 0)
+                {
+                    preConditionQuery = preConditionQuery.Replace("bodb02.dbo.match", "bodb02.dbo.match14");
+                    _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+                }
             }
         }
 
@@ -252,10 +257,12 @@ namespace FD.Lib.TaskExecutors
         {
             var result = new List<DataCapture>();
             var shouldBeChecked = true;
+            var moveBetDay = new MoveBetsBalanceUpService().GetBalanceUpDay(new BalanceUpDaySelectCriteria()).MoveBetsDay;
+            var dataSource = match.EventDate > moveBetDay ? "bodb02.dbo.bettrans" : "bodb02.dbo.bettrans14";
 
             if (isCheckingCompletedMatches)
             {
-                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds);
+                shouldBeChecked = match.EventDate > moveBetDay ? TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds) : true;
             }
 
             if (shouldBeChecked || isCheckingRunningMatches)
@@ -272,7 +279,7 @@ namespace FD.Lib.TaskExecutors
 
                         foreach (var ticketChunk in ticketChunks)
                         {
-                            value += TaskService.CaptureData(GenerateSqlQueryByTickets(match.MatchId, ticketChunk, item.Value));
+                            value += TaskService.CaptureData(GenerateSqlQueryByTickets(match.MatchId, dataSource, ticketChunk, item.Value));
                         }
 
                         var dataCapture = new DataCapture
@@ -312,10 +319,12 @@ namespace FD.Lib.TaskExecutors
         {
             var result = new List<DataCapture>();
             var shouldBeChecked = true;
+            var moveBetDay = new MoveBetsBalanceUpService().GetBalanceUpDay(new BalanceUpDaySelectCriteria()).MoveBetsDay;
+            var dataSource = match.EventDate > moveBetDay ? "bodb02.dbo.bettrans" : "bodb02.dbo.bettrans14";
 
             if (isCheckingCompletedMatches)
             {
-                shouldBeChecked = TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds);
+                shouldBeChecked = match.EventDate > moveBetDay ? TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds) : true;
             }
 
             if (shouldBeChecked || isCheckingRunningMatches)
@@ -324,7 +333,7 @@ namespace FD.Lib.TaskExecutors
                 {
                     foreach (var item in NextActionDictionary)
                     {
-                        var value = TaskService.CaptureData(GenerateSqlQueryByMatch(match.MatchId, item.Value));
+                        var value = TaskService.CaptureData(GenerateSqlQueryByMatch(match.MatchId, dataSource, item.Value));
 
                         var dataCapture = new DataCapture
                         {
@@ -385,10 +394,10 @@ namespace FD.Lib.TaskExecutors
             }
         }
 
-        private string GenerateSqlQueryByTickets(int matchId, IEnumerable<string> tickets, int dataType)
+        private string GenerateSqlQueryByTickets(int matchId, string dataSource, IEnumerable<string> tickets, int dataType)
         {
-            var sqlQueryString =
-                "select $data$ as DataCapture FROM bodb02.dbo.bettrans b with(nolock) where b.transid in " + "(" + string.Join(",", tickets.ToArray()) + ")";
+            var sqlQueryString = "select $data$ as DataCapture FROM $dataSource$ b with(nolock) where b.transid in " + "(" + string.Join(",", tickets.ToArray()) + ")";
+            sqlQueryString = sqlQueryString.Replace("$dataSource$", dataSource);
 
             switch (dataType)
             {
@@ -436,9 +445,10 @@ namespace FD.Lib.TaskExecutors
             return sqlQueryString;
         }
 
-        private string GenerateSqlQueryByMatch(int matchId, int dataType)
+        private string GenerateSqlQueryByMatch(int matchId, string dataSource, int dataType)
         {
-            var sqlQueryString = "select $data$ as DataCapture FROM bodb02.dbo.bettrans b with(nolock) where b.matchid in " + "(" + matchId + ")";
+            var sqlQueryString = "select $data$ as DataCapture FROM $dataSource$ b with(nolock) where b.currency <> 20 and b.matchid in " + "(" + matchId + ")";
+            sqlQueryString = sqlQueryString.Replace("$dataSource$", dataSource);
 
             switch (dataType)
             {

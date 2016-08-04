@@ -128,15 +128,14 @@ namespace FD.Lib.TaskExecutors
 
         private void GetAllNotComparedMatches()
         {
-            if (_matchList.Count > 0)
+            var matchIdList = _matchList.Select(m => m.MatchId).Distinct();
+            var criteria = new DataCaptureGetAllNotComparedMatchesCriteria
             {
-                var matchIdList = _matchList.Select(m => m.MatchId).Distinct();
-                _notComparedMatchIdList = _dataCaptureService.GetAllNotComparedMacthes(new DataCaptureGetAllNotComparedMatchesCriteria
-                {
-                    DataIdList = GetDataCaptureTypes(),
-                    MatchIdList = string.Join(",", matchIdList)
-                }).ToList();
-            }
+                DataIdList = GetDataCaptureTypes(),
+                MatchIdList = string.Join(",", matchIdList)
+            };
+
+            _notComparedMatchIdList = _dataCaptureService.GetAllNotComparedMacthes(criteria).ToList();
         }
 
         private void FindSuspiciousMatches()
@@ -175,13 +174,17 @@ namespace FD.Lib.TaskExecutors
 
         private void UpdateDataCaptureTable()
         {
-            var dataCaptureUpdateCriteria = new DataCaptureUpdateCriteria
+            var matchChunks = _notComparedMatchIdList.Chunk(ChunkSize);
+            foreach (var chunk in matchChunks)
             {
-                DataIdList = GetDataCaptureTypes(),
-                MatchIdList = string.Join(",", _notComparedMatchIdList)
-            };
+                var dataCaptureUpdateCriteria = new DataCaptureUpdateCriteria
+                {
+                    DataIdList = GetDataCaptureTypes(),
+                    MatchIdList = string.Join(",", chunk)
+                };
 
-            _dataCaptureService.UpdateCapturedData(dataCaptureUpdateCriteria);
+                _dataCaptureService.UpdateCapturedData(dataCaptureUpdateCriteria);
+            }
         }
 
         private string GetDataCaptureTypes()
