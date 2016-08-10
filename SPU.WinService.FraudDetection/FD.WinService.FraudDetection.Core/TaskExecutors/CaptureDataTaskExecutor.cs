@@ -83,11 +83,11 @@ namespace FD.Lib.TaskExecutors
             {
                 var preConditionQuery = Task.TaskPreconditions.Replace("$param1$", Task.TaskId.ToString(CultureInfo.InvariantCulture));
                 _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
-                
-                if (_matchList.Count == 0)
+
+                if (!isCheckingRunningMatches)
                 {
                     preConditionQuery = preConditionQuery.Replace("bodb02.dbo.match", "bodb02.dbo.match14");
-                    _matchList = TaskService.ExecutePrecondition(preConditionQuery).ToList();
+                    _matchList.AddRange(TaskService.ExecutePrecondition(preConditionQuery).ToList());
                 }
             }
         }
