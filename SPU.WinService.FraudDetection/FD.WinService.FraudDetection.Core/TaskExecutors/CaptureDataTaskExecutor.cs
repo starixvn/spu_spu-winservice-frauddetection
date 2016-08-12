@@ -441,6 +441,7 @@ namespace FD.Lib.TaskExecutors
                     sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
                     break;
             }
+
             sqlQueryString = sqlQueryString + " OPTION (MAXDOP 1)";
 
             return sqlQueryString;
@@ -493,6 +494,8 @@ namespace FD.Lib.TaskExecutors
                     sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
                     break;
             }
+
+            sqlQueryString = sqlQueryString + " OPTION (MAXDOP 1)";
 
             return sqlQueryString;
         }
