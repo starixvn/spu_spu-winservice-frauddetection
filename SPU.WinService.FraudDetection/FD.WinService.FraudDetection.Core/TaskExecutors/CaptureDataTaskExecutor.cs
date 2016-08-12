@@ -396,7 +396,7 @@ namespace FD.Lib.TaskExecutors
 
         private string GenerateSqlQueryByTickets(int matchId, string dataSource, IEnumerable<string> tickets, int dataType)
         {
-            var sqlQueryString = "select $data$ as DataCapture FROM $dataSource$ b with(nolock) where b.transid in " + "(" + string.Join(",", tickets.ToArray()) + ")";
+            var sqlQueryString = "SELECT $data$ AS DataCapture FROM $dataSource$ b WITH(NOLOCK) WHERE b.transid IN " + "(" + string.Join(",", tickets.ToArray()) + ")";
             sqlQueryString = sqlQueryString.Replace("$dataSource$", dataSource);
 
             switch (dataType)
@@ -419,28 +419,29 @@ namespace FD.Lib.TaskExecutors
 
                 case 5:
                     sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
-                    sqlQueryString = sqlQueryString + " and b.statusid in (101, 102, 103, 111, 112, 113)";
+                    sqlQueryString = sqlQueryString + " AND b.statusid IN (101, 102, 103, 111, 112, 113)";
                     break;
 
                 case 6:
                     sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
-                    sqlQueryString = sqlQueryString + " and b.statusid in (111, 112, 113)";
+                    sqlQueryString = sqlQueryString + " AND b.statusid IN (111, 112, 113)";
                     break;
 
                 case 7:
                     sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
-                    sqlQueryString = sqlQueryString + " and b.statusid in (101, 102, 103)";
+                    sqlQueryString = sqlQueryString + " AND b.statusid IN (101, 102, 103)";
                     break;
 
                 case 8:
                     sqlQueryString =
-                        "select ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) as DataCapture FROM bodb02.dbo.match m with(nolock) where m.matchid in " + "(" + matchId.ToString() + ")";
+                        "SELECT ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) AS DataCapture FROM bodb02.dbo.match m WITH(NOLOCK) WHERE m.matchid IN " + "(" + matchId.ToString() + ")";
                     break;
 
                 default:
                     sqlQueryString = sqlQueryString.Replace("$data$", "COUNT(1)");
                     break;
             }
+            sqlQueryString = sqlQueryString + " OPTION (MAXDOP 1)";
 
             return sqlQueryString;
         }
