@@ -9,8 +9,8 @@
 
 namespace FD.WinService.FraudDetection.Core.MailSenders
 {
-    using Fanex.MailDelivery.Client.Handlers;
-    using Fanex.MailDelivery.Client.Models;
+    using Fanex.MailDelivery.Client;
+    using Fanex.MailDelivery.Core.Models;
 
     public interface IMailClient
     {
@@ -21,7 +21,7 @@ namespace FD.WinService.FraudDetection.Core.MailSenders
     {
         public void Send(Mail mail)
         {
-            MailClientHandler.SendMail(mail);         
+            MailClientHandler.SendFunctionMail(mail);
         }
     }
 }

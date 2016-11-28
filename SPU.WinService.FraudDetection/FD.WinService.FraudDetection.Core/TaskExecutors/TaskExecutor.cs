@@ -12,7 +12,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 {
     using Criteria.Task;
     using Fanex.Logging;
-    using Fanex.MailDelivery.Client.Handlers;
+    using Fanex.MailDelivery.Client;
     using FD.Lib.Criteria.Config;
     using Lib.TaskExecutors;
     using Service.Implement;
@@ -298,7 +298,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         protected void SendMailInform(string message)
         {
-            var newMail = new Fanex.MailDelivery.Client.Models.Mail
+            var newMail = new Fanex.MailDelivery.Core.Models.Mail
             {
                 Subject = "SPU FS Error",
                 Title = "SPU FS Error",
@@ -306,7 +306,7 @@ namespace FD.Lib.BusinessManager.TaskExecutors
                 MailingListId = int.Parse(ConfigurationManager.AppSettings["MailingListId"])
             };
 
-            MailClientHandler.SendMail(newMail);
+            MailClientHandler.SendFunctionMail(newMail);
         }
 
         #endregion Execute task

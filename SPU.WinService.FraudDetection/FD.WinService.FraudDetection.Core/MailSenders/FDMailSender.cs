@@ -9,7 +9,7 @@
 
 namespace FD.WinService.FraudDetection.Core.MailSenders
 {
-    using Fanex.MailDelivery.Client.Models;
+    using Fanex.MailDelivery.Core.Models;
     using WinService.FraudDetection.Core.MailMasterRenders;
 
     public class FDMailSender : IMailSender

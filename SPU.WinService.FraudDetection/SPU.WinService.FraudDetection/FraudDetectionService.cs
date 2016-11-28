@@ -7,6 +7,7 @@
     using Fanex.Logging;
     using Fanex.MailDelivery.Client.Handlers;
     using Lib.TaskLoaders;
+    using Fanex.MailDelivery.Client;
 
     public partial class FraudDetectionService : ServiceBase
     {
@@ -83,7 +84,7 @@
                 subject = "SPU FS Service Stopped";
             }
 
-            var newMail = new Fanex.MailDelivery.Client.Models.Mail
+            var newMail = new Fanex.MailDelivery.Core.Models.Mail
             {
                 Subject = subject,
                 Title = subject,
@@ -91,7 +92,7 @@
                 MailingListId = int.Parse(ConfigurationManager.AppSettings["MailingListId"])
             };
 
-            MailClientHandler.SendMail(newMail);
+            MailClientHandler.SendFunctionMail(newMail);
         }
 
         private void InitDependencies()
