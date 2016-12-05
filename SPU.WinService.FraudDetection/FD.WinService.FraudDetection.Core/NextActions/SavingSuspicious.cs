@@ -19,6 +19,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     using Lib.DTO;
     using Lib.Service.Implement;
     using Lib.Service.Interface;
+    using FD.Lib.Criteria.Case;
 
     /// <summary>
     /// Save suspicious info.
@@ -29,12 +30,15 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         private List<SuspiciousInfo> _suspiciousInfoList;
 
+        private readonly ICaseService _caseService;
+
         public SavingSuspicious(List<SuspiciousInfo> suspiciousInfoList)
         {
             _suspiciousInfoList = suspiciousInfoList;
             SuspiciousInfoService = new SuspiciousInfoService();
             SuspiciousCustomerService = new SuspiciousCustomerService();
             CustomerService = new CustomerService();
+            _caseService = new CaseService();
         }
 
         public ISuspiciousInfoService SuspiciousInfoService { get; set; }
@@ -58,6 +62,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
         public void TakeAction()
         {
+            UpdateSuspiciousBetCountForLiveMatches();
             InsertSuspiciousCustomers();
             InsertSuspiciousInfo();
         }
@@ -174,6 +179,67 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 builder.Append(GetElement("CustName", suspiciousCustomer.CustName));
                 builder.Append(GetElement("Currency", suspiciousCustomer.CurrencyId));
                 builder.Append(GetElement("CurrencyCode", suspiciousCustomer.CurrencyName));
+                builder.Append("</Row>");
+            }
+
+            builder.Append("</Root>");
+
+            return builder.ToString();
+        }
+
+        private void UpdateSuspiciousBetCountForLiveMatches()
+        {
+            if (_suspiciousInfoList != null && _suspiciousInfoList.Count > 0)
+            {
+                var caseId = _suspiciousInfoList.Select(t => t.CaseId).Distinct().FirstOrDefault();
+                var fraudCase = _caseService.GetCaseById(new CaseGetByIdCriteria 
+                {
+                    CaseId = caseId
+                });
+
+                if(fraudCase != null && fraudCase.TypeId == 2)
+                {
+                    var suspiciousMacthGroup = _suspiciousInfoList.GroupBy(t => t.MatchId);
+                    var result = new Dictionary<int, int>();
+
+                    foreach (var group in suspiciousMacthGroup)
+                    {
+                        result.Add(group.Key, CountSuspiciousBet(group));
+                    }
+
+                    var xml = CreateXmlParamForInsertingSuspiciousBetCountLiveMatch(caseId, result);
+
+                    SuspiciousInfoService.InsertSuspiciousBetCount(new SuspiciousBetCountInsertCriteria
+                    {
+                        SuspiciousDoc = xml
+                    });
+                }
+            }
+        }
+
+        private int CountSuspiciousBet(IGrouping<int, SuspiciousInfo> data)
+        {
+            var result = 0;
+
+            foreach (var item in data)
+            {
+                result += item.TransId.Split(',').Count();
+            }
+
+            return result;
+        }
+
+        private string CreateXmlParamForInsertingSuspiciousBetCountLiveMatch(int caseId, Dictionary<int, int> data)
+        {
+            var builder = new StringBuilder();
+            builder.Append("<Root>");
+
+            foreach (var item in data)
+            {
+                builder.Append("<Row>");
+                builder.Append(GetElement("MatchId", item.Key));
+                builder.Append(GetElement("CaseId", caseId));
+                builder.Append(GetElement("BetCount", item.Value));
                 builder.Append("</Row>");
             }
 
