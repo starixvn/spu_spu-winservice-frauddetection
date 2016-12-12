@@ -29,6 +29,8 @@ namespace FD.Lib.TaskExecutors
     {
         private const int TicketChunk = 100000;
 
+        private DateTime _moveBetDay;
+
         private readonly List<DataCapture> _dataCaptureList;
 
         private readonly List<Task<IList<DataCapture>>> _threads;
@@ -133,6 +135,7 @@ namespace FD.Lib.TaskExecutors
             var coreCount = Environment.ProcessorCount;
             var matchCount = _matchList.Count;
             var newMatchList = _matchList.Select(m => m).ToList();
+            _moveBetDay = new MoveBetsBalanceUpService().GetBalanceUpDay(new BalanceUpDaySelectCriteria()).MoveBetsDay;
 
             var count = 0;
 
@@ -196,6 +199,7 @@ namespace FD.Lib.TaskExecutors
             var coreCount = Environment.ProcessorCount;
             var matchCount = _matchList.Count;
             var newMatchList = _matchList.Select(m => m).ToList();
+            _moveBetDay = new MoveBetsBalanceUpService().GetBalanceUpDay(new BalanceUpDaySelectCriteria()).MoveBetsDay;
 
             var count = 0;
 
@@ -257,12 +261,11 @@ namespace FD.Lib.TaskExecutors
         {
             var result = new List<DataCapture>();
             var shouldBeChecked = true;
-            var moveBetDay = new MoveBetsBalanceUpService().GetBalanceUpDay(new BalanceUpDaySelectCriteria()).MoveBetsDay;
-            var dataSource = match.EventDate > moveBetDay ? "bodb02.dbo.bettrans" : "bodb02.dbo.bettrans14";
+            var dataSource = match.EventDate > _moveBetDay ? "bodb02.dbo.bettrans" : "bodb02.dbo.bettrans14";
 
             if (isCheckingCompletedMatches)
             {
-                shouldBeChecked = match.EventDate > moveBetDay ? TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds) : true;
+                shouldBeChecked = match.EventDate > _moveBetDay ? TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds) : true;
             }
 
             if (shouldBeChecked || isCheckingRunningMatches)
@@ -319,12 +322,11 @@ namespace FD.Lib.TaskExecutors
         {
             var result = new List<DataCapture>();
             var shouldBeChecked = true;
-            var moveBetDay = new MoveBetsBalanceUpService().GetBalanceUpDay(new BalanceUpDaySelectCriteria()).MoveBetsDay;
-            var dataSource = match.EventDate > moveBetDay ? "bodb02.dbo.bettrans" : "bodb02.dbo.bettrans14";
+            var dataSource = match.EventDate > _moveBetDay ? "bodb02.dbo.bettrans" : "bodb02.dbo.bettrans14";
 
             if (isCheckingCompletedMatches)
             {
-                shouldBeChecked = match.EventDate > moveBetDay ? TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds) : true;
+                shouldBeChecked = match.EventDate > _moveBetDay ? TaskService.CheckAllTicketsSettled(match.MatchId, bettypeIds) : true;
             }
 
             if (shouldBeChecked || isCheckingRunningMatches)
