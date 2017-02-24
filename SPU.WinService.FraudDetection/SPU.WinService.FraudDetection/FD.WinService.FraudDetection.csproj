@@ -273,6 +273,7 @@
     <Content Include="FD.WinService.FraudDetection.exe.PRO.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <Content Include="FD.WinService.FraudDetection.exe.UAT.config">
       <DependentUpon>MasterTemplate.tt</DependentUpon>
