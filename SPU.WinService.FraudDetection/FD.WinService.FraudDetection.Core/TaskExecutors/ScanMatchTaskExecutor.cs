@@ -20,6 +20,7 @@ namespace FD.Lib.TaskExecutors
     using System.Collections.Generic;
     using System.Globalization;
     using System.Linq;
+    using System.Threading;
     using System.Threading.Tasks;
     using WinService.FraudDetection.Core.NextActions;
     using Task = DTO.Task;
@@ -141,6 +142,8 @@ namespace FD.Lib.TaskExecutors
                 }
 
                 CreateAndAddNewThread(newMatchList.ElementAt(count));
+
+                Thread.Sleep(10);
             }
 
             var threadsHaveDone = 0;
@@ -165,6 +168,8 @@ namespace FD.Lib.TaskExecutors
                     continue;
                 CreateAndAddNewThread(newMatchList.ElementAt(count));
                 count++;
+
+                Thread.Sleep(10);
             }
         }
 
