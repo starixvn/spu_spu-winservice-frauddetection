@@ -19,7 +19,7 @@
     <add key="ClientSettingsProvider.ServiceUri" value="" />    
     <add key="RemoteRefURL" value="tcp://10.70.70.242:8888/CallGetRefFunction" />
     <add key="RemoteCacheUrl" value="tcp://10.18.200.124:8888/CallGetOddsFunction" />
-    <add key="queuePath" value="FormatName:DIRECT=TCP:10.18.200.209\private$\fdmessagequeue"/>
+    <add key="queuePath" value="FormatName:DIRECT=TCP:10.70.70.242\private$\fdmessagequeue"/>
     <add key="FDUrl" value="" />
     <add key="MailingListId" value="80" />
     <add key="ExpiredTime" value="900" />
@@ -45,7 +45,7 @@
 <Fanex.MailDelivery.Client environment="local" 
                            applicationSendMailId="1" 
                            siteId="95" 
-                           rabbitMQConnectionString="host=10.18.200.124;virtualHost=/QCLocalTest;username=rabbitclient" 
+                           rabbitMQConnectionString="host=10.35.35.253,10.35.35.254;virtualHost=/QCLocalTest;username=rabbitclient" 
                            messageBrokerLogCategory="MailCentralized">
         <Functions>
           <!--<add id="1" name="YourFunction" />-->
