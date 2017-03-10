@@ -165,7 +165,10 @@ namespace FD.Lib.TaskExecutors
                 _threads.RemoveAt(index);
 
                 if (count >= matchCount)
+                {
                     continue;
+                }
+
                 CreateAndAddNewThread(newMatchList.ElementAt(count));
                 count++;
 

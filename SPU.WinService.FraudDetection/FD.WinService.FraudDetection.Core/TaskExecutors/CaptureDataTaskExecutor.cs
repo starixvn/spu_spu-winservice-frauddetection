@@ -19,6 +19,7 @@ namespace FD.Lib.TaskExecutors
     using Service.Interface;
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.Linq;
     using System.Threading;
@@ -30,8 +31,6 @@ namespace FD.Lib.TaskExecutors
     {
         private const int TicketChunk = 100000;
 
-        private DateTime _moveBetDay;
-
         private readonly List<DataCapture> _dataCaptureList;
 
         private readonly List<Task<IList<DataCapture>>> _threads;
@@ -41,6 +40,8 @@ namespace FD.Lib.TaskExecutors
         private readonly DataCaptureService _dataCaptureService;
 
         private readonly int _taskId;
+
+        private DateTime _moveBetDay;
 
         private List<Match> _matchList;
 
@@ -131,6 +132,7 @@ namespace FD.Lib.TaskExecutors
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private void CaptureDataByMatchOnAllMatches()
         {
             var coreCount = Environment.ProcessorCount;
@@ -180,7 +182,9 @@ namespace FD.Lib.TaskExecutors
                 _threads.RemoveAt(index);
 
                 if (count >= matchCount)
+                {
                     continue;
+                }
 
                 var thread = System.Threading.Tasks.Task.Factory.StartNew(
                 obj =>
@@ -199,6 +203,7 @@ namespace FD.Lib.TaskExecutors
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private void CaptureDataByTicketsOnAllMatches()
         {
             var coreCount = Environment.ProcessorCount;
@@ -247,7 +252,10 @@ namespace FD.Lib.TaskExecutors
                 threadsHaveDone++;
                 _threads.RemoveAt(index);
 
-                if (count >= matchCount) continue;
+                if (count >= matchCount)
+                {
+                    continue;
+                }
 
                 var thread = System.Threading.Tasks.Task.Factory.StartNew(
                     obj =>
@@ -266,6 +274,7 @@ namespace FD.Lib.TaskExecutors
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private IList<DataCapture> CaptureDataByTicketsOnEachMatch(Match match)
         {
             var result = new List<DataCapture>();
@@ -405,6 +414,7 @@ namespace FD.Lib.TaskExecutors
             }
         }
 
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private string GenerateSqlQueryByTickets(int matchId, string dataSource, IEnumerable<string> tickets, int dataType)
         {
             var sqlQueryString = "SELECT $data$ AS DataCapture FROM $dataSource$ b WITH(NOLOCK) WHERE b.transid IN " + "(" + string.Join(",", tickets.ToArray()) + ")";
@@ -445,7 +455,8 @@ namespace FD.Lib.TaskExecutors
 
                 case 8:
                     sqlQueryString =
-                        "SELECT ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) AS DataCapture FROM bodb02.dbo.match m WITH(NOLOCK) WHERE m.matchid IN " + "(" + matchId.ToString() + ")";
+                        "SELECT ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) AS DataCapture FROM bodb02.dbo.match m WITH(NOLOCK) WHERE m.matchid IN " + "("
+                        + matchId.ToString() + ")";
                     break;
 
                 default:
@@ -458,6 +469,7 @@ namespace FD.Lib.TaskExecutors
             return sqlQueryString;
         }
 
+        [SuppressMessage("StyleCop.CSharp.StylecopPlus.Rules", "SP2101:MethodMustNotContainMoreLinesThan", Justification = "Need to review here.")]
         private string GenerateSqlQueryByMatch(int matchId, string dataSource, int dataType)
         {
             var sqlQueryString = "select $data$ as DataCapture FROM $dataSource$ b with(nolock) where b.currency <> 20 and b.matchid in " + "(" + matchId + ")";
@@ -498,7 +510,8 @@ namespace FD.Lib.TaskExecutors
 
                 case 8:
                     sqlQueryString =
-                        "select ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) as DataCapture FROM bodb02.dbo.match m with(nolock) where m.matchid in " + "(" + matchId.ToString() + ")";
+                        "select ISNULL((m.livehomescore * 1000 + m.liveawayscore),0) as DataCapture FROM bodb02.dbo.match m with(nolock) where m.matchid in " + "("
+                        + matchId.ToString() + ")";
                     break;
 
                 default:

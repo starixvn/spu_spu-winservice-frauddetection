@@ -9,17 +9,17 @@
 
 namespace FD.WinService.FraudDetection.Core.NextActions
 {
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Text;
     using Fanex.Logging;
+    using FD.Lib.Criteria.Case;
     using Lib.Core.Utilities;
     using Lib.Criteria.SuspiciousInfo;
     using Lib.Criteria.SuspiciousStatistic;
     using Lib.DTO;
     using Lib.Service.Implement;
     using Lib.Service.Interface;
-    using FD.Lib.Criteria.Case;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
 
     /// <summary>
     /// Save suspicious info.
@@ -28,9 +28,9 @@ namespace FD.WinService.FraudDetection.Core.NextActions
     {
         protected const int ChunkSize = int.MaxValue;
 
-        private List<SuspiciousInfo> _suspiciousInfoList;
-
         private readonly ICaseService _caseService;
+
+        private List<SuspiciousInfo> _suspiciousInfoList;
 
         public SavingSuspicious(List<SuspiciousInfo> suspiciousInfoList)
         {
@@ -53,6 +53,7 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             {
                 return _suspiciousInfoList;
             }
+
             set
             {
                 _suspiciousInfoList = value;
@@ -192,12 +193,12 @@ namespace FD.WinService.FraudDetection.Core.NextActions
             if (_suspiciousInfoList != null && _suspiciousInfoList.Count > 0)
             {
                 var caseId = _suspiciousInfoList.Select(t => t.CaseId).Distinct().FirstOrDefault();
-                var fraudCase = _caseService.GetCaseById(new CaseGetByIdCriteria 
+                var fraudCase = _caseService.GetCaseById(new CaseGetByIdCriteria
                 {
                     CaseId = caseId
                 });
 
-                if(fraudCase != null && fraudCase.TypeId == 2)
+                if (fraudCase != null && fraudCase.TypeId == 2)
                 {
                     var suspiciousMacthGroup = _suspiciousInfoList.GroupBy(t => t.MatchId);
                     var result = new Dictionary<int, int>();

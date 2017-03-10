@@ -1,13 +1,12 @@
 ﻿namespace FD.WinService.FraudDetection
 {
-    using System.Configuration;
-    using System.ServiceProcess;
     using Core.QueueManagement;
     using Fanex.Data.Configuration;
     using Fanex.Logging;
-    using Fanex.MailDelivery.Client.Handlers;
-    using Lib.TaskLoaders;
     using Fanex.MailDelivery.Client;
+    using Lib.TaskLoaders;
+    using System.Configuration;
+    using System.ServiceProcess;
 
     public partial class FraudDetectionService : ServiceBase
     {
@@ -78,21 +77,27 @@
 
         private void SendMailInform(bool serviceStarting)
         {
-            var subject = "SPU FS Service Started";
-            if (!serviceStarting)
+            try
             {
-                subject = "SPU FS Service Stopped";
+                var subject = "SPU FS Service Started";
+                if (!serviceStarting)
+                {
+                    subject = "SPU FS Service Stopped";
+                }
+
+                var newMail = new Fanex.MailDelivery.Core.Models.Mail
+                {
+                    Subject = subject,
+                    Title = subject,
+                    Body = subject,
+                    MailingListId = int.Parse(ConfigurationManager.AppSettings["MailingListId"])
+                };
+
+                MailClientHandler.SendFunctionMail(newMail);
             }
-
-            var newMail = new Fanex.MailDelivery.Core.Models.Mail
+            catch
             {
-                Subject = subject,
-                Title = subject,
-                Body = subject,
-                MailingListId = int.Parse(ConfigurationManager.AppSettings["MailingListId"])
-            };
-
-            MailClientHandler.SendFunctionMail(newMail);
+            }
         }
 
         private void InitDependencies()

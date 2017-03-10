@@ -214,7 +214,9 @@
     <Compile Include="TaskExecutors\ITaskManager.cs" />
     <Compile Include="TaskExecutors\FindBettingGroupsTaskExecutor.cs" />
     <Compile Include="TaskExecutors\ScanMatchTaskExecutor.cs" />
-    <Compile Include="TaskExecutors\TaskExecutor.cs" />
+    <Compile Include="TaskExecutors\TaskExecutor.cs">
+      <ExcludeFromStyleCop>True</ExcludeFromStyleCop>
+    </Compile>
     <Compile Include="TaskExecutors\TaskExecutorFactory.cs" />
     <Compile Include="TaskExecutors\TaskManager.cs" />
     <Compile Include="TaskLoaders\ITaskLoader.cs" />

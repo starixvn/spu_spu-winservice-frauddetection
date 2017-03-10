@@ -235,8 +235,9 @@ namespace FD.Lib.BusinessManager.TaskExecutors
             var message = "\r\nError: " + exception.Message +
                           "\r\nStackTrace: " + exception.StackTrace;
 
-            SendMailInform(message);
             Logger.Log.Error(message);
+
+            SendMailInform(message);
         }
 
         private string GetBettypeIdList(string taskRules)
@@ -298,15 +299,21 @@ namespace FD.Lib.BusinessManager.TaskExecutors
 
         protected void SendMailInform(string message)
         {
-            var newMail = new Fanex.MailDelivery.Core.Models.Mail
+            try
             {
-                Subject = "SPU FS Error",
-                Title = "SPU FS Error",
-                Body = message,
-                MailingListId = int.Parse(ConfigurationManager.AppSettings["MailingListId"])
-            };
+                var newMail = new Fanex.MailDelivery.Core.Models.Mail
+                {
+                    Subject = "SPU FS Error",
+                    Title = "SPU FS Error",
+                    Body = message,
+                    MailingListId = int.Parse(ConfigurationManager.AppSettings["MailingListId"])
+                };
 
-            MailClientHandler.SendFunctionMail(newMail);
+                MailClientHandler.SendFunctionMail(newMail);
+            }
+            catch
+            {
+            }
         }
 
         #endregion Execute task
