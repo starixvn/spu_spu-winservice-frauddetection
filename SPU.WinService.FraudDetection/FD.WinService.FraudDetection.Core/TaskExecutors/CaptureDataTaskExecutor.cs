@@ -323,7 +323,7 @@ namespace FD.Lib.TaskExecutors
 
                     var error = "<b>Error:</b> " + ex.Message +
                               "<br><b>StackTrace:</b> " + ex.StackTrace;
-                    var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
+                    var message = string.Format("<b>Problem with MatchId = {0}, CaseId = {1}, TaskName = {2}</b><br><br>", match.MatchId, Task.CaseId, Task.TaskName) + error;
 
                     SendMailInform(message);
                 }
@@ -375,7 +375,7 @@ namespace FD.Lib.TaskExecutors
 
                     var error = "<b>Error:</b> " + ex.Message +
                               "<br><b>StackTrace:</b> " + ex.StackTrace;
-                    var message = "<b>Problem with MatchId = " + match.MatchId.ToString() + "</b><br><br>" + error;
+                    var message = string.Format("<b>Problem with MatchId = {0}, CaseId = {1}, TaskName = {2}</b><br><br>", match.MatchId, Task.CaseId, Task.TaskName) + error;
 
                     SendMailInform(message);
                 }

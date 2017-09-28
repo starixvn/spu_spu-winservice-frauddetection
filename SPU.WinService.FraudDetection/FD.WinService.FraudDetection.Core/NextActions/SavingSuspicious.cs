@@ -200,10 +200,10 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 
                 if (fraudCase != null && fraudCase.TypeId == 2)
                 {
-                    var suspiciousMacthGroup = _suspiciousInfoList.GroupBy(t => t.MatchId);
+                    var suspiciousMatchGroup = _suspiciousInfoList.GroupBy(t => t.MatchId);
                     var result = new Dictionary<int, int>();
 
-                    foreach (var group in suspiciousMacthGroup)
+                    foreach (var group in suspiciousMatchGroup)
                     {
                         result.Add(group.Key, CountSuspiciousBet(group));
                     }
