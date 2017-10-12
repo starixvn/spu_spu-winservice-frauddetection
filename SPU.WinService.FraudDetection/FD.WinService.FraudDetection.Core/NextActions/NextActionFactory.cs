@@ -11,13 +11,14 @@ namespace FD.WinService.FraudDetection.Core.NextActions
 {
     using FD.Lib.DTO;
     using System;
+    using System.Collections.Generic;
 
     /// <summary>
     ///     ActionFactory Class.
     /// </summary>
     public static class NextActionFactory
     {
-        public static INextAction GetNextAction(NextActionType actionType, int targetId, Task task)
+        public static INextAction GetNextAction(NextActionType actionType, int targetId, Task task, List<string> associatedAccounts = null)
         {
             switch (actionType)
             {
@@ -33,6 +34,8 @@ namespace FD.WinService.FraudDetection.Core.NextActions
                 case NextActionType.PostMessage:
                     return new PostMessageNextAction(targetId, task);
 
+                case NextActionType.SyncDataWithFPS:
+                    return new SyncDataNextAction(targetId, task.CaseId, associatedAccounts);
                 default:
                     throw new ArgumentOutOfRangeException();
             }

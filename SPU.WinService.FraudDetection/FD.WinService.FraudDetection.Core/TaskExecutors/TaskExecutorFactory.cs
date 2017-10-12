@@ -31,14 +31,14 @@ namespace FD.WinService.FraudDetection.Core.TaskExecutors
                 case ActivityType.CountSuspiciousTimes:
                     return new CountingSuspicousTimesTaskExecutor(task);
 
-                case ActivityType.ScanMatchFindBettingGroups:
-                    return new FindBettingGroupsTaskExecutor(task);
-
                 case ActivityType.ScanMatchCaptureData:
                     return new CaptureDataTaskExecutor(task);
 
                 case ActivityType.ScanMatchCompareData:
                     return new CompareDataTaskExecutor(task);
+
+                case ActivityType.ScanCustomerSyncData:
+                    return new SyncDataWithFPSTaskExecutor(task);
 
                 default:
                     throw new ArgumentOutOfRangeException();

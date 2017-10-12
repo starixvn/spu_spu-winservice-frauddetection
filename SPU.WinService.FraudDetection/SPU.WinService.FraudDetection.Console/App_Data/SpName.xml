@@ -94,6 +94,8 @@
              DbName="DBFD.FraudDetection.bodbSPUNet" />
     <Setting Key="FD_SuspiciousBetCountInsert" SpName="FD_SuspiciousBetCountInsert"
              DbName="DBFD.FraudDetection.bodbSPUNet" />
+    <Setting Key="FD_AssociatedAccountInsert" SpName="FD_AssociatedAccountInsert"
+             DbName="DBFD.FraudDetection.bodbSPUNet" />
   </Function>
 
   <Function Name="FD_SuspiciousGroupInfo">
