@@ -4,6 +4,7 @@ namespace FD.Lib.TaskExecutors
     using Core.Utilities;
     using DTO;
     using FD.Lib.Service.Implement;
+    using Newtonsoft.Json;
     using Service.Interface;
     using System.Collections.Generic;
     using System.Configuration;
@@ -60,10 +61,16 @@ namespace FD.Lib.TaskExecutors
                     var chunks = _customers.Chunk(ChunkSize);
                     foreach (var chunk in chunks)
                     {
-                        var fpsApiLink = FPS_ASSOCIATION + string.Join(",", chunk.Select(t => t.CustName));
-                        var result = _webService.GetJson(fpsApiLink);
+                        var data = new { usernames = string.Join(",", chunk.Select(t => t.CustName)) };
+                        var result = _webService.PostJson(FPS_ASSOCIATION, JsonConvert.SerializeObject(data)).Replace("\"", "");
 
-                        _associatedAccounts.AddRange(result.Split(','));
+                        if (!string.IsNullOrEmpty(result) && result.Length > 1)
+                            _associatedAccounts.AddRange(result.Split(','));
+                    }
+
+                    foreach (var customer in _customers)
+                    {
+                        _associatedAccounts.RemoveAll(t => t.ToLower() == customer.CustName.ToLower());
                     }
 
                     _associatedAccounts = _associatedAccounts.Distinct().ToList();
