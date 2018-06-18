@@ -11,7 +11,7 @@
   </startup>
   <Fanex.Data.DbSettingProvider default="XmlDbSettingProvider">
     <providers>
-      <add name="XmlDbSettingProvider" type="Fanex.Data.Configuration.XmlDbSettingProvider,Fanex.Data" resourcePath="App_Data" enableWatching="1" />
+      <add name="XmlDbSettingProvider" type="Fanex.Data.DbSettingProviderExtension.XmlDbSettingProvider3, Fanex.Data.DbSettingProviderExtension" resourcePath="App_Data" enableWatching="1" />
     </providers>
   </Fanex.Data.DbSettingProvider>
   <Fanex.Logging msmqPath="FormatName:DIRECT=TCP:10.18.200.124\private$\entlib" defaultCategory="SPU.Local" />
